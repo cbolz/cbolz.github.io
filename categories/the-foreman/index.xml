@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>http://www.jung-christian.de/categories/the-foreman/index.xml</link>
+    <link>https://cbolz.github.io/categories/the-foreman/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="http://www.jung-christian.de/categories/the-foreman/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://cbolz.github.io/categories/the-foreman/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Install all available updates via Satellite 6</title>
-      <link>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</link>
+      <link>https://cbolz.github.io/post/2015/09/install-all-available-updates-via-satellite-6/</link>
       <pubDate>Fri, 11 Sep 2015 10:24:38 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</guid>
+      <guid>https://cbolz.github.io/post/2015/09/install-all-available-updates-via-satellite-6/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/products/red-hat-satellite&#34;&gt;Red Hat Satellite 6&lt;/a&gt; is a great tool to manage your RHEL virtual machines. In some scenarios you would like to be able to install all available updates for a given system from CloudForms or ManageIQ. I created a small script to accomplish this task.&lt;/p&gt;
 
 &lt;p&gt;To use this script, it is necessary to upgrade your Satellite Server to version 6.1.1 or later. Earlier versions do not expose the necessary API calls.&lt;/p&gt;
@@ -25,15 +25,15 @@
 
 &lt;p&gt;First step is to create a button which points to the Request object:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/install_all_updates-button.png&#34; title=&#34;Install all updates button&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/install_all_updates-button-300x310.png&#34; alt=&#34;install_all_updates-button&#34; title=&#34;Install all updates button&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/install_all_updates-button.png&#34; title=&#34;Install all updates button&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/install_all_updates-button-300x310.png&#34; alt=&#34;install_all_updates-button&#34; title=&#34;Install all updates button&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Now create request object which points to the actual method. Like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/request.png&#34; title=&#34;Request object&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/request-300x63.png&#34; alt=&#34;request&#34; title=&#34;Request object&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/request.png&#34; title=&#34;Request object&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/request-300x63.png&#34; alt=&#34;request&#34; title=&#34;Request object&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Last but not least, the actual method. I put it into my personal datastore and namespace:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/foreman-class.png&#34; title=&#34;The Foreman Class&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/foreman-class-300x103.png&#34; alt=&#34;foreman-class&#34; title=&#34;The Foreman Class&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/foreman-class.png&#34; title=&#34;The Foreman Class&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/foreman-class-300x103.png&#34; alt=&#34;foreman-class&#34; title=&#34;The Foreman Class&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This will allow you to select any VM and install all available updates on it.&lt;/p&gt;
 </description>
@@ -41,10 +41,10 @@
     
     <item>
       <title>Check provisioning state in ManageIQ with Foreman</title>
-      <link>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</link>
+      <link>https://cbolz.github.io/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</link>
       <pubDate>Wed, 10 Jun 2015 10:10:39 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</guid>
+      <guid>https://cbolz.github.io/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</guid>
       <description>&lt;p&gt;If you&amp;rsquo;re using &lt;a href=&#34;http://www.theforman.org&#34;&gt;The Foreman&lt;/a&gt; for provisioning VMs, you might want the state machine to proceed only if the puppet run was completed successfully. I wrote a script which checks the puppet state of a given VM via Foreman&amp;rsquo;s API. It can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/check_puppet/checkpuppet.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;To make this script work, the hostid of the provisioned VM has to be stored as an provisioning option. The following line in the script, retrieves the hostid:&lt;/p&gt;
@@ -65,10 +65,10 @@ prov.set_option(:hostid,hostid)
     
     <item>
       <title>Delete VM from Foreman during retirement</title>
-      <link>http://www.jung-christian.de/post/2015/06/delete-vm-from-foreman-during-retirement/</link>
+      <link>https://cbolz.github.io/post/2015/06/delete-vm-from-foreman-during-retirement/</link>
       <pubDate>Tue, 02 Jun 2015 14:09:18 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/06/delete-vm-from-foreman-during-retirement/</guid>
+      <guid>https://cbolz.github.io/post/2015/06/delete-vm-from-foreman-during-retirement/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; is covering the full life cycle of a virtual machine or service. This includes the eventual retirement of resources. If you&amp;rsquo;re using my script to &lt;a href=&#34;http://www.jung-christian.de/2015/04/how-to-provision-vms-with-foreman-and-manageiq/&#34;&gt;register a virtual machine in Foreman&lt;/a&gt;, you might want to delete the Foreman records during retirement.&lt;/p&gt;
 
 &lt;p&gt;A wrote a little script to do that, which can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/delete_from_foreman/deletefromforeman.rb&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
@@ -79,10 +79,10 @@ prov.set_option(:hostid,hostid)
     
     <item>
       <title>How to provision VMs with Foreman and ManageIQ</title>
-      <link>http://www.jung-christian.de/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</link>
+      <link>https://cbolz.github.io/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</link>
       <pubDate>Thu, 30 Apr 2015 11:51:24 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</guid>
+      <guid>https://cbolz.github.io/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</guid>
       <description>
 
 &lt;p&gt;&lt;a href=&#34;http://www.theforman.org&#34;&gt;The Foreman&lt;/a&gt; is a very powerful tool for system management. Red Hat&amp;rsquo;s new version of &lt;a href=&#34;http://www.redhat.com/en/technologies/linux-platforms/satellite&#34;&gt;Satellite&lt;/a&gt; is also using Foreman as one of its core components. It&amp;rsquo;s only consequent to setup both tools so they can benefit from each other.&lt;/p&gt;

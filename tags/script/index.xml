@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>http://www.jung-christian.de/tags/script/index.xml</link>
+    <link>https://cbolz.github.io/tags/script/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="http://www.jung-christian.de/tags/script/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://cbolz.github.io/tags/script/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Call a script from a Control Policy</title>
-      <link>http://www.jung-christian.de/post/2017/01/call-script-from-control-policy/</link>
+      <link>https://cbolz.github.io/post/2017/01/call-script-from-control-policy/</link>
       <pubDate>Tue, 17 Jan 2017 22:14:29 +0100</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2017/01/call-script-from-control-policy/</guid>
+      <guid>https://cbolz.github.io/post/2017/01/call-script-from-control-policy/</guid>
       <description>
 
 &lt;h1 id=&#34;control-and-compliance-policies&#34;&gt;Control and Compliance Policies&lt;/h1&gt;
@@ -50,13 +50,13 @@
 
 &lt;p&gt;If you want to lean more about Automate, check out the book &lt;a href=&#34;https://access.redhat.com/mastering-cloudforms-automation&#34;&gt;&amp;ldquo;Master CloudForms Automation&amp;rdquo;&lt;/a&gt; - which also applies to ManageIQ.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-new-action.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-new-action-300x195.png&#34; alt=&#34;Add new Action&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/add-new-action.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/add-new-action-300x195.png&#34; alt=&#34;Add new Action&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;create-new-policy&#34;&gt;Create new Policy&lt;/h2&gt;
 
 &lt;p&gt;Navigate to Control, Explorer, Policies and select &amp;ldquo;VM Compliant Policies&amp;rdquo;. In the Configuration Menu click select add a new policy. Choose a reasonable name.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/control-policy-system-command.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/control-policy-system-command-300x145.png&#34; alt=&#34;Add Compliance Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/control-policy-system-command.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/control-policy-system-command-300x145.png&#34; alt=&#34;Add Compliance Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

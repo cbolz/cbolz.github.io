@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>http://www.jung-christian.de/categories/rhev/index.xml</link>
+    <link>https://cbolz.github.io/categories/rhev/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="http://www.jung-christian.de/categories/rhev/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://cbolz.github.io/categories/rhev/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Add an additional network interface on RHEV virtual machines</title>
-      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
+      <link>https://cbolz.github.io/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
       <pubDate>Fri, 05 Aug 2016 15:30:05 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
+      <guid>https://cbolz.github.io/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
       <description>&lt;p&gt;Similar to the previous post on how to &lt;a href=&#34;http://www.jung-christian.de/2016/08/add-an-additional-disk-on-rhev-virtual-machines/&#34;&gt;add additional disks for existing virtual machines&lt;/a&gt; running on RHEV, this article describes how to add additional network interfaces to virtual machines running in RHEV.&lt;/p&gt;
 
 &lt;p&gt;The implementation follows the same concept:&lt;/p&gt;
@@ -35,10 +35,10 @@
     
     <item>
       <title>Add an additional disk on RHEV virtual machines</title>
-      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
+      <link>https://cbolz.github.io/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
       <pubDate>Fri, 05 Aug 2016 15:25:41 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
+      <guid>https://cbolz.github.io/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
       <description>
 
 &lt;p&gt;I was working on a script to add additional disks to existing virtual machines running on Red Hat Enterprise Virtualization (RHEV). I did find some code original written by Eduardo Minguez which I just polished a little bit. Thanks to him I published the full code on Github under the terms of the GPL.&lt;/p&gt;
@@ -83,7 +83,7 @@
 
 &lt;p&gt;To put everything together, a button has to be created and associated to virtual machine objects. For the button it is important to specify the correct value for &amp;ldquo;System/Process&amp;rdquo; which should be set to &amp;ldquo;Request&amp;rdquo;, and the request name which has to match the name of the instance. In the provided Automate export the name of the instance is &amp;ldquo;hot_add_disk&amp;rdquo; which has to be put into the &amp;ldquo;Request&amp;rdquo; field.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;a-few-words-about-the-code&#34;&gt;A few words about the code&lt;/h1&gt;
 
@@ -104,10 +104,10 @@
     
     <item>
       <title>Memory errors when provisioning VM from template in RHEV</title>
-      <link>http://www.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</link>
+      <link>https://cbolz.github.io/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</link>
       <pubDate>Wed, 10 Feb 2016 08:29:09 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</guid>
+      <guid>https://cbolz.github.io/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</guid>
       <description>&lt;p&gt;If you&amp;rsquo;re provisioning from a template which is stored in RHEV, you might ran into the following error (found in evm.log):&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;MIQ(MiqProvisionRedhat#&amp;lt;wbr&amp;gt;&amp;lt;/wbr&amp;gt;provision_error) [[Ovirt::Error]: [Cannot edit VM. Physical Memory Guaranteed cannot exceed Memory Size.]] encountered during phase [customize_destination]
@@ -123,21 +123,21 @@
     
     <item>
       <title>Manage VM snapshots in RHEV/oVirt with ManageIQ</title>
-      <link>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</link>
+      <link>https://cbolz.github.io/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</link>
       <pubDate>Wed, 17 Jun 2015 08:50:28 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</guid>
+      <guid>https://cbolz.github.io/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</guid>
       <description>&lt;p&gt;One feature which is still missing in &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; or &lt;a href=&#34;http://www.redhat.com/en/technologies/cloud-computing/cloudforms&#34;&gt;CloudForms&lt;/a&gt; is the capability to create, roll back and delete snapshots in &lt;a href=&#34;https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Virtualization&#34;&gt;RHEV&lt;/a&gt; or &lt;a href=&#34;http://www.ovirt.org&#34;&gt;oVirt&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;I wrote three scripts to accomplish these tasks and made them available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/rhev&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Download the namespace cjung, zip and import it into the appliance by clicking &amp;ldquo;Automate, Import/Export&amp;rdquo; and upload the zip file. There is a YAML export of some simple example dialogs which can be used when designing the custom buttons. The custom menu for a VM could look something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom_buttons.png&#34; title=&#34;Custom buttons&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom_buttons-300x46.png&#34; alt=&#34;custom_buttons&#34; title=&#34;Custom Buttons&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/custom_buttons.png&#34; title=&#34;Custom buttons&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/custom_buttons-300x46.png&#34; alt=&#34;custom_buttons&#34; title=&#34;Custom Buttons&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The create snapshot button only asks for the description of the new snapshot. To make the delete and revert snapshot functionality a bit more convenient to use, I wrote a dynamic drop down method. This method queries the list of all available snapshots from RHEV/oVirt and presents the list to the user. By choosing one of the provided options, the snapshot ID is send to the delete_snapshot or revert_snapshot method.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/dynamic_dropdown.png&#34; title=&#34;Dynamic Dropdown Lists&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/dynamic_dropdown-300x122.png&#34; alt=&#34;dynamic_dropdown&#34; title=&#34;Dynamic Dropdown Lists&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/dynamic_dropdown.png&#34; title=&#34;Dynamic Dropdown Lists&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/dynamic_dropdown-300x122.png&#34; alt=&#34;dynamic_dropdown&#34; title=&#34;Dynamic Dropdown Lists&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;All three scripts are using the RHEV/oVirt API to manage the snapshots. Actions are executed in the background, so it might take a few seconds until the action is executed.&lt;/p&gt;
 </description>
@@ -145,10 +145,10 @@
     
     <item>
       <title>How to use CloudInit in CloudForms or ManageIQ</title>
-      <link>http://www.jung-christian.de/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</link>
+      <link>https://cbolz.github.io/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</link>
       <pubDate>Wed, 28 Jan 2015 13:30:04 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</guid>
+      <guid>https://cbolz.github.io/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</guid>
       <description>&lt;p&gt;CloudForms/ManageIQ and RHEV both support &lt;a href=&#34;http://cloudinit.readthedocs.org/en/latest/&#34;&gt;CloudInit&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;In CloudForms the configuration is hidden in Infrastructure, PXE. Navigate to &amp;ldquo;Customization Templates&amp;rdquo; on the left hand accordion and create a new template (I used the folder &amp;ldquo;RHEL-6&amp;rdquo; for my testing). When creating the temlate select &amp;ldquo;CloudInit&amp;rdquo; in the &amp;ldquo;Type&amp;rdquo; drop down list.&lt;/p&gt;
@@ -181,10 +181,10 @@ users:
     
     <item>
       <title>How to import qcow images into RHEV</title>
-      <link>http://www.jung-christian.de/post/2015/01/how-to-import-qcow-images-into-rhev/</link>
+      <link>https://cbolz.github.io/post/2015/01/how-to-import-qcow-images-into-rhev/</link>
       <pubDate>Wed, 14 Jan 2015 10:19:50 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2015/01/how-to-import-qcow-images-into-rhev/</guid>
+      <guid>https://cbolz.github.io/post/2015/01/how-to-import-qcow-images-into-rhev/</guid>
       <description>&lt;p&gt;Red Hat is providing KVM/QCOW2 images on the &lt;a href=&#34;http://access.redhat.com&#34;&gt;support portal&lt;/a&gt; for easy access and use in virtualized or cloud environments. The images are stripped down and cloud-init enabled so they can be used for example in &lt;a href=&#34;http://openstack.org&#34;&gt;OpenStack&lt;/a&gt;, &lt;a href=&#34;http://redhat.com/rhev&#34;&gt;RHEV&lt;/a&gt;/&lt;a href=&#34;http://www.ovirt.org&#34;&gt;ovirt&lt;/a&gt; or plain &lt;a href=&#34;http://www.linux-kvm.org/page/Main_Page&#34;&gt;KVM&lt;/a&gt;. &lt;a href=&#34;http://www.redhat.com/en/technologies/cloud-computing/cloudforms&#34;&gt;CloudForms&lt;/a&gt;/&lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; provides support for managing &lt;a href=&#34;http://cloudinit.readthedocs.org/en/latest/&#34;&gt;cloud-init&lt;/a&gt; templates and the combination of those technologies dramatically simplifies template management.&lt;/p&gt;
 
 &lt;p&gt;To use such an image on RHEV, you have to first import it. Sadly the rhevm-image-uploader does not support qcow images yet, so you have to import the image manually. This is the way I did - there might be better ways to do it.&lt;/p&gt;

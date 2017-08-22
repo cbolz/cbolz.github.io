@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>http://www.jung-christian.de/categories/openshift/index.xml</link>
+    <link>https://cbolz.github.io/categories/openshift/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="http://www.jung-christian.de/categories/openshift/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://cbolz.github.io/categories/openshift/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Orchestrating OpenShift Enterprise with ManageIQ</title>
-      <link>http://www.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</link>
+      <link>https://cbolz.github.io/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</link>
       <pubDate>Fri, 03 Jun 2016 09:18:15 +0000</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</guid>
+      <guid>https://cbolz.github.io/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</guid>
       <description>&lt;p&gt;A nice post on how to scale &lt;a href=&#34;http://Orchestrating OpenShift Enterprise with ManageIQ&#34;&gt;OpenShift Applications with ManageIQ&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>

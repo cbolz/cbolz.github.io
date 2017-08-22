@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>http://www.jung-christian.de/categories/control/index.xml</link>
+    <link>https://cbolz.github.io/categories/control/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="http://www.jung-christian.de/categories/control/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://cbolz.github.io/categories/control/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>ManageIQ vs CloudForms - what&#39;s the difference</title>
-      <link>http://www.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</link>
+      <link>https://cbolz.github.io/post/2017/01/manageiq-vs-cloudforms/</link>
       <pubDate>Sun, 29 Jan 2017 22:14:29 +0100</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</guid>
+      <guid>https://cbolz.github.io/post/2017/01/manageiq-vs-cloudforms/</guid>
       <description>
 
 &lt;p&gt;&lt;a href=&#34;http://redhat.com/cloudforms&#34;&gt;Red Hat CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; both recently launched new releases of their software. The latest release of &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/release-notes/&#34;&gt;Red Hat CloudForms is 4.2&lt;/a&gt;, while ManageIQ is following an alphabetical versioning schema and &lt;a href=&#34;http://manageiq.org/blog/2016/12/manageiq-euwe-ga-announcement/&#34;&gt;released Euwe&lt;/a&gt;.&lt;/p&gt;
@@ -35,7 +35,7 @@
 
 &lt;h1 id=&#34;branding&#34;&gt;Branding&lt;/h1&gt;
 
-&lt;p&gt;The branding of the UI, naming of the images and packages, and the documentation are different too. Until recently, Red Hat CloudForms was using &lt;a href=&#34;http://www.adobe.com/&#34;&gt;Adobe Flash&lt;/a&gt; to render certain diagrams and graphs, while ManageIQ was using a JavaScript library to do the same. Starting with version 4.2 of CloudForms, it is using the same library and &lt;a href=&#34;http://www.jung-christian.de/post/2017/01/bye-bye-flash/&#34;&gt;got rid of Flash&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The branding of the UI, naming of the images and packages, and the documentation are different too. Until recently, Red Hat CloudForms was using &lt;a href=&#34;http://www.adobe.com/&#34;&gt;Adobe Flash&lt;/a&gt; to render certain diagrams and graphs, while ManageIQ was using a JavaScript library to do the same. Starting with version 4.2 of CloudForms, it is using the same library and &lt;a href=&#34;https://cbolz.github.io/post/2017/01/bye-bye-flash/&#34;&gt;got rid of Flash&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h1 id=&#34;upgrades&#34;&gt;Upgrades&lt;/h1&gt;
 
@@ -61,10 +61,10 @@
     
     <item>
       <title>Call a script from a Control Policy</title>
-      <link>http://www.jung-christian.de/post/2017/01/call-script-from-control-policy/</link>
+      <link>https://cbolz.github.io/post/2017/01/call-script-from-control-policy/</link>
       <pubDate>Tue, 17 Jan 2017 22:14:29 +0100</pubDate>
       
-      <guid>http://www.jung-christian.de/post/2017/01/call-script-from-control-policy/</guid>
+      <guid>https://cbolz.github.io/post/2017/01/call-script-from-control-policy/</guid>
       <description>
 
 &lt;h1 id=&#34;control-and-compliance-policies&#34;&gt;Control and Compliance Policies&lt;/h1&gt;
@@ -100,13 +100,13 @@
 
 &lt;p&gt;If you want to lean more about Automate, check out the book &lt;a href=&#34;https://access.redhat.com/mastering-cloudforms-automation&#34;&gt;&amp;ldquo;Master CloudForms Automation&amp;rdquo;&lt;/a&gt; - which also applies to ManageIQ.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-new-action.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-new-action-300x195.png&#34; alt=&#34;Add new Action&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/add-new-action.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/add-new-action-300x195.png&#34; alt=&#34;Add new Action&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;create-new-policy&#34;&gt;Create new Policy&lt;/h2&gt;
 
 &lt;p&gt;Navigate to Control, Explorer, Policies and select &amp;ldquo;VM Compliant Policies&amp;rdquo;. In the Configuration Menu click select add a new policy. Choose a reasonable name.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/control-policy-system-command.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/control-policy-system-command-300x145.png&#34; alt=&#34;Add Compliance Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/control-policy-system-command.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/control-policy-system-command-300x145.png&#34; alt=&#34;Add Compliance Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
