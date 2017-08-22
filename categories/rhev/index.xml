@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/categories/rhev/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/categories/rhev/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Add an additional network interface on RHEV virtual machines</title>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
+      <pubDate>Fri, 05 Aug 2016 15:30:05 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
+      <description>&lt;p&gt;Similar to the previous post on how to &lt;a href=&#34;http://www.jung-christian.de/2016/08/add-an-additional-disk-on-rhev-virtual-machines/&#34;&gt;add additional disks for existing virtual machines&lt;/a&gt; running on RHEV, this article describes how to add additional network interfaces to virtual machines running in RHEV.&lt;/p&gt;
+
+&lt;p&gt;The implementation follows the same concept:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;use a dynamic drop down list to make the selection of available networks available to the user&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;specify the name of the new interface&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create a button to call the action&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;and the actual code which adds the network interfaces to the specified virtual machine&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since the setup is very similar to what was described in the previous post, here are the links to the &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-nic.yml&#34;&gt;Service Dialog&lt;/a&gt; and the &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Automate Code&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Add an additional disk on RHEV virtual machines</title>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
+      <pubDate>Fri, 05 Aug 2016 15:25:41 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
+      <description>
+
+&lt;p&gt;I was working on a script to add additional disks to existing virtual machines running on Red Hat Enterprise Virtualization (RHEV). I did find some code original written by Eduardo Minguez which I just polished a little bit. Thanks to him I published the full code on Github under the terms of the GPL.&lt;/p&gt;
+
+&lt;p&gt;There are actually multiple steps to build a user friendly way for adding the virtual disk:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;create an additional button for the VM object&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;provide a dialog to select disk size, data store and allocation policy (thin vs preallocated)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;select from a list of available datastores created by a dynamic dropdown list&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;the actual code which adds the virtual disk to the VM&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The code was tested on CloudForms 4.0/4.1 and RHEV 3.4 - but it should work with other versions and the respective OpenSource Projects too.&lt;/p&gt;
+
+&lt;h1 id=&#34;automate-code&#34;&gt;Automate Code&lt;/h1&gt;
+
+&lt;p&gt;There are two methods to implement this functionality. The first method &amp;ldquo;dialog_add_disk&amp;rdquo; will provide a dynamic drop down list from which the user will be able to select one of the existing RHEV data stores. The new virtual disk will be created on the selected storage.&lt;/p&gt;
+
+&lt;p&gt;The second method &amp;ldquo;hot_add_disk&amp;rdquo; will parse this information plus the other settings provided by the user (allocation policy and size) and create the virtual disk.&lt;/p&gt;
+
+&lt;p&gt;Both methods can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;service-dialog&#34;&gt;Service Dialog&lt;/h1&gt;
+
+&lt;p&gt;The second step is to create a service dialog which asks the user for required information. If you create the dialog manually, make sure the field are using the proper names, or the &amp;ldquo;hot_add_disk&amp;rdquo; method will not be able to find the values.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&amp;ldquo;size&amp;rdquo;: and integer value of the new disk size in GB&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&amp;ldquo;datastore&amp;rdquo;: the name of the data store, ideally coming from a dynamic dialog&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&amp;ldquo;allocpolicy&amp;rdquo;: allocation policy, possible values are &amp;ldquo;thick&amp;rdquo; or &amp;ldquo;thin&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For your convenience I exported my service dialog and put it on &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-disk.yml&#34;&gt;Github&lt;/a&gt; too.&lt;/p&gt;
+
+&lt;h1 id=&#34;button&#34;&gt;Button&lt;/h1&gt;
+
+&lt;p&gt;To put everything together, a button has to be created and associated to virtual machine objects. For the button it is important to specify the correct value for &amp;ldquo;System/Process&amp;rdquo; which should be set to &amp;ldquo;Request&amp;rdquo;, and the request name which has to match the name of the instance. In the provided Automate export the name of the instance is &amp;ldquo;hot_add_disk&amp;rdquo; which has to be put into the &amp;ldquo;Request&amp;rdquo; field.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;a-few-words-about-the-code&#34;&gt;A few words about the code&lt;/h1&gt;
+
+&lt;p&gt;The &amp;ldquo;dialog_add_disk&amp;rdquo; method has probably two blocks worth describing. The function &amp;ldquo;getstorages&amp;rdquo; will use the provided host name and credentials to retrieve a list of all available storage domains. This list is filtered by type &amp;ldquo;data&amp;rdquo; to exclude ISO and Export domains. The resulting list of storage domain is stored in an array which later stored in the $evm.object to populate the dynamic dialog fields.&lt;/p&gt;
+
+&lt;p&gt;The second noteworthy code block is the following section:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  vm=$evm.root[&#39;vm&#39;]
+  ext_mgt_system = vm.ext_management_system
+  rhevmhost = &amp;quot;https://#{ext_mgt_system.hostname}&amp;quot;
+  rhevmuser = ext_mgt_system.authentication_userid
+  rhevmpass = ext_mgt_system.authentication_password
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This piece of code does first retrieve the VM object (from which the button was clicked) and will then retrieve the details for the management system. This object does contain the host name and credentials to communicate to the provider. This is a nice way of retrieving those credentials from the internal database instead of hard coding them or providing them in the instance attributes.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Memory errors when provisioning VM from template in RHEV</title>
+      <link>http://www.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</link>
+      <pubDate>Wed, 10 Feb 2016 08:29:09 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;re provisioning from a template which is stored in RHEV, you might ran into the following error (found in evm.log):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MIQ(MiqProvisionRedhat#&amp;lt;wbr&amp;gt;&amp;lt;/wbr&amp;gt;provision_error) [[Ovirt::Error]: [Cannot edit VM. Physical Memory Guaranteed cannot exceed Memory Size.]] encountered during phase [customize_destination]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This happens if the template is using more memory than your provisioned VM. For example, the template is using 4 GB of memory, but you&amp;rsquo;re trying to deploy a VM which is only using 2 GB.&lt;/p&gt;
+
+&lt;p&gt;When CloudForms sets the memory to 2 GB, it doesn&amp;rsquo;t adjust the amount of reserved memory while doing it. A template with 4 GB memory usually has about 2.7 GB of reserved memory - which is more than the amount of memory you try to allocate and hence the error.&lt;/p&gt;
+
+&lt;p&gt;The fix is quite simple: Modify the VM template and set the memory size in the template to 1 GB. This will make sure whatever value CloudForms tries to set during provisioning, will not be below the reserved memory size.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Manage VM snapshots in RHEV/oVirt with ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</link>
+      <pubDate>Wed, 17 Jun 2015 08:50:28 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</guid>
+      <description>&lt;p&gt;One feature which is still missing in &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; or &lt;a href=&#34;http://www.redhat.com/en/technologies/cloud-computing/cloudforms&#34;&gt;CloudForms&lt;/a&gt; is the capability to create, roll back and delete snapshots in &lt;a href=&#34;https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Virtualization&#34;&gt;RHEV&lt;/a&gt; or &lt;a href=&#34;http://www.ovirt.org&#34;&gt;oVirt&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I wrote three scripts to accomplish these tasks and made them available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/rhev&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Download the namespace cjung, zip and import it into the appliance by clicking &amp;ldquo;Automate, Import/Export&amp;rdquo; and upload the zip file. There is a YAML export of some simple example dialogs which can be used when designing the custom buttons. The custom menu for a VM could look something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom_buttons.png&#34; title=&#34;Custom buttons&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom_buttons-300x46.png&#34; alt=&#34;custom_buttons&#34; title=&#34;Custom Buttons&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The create snapshot button only asks for the description of the new snapshot. To make the delete and revert snapshot functionality a bit more convenient to use, I wrote a dynamic drop down method. This method queries the list of all available snapshots from RHEV/oVirt and presents the list to the user. By choosing one of the provided options, the snapshot ID is send to the delete_snapshot or revert_snapshot method.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/dynamic_dropdown.png&#34; title=&#34;Dynamic Dropdown Lists&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/dynamic_dropdown-300x122.png&#34; alt=&#34;dynamic_dropdown&#34; title=&#34;Dynamic Dropdown Lists&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;All three scripts are using the RHEV/oVirt API to manage the snapshots. Actions are executed in the background, so it might take a few seconds until the action is executed.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to use CloudInit in CloudForms or ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</link>
+      <pubDate>Wed, 28 Jan 2015 13:30:04 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</guid>
+      <description>&lt;p&gt;CloudForms/ManageIQ and RHEV both support &lt;a href=&#34;http://cloudinit.readthedocs.org/en/latest/&#34;&gt;CloudInit&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In CloudForms the configuration is hidden in Infrastructure, PXE. Navigate to &amp;ldquo;Customization Templates&amp;rdquo; on the left hand accordion and create a new template (I used the folder &amp;ldquo;RHEL-6&amp;rdquo; for my testing). When creating the temlate select &amp;ldquo;CloudInit&amp;rdquo; in the &amp;ldquo;Type&amp;rdquo; drop down list.&lt;/p&gt;
+
+&lt;p&gt;Now you can add your raw CloudInit configuration into the text area.&lt;/p&gt;
+
+&lt;p&gt;**NOTE: **Your script has to start with this first line:
+&lt;code&gt;#cloud-config&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Otherwise you&amp;rsquo;ll get a parsing error during boot of your new VMs or instances.&lt;/p&gt;
+
+&lt;p&gt;A complete example could looke like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#cloud-config
+users:
+- default
+- name: foobar2
+  gecos: Foo B. Bar
+  groups: users
+  plain_text_passwd: &#39;foobar&#39;
+- name: root
+  chpasswd:
+  list: |
+  root:password
+  expire: False
+# end of example
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to import qcow images into RHEV</title>
+      <link>http://www.jung-christian.de/post/2015/01/how-to-import-qcow-images-into-rhev/</link>
+      <pubDate>Wed, 14 Jan 2015 10:19:50 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/01/how-to-import-qcow-images-into-rhev/</guid>
+      <description>&lt;p&gt;Red Hat is providing KVM/QCOW2 images on the &lt;a href=&#34;http://access.redhat.com&#34;&gt;support portal&lt;/a&gt; for easy access and use in virtualized or cloud environments. The images are stripped down and cloud-init enabled so they can be used for example in &lt;a href=&#34;http://openstack.org&#34;&gt;OpenStack&lt;/a&gt;, &lt;a href=&#34;http://redhat.com/rhev&#34;&gt;RHEV&lt;/a&gt;/&lt;a href=&#34;http://www.ovirt.org&#34;&gt;ovirt&lt;/a&gt; or plain &lt;a href=&#34;http://www.linux-kvm.org/page/Main_Page&#34;&gt;KVM&lt;/a&gt;. &lt;a href=&#34;http://www.redhat.com/en/technologies/cloud-computing/cloudforms&#34;&gt;CloudForms&lt;/a&gt;/&lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; provides support for managing &lt;a href=&#34;http://cloudinit.readthedocs.org/en/latest/&#34;&gt;cloud-init&lt;/a&gt; templates and the combination of those technologies dramatically simplifies template management.&lt;/p&gt;
+
+&lt;p&gt;To use such an image on RHEV, you have to first import it. Sadly the rhevm-image-uploader does not support qcow images yet, so you have to import the image manually. This is the way I did - there might be better ways to do it.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;create a new VM in RHEV&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;choose RHEL 6 or 7 depending on which template you want to import&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;give it a reasonable name&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;adjust other settings as you see fit&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;add a disk to the new VM. The minimum size can be retrieved from the qcow image itself:
+&lt;code&gt;$ qemu-img info rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+image: rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+file format: qcow2
+virtual size: 16G (17179869184 bytes)
+disk size: 340M
+cluster_size: 65536&lt;/code&gt;
+This image needs a minimum disk size of 16 GB. The image automatically grows on first boot, if you create a larger disk.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Identify the associated file on disk. If you&amp;rsquo;re using NFS, this is rather simple. You can try to find the newly created image directly on your disk, if you&amp;rsquo;re already familiar with the internal structure. Or you can use the RHEV REST API to identify the file name.
+&lt;code&gt;https://&amp;lt;rhev-hostname&amp;gt;/api/templates
+&lt;/code&gt;
+You should find a block similar to this one (output truncated):
+&lt;code&gt;&amp;lt;template href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&amp;quot; id=&amp;quot;66081542-2ef7-4978-bf30-5e79173630e6&amp;quot;&amp;gt;
+&amp;lt;actions&amp;gt;&amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/export&amp;quot; rel=&amp;quot;export&amp;quot;/&amp;gt;&amp;lt;/actions&amp;gt;
+&amp;lt;name&amp;gt;rhel-6.6-cloudinit-2&amp;lt;/name&amp;gt;
+&amp;lt;description&amp;gt;CloudInit&amp;lt;/description&amp;gt;
+&amp;lt;comment/&amp;gt;
+&amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks&amp;quot; rel=&amp;quot;disks&amp;quot;/&amp;gt;
+&lt;/code&gt;
+Try to access the link for the list of associated disks, e.g.:
+&lt;code&gt;https://&amp;lt;rhev-hostname&amp;gt;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks
+&lt;/code&gt;
+You should get an output like this (output truncated):
+&lt;code&gt;&amp;lt;disks&amp;gt;
+&amp;lt;disk href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52&amp;quot; id=&amp;quot;cde4a207-df4c-4b45-81bd-3ed0a72f4c52&amp;quot;&amp;gt;&amp;lt;actions&amp;gt;&amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52/export&amp;quot; rel=&amp;quot;export&amp;quot;/&amp;gt;
+&amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52/copy&amp;quot; rel=&amp;quot;copy&amp;quot;/&amp;gt;&amp;lt;/actions&amp;gt;
+&amp;lt;name&amp;gt;rhel-6.6-template_Disk1&amp;lt;/name&amp;gt;
+&amp;lt;template href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&amp;quot; id=&amp;quot;66081542-2ef7-4978-bf30-5e79173630e6&amp;quot;/&amp;gt;
+&amp;lt;alias&amp;gt;rhel-6.6-template_Disk1&amp;lt;/alias&amp;gt;
+&amp;lt;image_id&amp;gt;bfcffeba-8b81-4a64-82eb-9007a28557b4&amp;lt;/image_id&amp;gt;
+&lt;/code&gt;
+You should find a file with the name matching the image ID on your NFS server.
+If you use fibre channel or iSCSI the on disk layout is different, but the above calls should help you to identify the proper LUN and logical volume.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Big fat warning!&lt;/strong&gt; Do not continue if you&amp;rsquo;re not absolutely sure you identified the correct file! You &lt;strong&gt;will&lt;/strong&gt; ruin your RHEV environment and have been warned.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Make sure you identified the correct file:
+&lt;code&gt;$ pwd
+/srv/rhev/storage1/9315c53c-767f-49bd-bd91-c8cf93ef74ca/images/cde4a207-df4c-4b45-81bd-3ed0a72f4c52
+&lt;/code&gt;
+As you can see cde4a207-df4c-4b45-81bd-3ed0a72f4c52 matches the disk ID retrieved via the REST API. And there is a file in this directory matching the disk ID retrieved in the second API call:
+&lt;code&gt;# ls
+bfcffeba-8b81-4a64-82eb-9007a28557b4
+bfcffeba-8b81-4a64-82eb-9007a28557b4.lease
+bfcffeba-8b81-4a64-82eb-9007a28557b4.meta
+&lt;/code&gt;
+&lt;strong&gt;Again, do not proceed if the IDs do not match&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Overwrite the image with qemu-img:
+&lt;code&gt;# qemu-img convert -O raw /tmp/rhel-guest-image-6.6-20141222.1.x86_64.qcow2 bfcffeba-8b81-4a64-82eb-9007a28557b4&lt;/code&gt;
+Make sure you convert to the appropriate on disk format. Check the &lt;a href=&#34;https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.4/html/V2V_Guide/chap-V2V-VMS_To_Run_on_RHEV.html#Acceptable_Converted_Storage_Output_Formats&#34;&gt;v2v guide&lt;/a&gt; for details.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;If you now start this VM, it should come up with the RHEL KVM image.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;That&amp;rsquo;s all folks!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

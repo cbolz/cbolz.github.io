@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/categories/the-foreman/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/categories/the-foreman/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Install all available updates via Satellite 6</title>
+      <link>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</link>
+      <pubDate>Fri, 11 Sep 2015 10:24:38 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/products/red-hat-satellite&#34;&gt;Red Hat Satellite 6&lt;/a&gt; is a great tool to manage your RHEL virtual machines. In some scenarios you would like to be able to install all available updates for a given system from CloudForms or ManageIQ. I created a small script to accomplish this task.&lt;/p&gt;
+
+&lt;p&gt;To use this script, it is necessary to upgrade your Satellite Server to version 6.1.1 or later. Earlier versions do not expose the necessary API calls.&lt;/p&gt;
+
+&lt;p&gt;The script which is used here can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/install_all_updates&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To use this script, I created a custom button and a simple confirmation dialog. You can find an example dialog in the same git repository.&lt;/p&gt;
+
+&lt;p&gt;First step is to create a button which points to the Request object:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/install_all_updates-button.png&#34; title=&#34;Install all updates button&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/install_all_updates-button-300x310.png&#34; alt=&#34;install_all_updates-button&#34; title=&#34;Install all updates button&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Now create request object which points to the actual method. Like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/request.png&#34; title=&#34;Request object&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/request-300x63.png&#34; alt=&#34;request&#34; title=&#34;Request object&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Last but not least, the actual method. I put it into my personal datastore and namespace:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/foreman-class.png&#34; title=&#34;The Foreman Class&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/foreman-class-300x103.png&#34; alt=&#34;foreman-class&#34; title=&#34;The Foreman Class&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This will allow you to select any VM and install all available updates on it.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Check provisioning state in ManageIQ with Foreman</title>
+      <link>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</link>
+      <pubDate>Wed, 10 Jun 2015 10:10:39 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;re using &lt;a href=&#34;http://www.theforman.org&#34;&gt;The Foreman&lt;/a&gt; for provisioning VMs, you might want the state machine to proceed only if the puppet run was completed successfully. I wrote a script which checks the puppet state of a given VM via Foreman&amp;rsquo;s API. It can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/check_puppet/checkpuppet.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To make this script work, the hostid of the provisioned VM has to be stored as an provisioning option. The following line in the script, retrieves the hostid:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;foreman_host_id &amp;lt;span class=&amp;quot;pl-k&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; prov.get_option(&amp;lt;span class=&amp;quot;pl-c1&amp;quot;&amp;gt;:hostid&amp;lt;/span&amp;gt;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If this variable is &lt;em&gt;nil&lt;/em&gt;, the status check will fail. I updated the register_foreman script, which can also be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/register_foreman/register_foreman.rb&#34;&gt;Github&lt;/a&gt;, accordingly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;json_parse = JSON.parse(rest_result)
+hostid = json_parse[&#39;id&#39;].to_s
+
+$evm.log(&amp;quot;info&amp;quot;, &amp;quot;Storing Foreman host ID of new VM: #{hostid}&amp;quot;)
+prov.set_option(:hostid,hostid)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Delete VM from Foreman during retirement</title>
+      <link>http://www.jung-christian.de/post/2015/06/delete-vm-from-foreman-during-retirement/</link>
+      <pubDate>Tue, 02 Jun 2015 14:09:18 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/06/delete-vm-from-foreman-during-retirement/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; is covering the full life cycle of a virtual machine or service. This includes the eventual retirement of resources. If you&amp;rsquo;re using my script to &lt;a href=&#34;http://www.jung-christian.de/2015/04/how-to-provision-vms-with-foreman-and-manageiq/&#34;&gt;register a virtual machine in Foreman&lt;/a&gt;, you might want to delete the Foreman records during retirement.&lt;/p&gt;
+
+&lt;p&gt;A wrote a little script to do that, which can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/delete_from_foreman/deletefromforeman.rb&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To use the script, you can either re-use one of the existing states of the VM Retirement state machine, or add an additional one. The script requires the same attributes already described and documented in the previous article.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to provision VMs with Foreman and ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</link>
+      <pubDate>Thu, 30 Apr 2015 11:51:24 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://www.theforman.org&#34;&gt;The Foreman&lt;/a&gt; is a very powerful tool for system management. Red Hat&amp;rsquo;s new version of &lt;a href=&#34;http://www.redhat.com/en/technologies/linux-platforms/satellite&#34;&gt;Satellite&lt;/a&gt; is also using Foreman as one of its core components. It&amp;rsquo;s only consequent to setup both tools so they can benefit from each other.&lt;/p&gt;
+
+&lt;p&gt;While Foreman is the better tool for deployment and configuration management, ManageIQ acting as an open hybrid cloud management platform has the better understanding of the multiple cloud and virtualization environments. One simple scenario is that ManageIQ decides which particular cloud provider has to be used based on user provided input and then Foreman will do the actual installation of the guest operating system including configuration of the installed application.&lt;/p&gt;
+
+&lt;p&gt;Right now ManageIQ can not directly use Foreman to deploy new virtual machines. Due to ManageIQ&amp;rsquo;s very extensible Automate Framework, this can be solved quite easily with some custom code.&lt;/p&gt;
+
+&lt;p&gt;To accomplish the goal, a number of changes have to be implemented and are described further below:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;disable automatic VM start during provisioning&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create a new class &amp;ldquo;register_foreman&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;provide all the necessary credentials and data to &amp;ldquo;register_foreman&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;modify the provisioning state machine to add an additional step&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All the scripts described below can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/register_foreman&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;disable-vm-autostart&#34;&gt;Disable VM autostart&lt;/h1&gt;
+
+&lt;p&gt;During provisoning of virtual machines, ManageIQ will automatically power on the new VM. This is usually exactly what you want. In some scenarios you better want the VM to be powered on in a later stage of the provisioning process - this is possible by setting the option &amp;ldquo;vm_auto_start&amp;rdquo; to false.&lt;/p&gt;
+
+&lt;p&gt;In most cases you use the entry point /Service/Provisioning/StateMachines/ServiceProvision_Template/CatalogItemInitialization to kick of the service provisioning task. This instance is pointing to a method with the same name. Copy the method to your datastore and do a small modification. In the code block which populates all options into the child object, set the provisioning option &amp;ldquo;vm_auto_start&amp;rdquo; to false:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gc.set_option(:vm_auto_start,[false,0])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;An example can be found in my &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/register_foreman/CatalogItemInitialization.rb&#34;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;register-in-foreman&#34;&gt;Register in Foreman&lt;/h1&gt;
+
+&lt;p&gt;The Foreman provides an REST API which is used to register the new virtual machine. Since Satellite 6 is using the same API, the script will work with both versions.&lt;/p&gt;
+
+&lt;p&gt;To utilize Foreman from ManageIQ the following data has to be stored in the Automate class:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Organization&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Location&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Host group&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The necessary steps are described below.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a quick outline what the code does:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;parse variables from the Automate class and store them locally (foreman_host, foreman_user, foreman_password, hostgroup_name, organization_name, location_name)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;establish a connection to Foreman&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;query the hostgroup ID, location ID and organization ID from Foreman&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create a new host record in Foreman with VM name, MAC address, hostgroup ID, location ID and organization ID&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;query host and store details in the logs&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is still a huge potential for future improvements. Error handling is very basic for example.&lt;/p&gt;
+
+&lt;p&gt;The full script can be found in my &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/register_foreman/register_foreman.rb&#34;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;creating-the-register-foreman-class&#34;&gt;Creating the register_foreman class&lt;/h1&gt;
+
+&lt;p&gt;To use the register_foreman method during provisining, a new class has to be created. It&amp;rsquo;s a very simple one though and easy to create.&lt;/p&gt;
+
+&lt;p&gt;First create a new datastore with the namespace /custom/methods or anything else you prefer. In that namespace, create a new class and call it &amp;ldquo;register_foreman&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Modify the schema of the class according to this screenshot:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/register_foreman/register_foreman-class.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Pay special attention to the foreman_password attribute which is a password field. This makes sure that ManageIQ never shows the clear text password in the UI or in the log files.&lt;/p&gt;
+
+&lt;p&gt;After defining the schema, add a new instance and method called &amp;ldquo;register_foreman&amp;rdquo;. Import the code found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/register_foreman/register_foreman.rb&#34;&gt;GitHub&lt;/a&gt; into the &amp;ldquo;register_foreman&amp;rdquo; method. When creating the &amp;ldquo;register_foreman&amp;rdquo; instance, you obviously have to fill out all the data:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;foreman_host: the FQDN of your Foreman server&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;foreman_user: the user which ManageIQ will use to log into Foreman. Make sure this user has enough privileges to query hosts, locations, organizations and host groups and can also add new hosts&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;foreman_password: password of this user. Make sure the attribute is set to &amp;ldquo;password&amp;rdquo; to never expose it as clear text&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;location_name: the location of the new host&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;organization_name: the name of your organization&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;hostgroup_name: the name of the host group used during registration. Host groups define which OS is installed, which puppet groups are used etc.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;modify-the-provisioning-state-machine&#34;&gt;Modify the provisioning state machine&lt;/h1&gt;
+
+&lt;p&gt;The state machines in ManageIQ are very powerful and flexible. Although there is no step to register a host in Foreman, it&amp;rsquo;s quite easy to add one. As an alternative, you could re-use one of the existing states. It&amp;rsquo;s important that you re-use one of the states following &amp;ldquo;provisioning&amp;rdquo; to make sure all the requirements (e.g. the VM must exist before the &amp;ldquo;register_foreman&amp;rdquo; method is executed) are met.&lt;/p&gt;
+
+&lt;p&gt;To be able to modify an existing state machine, it has to be copied first. Navigate to /Infrastructure/VM/Provisioning/StateMachines/VMProvision_VM/Provision VM from Template (template) and copy that instance to your datastore.&lt;/p&gt;
+
+&lt;p&gt;After the instance has been copied, it becomes editable. First modify the parent class (VMProvision_VM) and change the schema. Add an additional state &amp;ldquo;register_foreman&amp;rdquo;. If you used the structure and name described in the previous step, use /custom/methods/register_foreman/register_foreman as the default value. Also set the Max Retries to 100 to avoid endless loops in case of an error.&lt;/p&gt;
+
+&lt;p&gt;Now you have to change the sequence and move the new step &amp;ldquo;register_foreman&amp;rdquo; between &amp;ldquo;CheckProvisioned&amp;rdquo; and &amp;ldquo;PostProvision&amp;rdquo;. The result should look similar to this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/register_foreman/vmprovision_vm-class.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;disclaimer&#34;&gt;Disclaimer&lt;/h1&gt;
+
+&lt;p&gt;All of the above was successfully implemented and tested with CloudForms Management Engine 5.3.3 and Satellite 6.0.8. All the relevant APIs in Satellite and Foreman should be the same, but I haven&amp;rsquo;t tested this in detail. Nevertheless the provided scripts should give you an idea on how to implement this level of integration.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

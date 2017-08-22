@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/categories/it/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/categories/it/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How to setup a PostgreSQL database for ManageIQ and CloudForms</title>
+      <link>http://www.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</link>
+      <pubDate>Wed, 23 Nov 2016 14:44:44 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</guid>
+      <description>
+
+&lt;p&gt;When playing with several &lt;a href=&#34;http://www.redhat.com/en/technologies/management/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; appliances in my lab environment, I face the problem that I quickly run out of RAM on my virtual infrastructure. I&amp;rsquo;m using a number of &lt;a href=&#34;http://www.intel.com/content/www/us/en/nuc/overview.html&#34;&gt;Intel NUC&amp;rsquo;s&lt;/a&gt; and although the newest models can go up to 32 GB of RAM, memory has always been my bottleneck. So I thought instead of running a PostgreSQL server in each virtual CloudForms or ManageIQ appliance, it might be more efficient to have a dedicated PostgreSQL Server for all of them. There are other use cases where one might want to use a external database:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;High Availability: built a PostgreSQL cluster to increase fault tolerance&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Scalability: a dedicated database server can make it easier to scale up&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Maintenance: if the database is clustered upgrades and other maintenance tasks can be performed on one node, while all other nodes continue to work&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These are just some examples and there are many more use cases and examples.&lt;/p&gt;
+
+&lt;h1 id=&#34;prepare-the-postgresql-server&#34;&gt;Prepare the PostgreSQL Server&lt;/h1&gt;
+
+&lt;p&gt;Obviously the first step is to setup the PostgreSQL Server on a physical or virtual machine (or multiple, if one wants to setup a clustered databse). This post will not go into any details on how to do that. It&amp;rsquo;s covered in many other posts and documents. When tuning the database server, it is recommended to have a look at the example configuration which can be found on an CloudForms or ManageIQ virtual appliance.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# example configuration on CloudForms Appliances
+/opt/rh/cfme-appliance/TEMPLATE/var/opt/rh/rh-postgresql94/lib/pgsql/data/
+# example configuration on ManageIQ Appliances
+/opt/manageiq/manageiq-appliance/TEMPLATE/var/opt/rh/rh-postgresql95/lib/pgsql/data
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make sure the applicable settings are transferred to your PostgreSQL Server to get best possible performance. Since the external database will be used a lot, its performance is crucial for the entire environment.&lt;/p&gt;
+
+&lt;p&gt;Tools like &lt;a href=&#34;https://www.postgresql.org/docs/current/static/pgbench.html&#34;&gt;pg_bench&lt;/a&gt; can help to verify database performance.&lt;/p&gt;
+
+&lt;h1 id=&#34;create-the-user-database-and-privileges&#34;&gt;Create the user, database and privileges&lt;/h1&gt;
+
+&lt;p&gt;After the database server has been installed, tuned and tested, it&amp;rsquo;s time to create the user and database. I&amp;rsquo;m using one database server for many CloudForms and ManageIQ appliances. To be able to isolate database access, I create a user for every appliance and restrict this user to its dedicated database.&lt;/p&gt;
+
+&lt;p&gt;For the following example, let&amp;rsquo;s assume there is a new &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ Appliance&lt;/a&gt; running the &lt;a href=&#34;http://manageiq.org/blog/2016/06/announce_e_name/&#34;&gt;Euwe&lt;/a&gt; release.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# create a new user and grant super user privilegescreateuser -s -P miq-euwe# create a dedicate database and set ownercreatedb -O miq-euwe miq-euwe
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We just created a user call &lt;strong&gt;miq-euwe&lt;/strong&gt; and gave him ownership to the new database with the same name. Why this user was created as a super user, will be covered in the next paragraph. Before we move on, we need to grant this user remote login privileges. Modfy pg_hba.conf on the PostgreSQL server and add a line similar to this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;host all miq-euwe 192.168.1.1/32 md5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will allow the user &lt;strong&gt;miq-euwe&lt;/strong&gt; to login into all databases from the system with the IP &lt;strong&gt;192.168.1.1&lt;/strong&gt; after authenticating with the correct password. Test the connection from the appliance with the &lt;strong&gt;psql&lt;/strong&gt; command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;psql -h &amp;lt;hostname&amp;gt; -U miq-euwe -W miq-euwe
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;configure-database-with-appliance-console&#34;&gt;Configure database with appliance console&lt;/h1&gt;
+
+&lt;p&gt;To configure the appliance to use the external database, the appliance_console can be used (on current version, you can just use the alias &amp;ldquo;ap&amp;rdquo;).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ appliance_console
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Chose Option 8 &amp;ldquo;Configure Database&amp;rdquo; and go through the guided procedure.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-happens&#34;&gt;What happens&lt;/h2&gt;
+
+&lt;p&gt;The appliance performs a number of steps while configuring the database:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;connect to the database and try to login&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;verify no process is currently using the database&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;if no other process is using the database, delete it&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create a new database with the specified name and credentials&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;populate the database with the initial tables and data&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;On the first start of the evmserverd service, additional data is written into the database. During that phase the database can grow to around 30 to 40 MB.&lt;/p&gt;
+
+&lt;p&gt;Now it might be clearer, why we needed a user with superuser privilege and why the pg_hba.conf has to allow access to all databases. But not all is lost, this can be fixed after the initial setup is done.&lt;/p&gt;
+
+&lt;h1 id=&#34;fix-database-configuration&#34;&gt;Fix database configuration&lt;/h1&gt;
+
+&lt;p&gt;After setting up the appliance and populating the initial data, I restrict database access to what is absolutely necessary. This is done by performing two simple steps.&lt;/p&gt;
+
+&lt;p&gt;Fix pg_hba.conf:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# only grant access to miq-euwe database
+host miq-euwe miq-euwe 192.168.1.1/32 md5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make this change active, send a Hangup signal to the master PostgreSQL process:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kill -HUP &amp;lt;PID&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Remove superuser privilege from user:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pgsql=# alter role miq-euwe nosuperuser;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Verify the appliance still works correctly after applying those changes.&lt;/p&gt;
+
+&lt;h1 id=&#34;clean-up-the-appliance&#34;&gt;Clean up the appliance&lt;/h1&gt;
+
+&lt;p&gt;When logging into the appliance, the active database configuration can be found in the Configuration, Database menu.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/external-database.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/external-database-300x69.png&#34; alt=&#34;Verify external database configuration&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If everything works fine, the internal database role can be disabled, which will also free up some memory in the virtual machine.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/disable-db-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/disable-db-role-300x157.png&#34; alt=&#34;How to disable database role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;wrap-up&#34;&gt;Wrap up&lt;/h1&gt;
+
+&lt;p&gt;I&amp;rsquo;m using this setup since CloudForms 5.6, aka ManageIQ Darga on a daily basis. I also tested this with previous versions of CloudForms back to 5.3 and the basic steps have always been the same.&lt;/p&gt;
+
+&lt;p&gt;To make ManageIQ and CloudForms work without superuser privileges during setup, a &lt;a href=&#34;https://bugzilla.redhat.com/show_bug.cgi?id=1364270&#34;&gt;Bugzilla Ticket&lt;/a&gt; has been created.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Tags for access control</title>
+      <link>http://www.jung-christian.de/post/2016/08/using-tags-for-access-control/</link>
+      <pubDate>Thu, 25 Aug 2016 18:35:15 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/using-tags-for-access-control/</guid>
+      <description>
+
+&lt;p&gt;UPDATE 2016-10-14: A more polished version of this article can now be found on the &lt;a href=&#34;http://cloudformsblog.redhat.com/2016/10/13/using-tags-for-access-control/&#34;&gt;Official Red Hat CloudForms Blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Most systems are using Access Control LIsts (ACL) to manage user access to objects. Common examples are ACL&amp;rsquo;s for file systems, LDAP, Web Servers and many more. Who ever had to create ACL rules and maintain them knows how complicated this can be. To make access control easy again, CloudForms and ManageIQ are using tags. If the group a user belongs to has the same tag associated as the accessed object, access is granted, if not, access is denied.&lt;/p&gt;
+
+&lt;p&gt;Sounds simple and straight forward. There are a couple of things to know about tags, which make it very powerful, but using them also a bit tricky. Let&amp;rsquo;s start with some basics.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;User: users can be created in the internal database or are retrieved from external authentication (LDAP, Active Directory, IPA/RH Identitiy Manager which is part of Red Hat Enterprise Linux). Meta data including the full name, the email address, the password (in case of database authentication) and a relationship to one or more groups&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Groups: every user is a member of one or more groups (if the internal database is used for authentication, users can only be a member of one group)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Roles: every group is associated to exactly one role which describes the granted privileges&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Tenants: multiple tenants can be used to separate slices of the infrastructure. Tenants could be external customers, internal departments or project teams.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Groups are used to define the scope or visibility of a user. For example, a member of the Engineering Department can be granted access to all VMs owned by the Engineering Department. Or an operator could be a member of the group Operations and be granted access to all VMs running in the production environment.&lt;/p&gt;
+
+&lt;p&gt;Roles are used to define which actions a user is allowed to perform. For example, an operator role could define all actions needed for an operator. This could include permissions to start or stop virtual machines, reconfigure them etc. A role &amp;ldquo;self service user&amp;rdquo; could allow a user to order new VMs and manage them.&lt;/p&gt;
+
+&lt;p&gt;The combination of groups and role defines which actions are allowed for which object. An operator in the Engineering Department would have the same privileges as an operator in the Finance Department (because they share the same role), but they would still see different objects (because they are not in the same group).&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s discuss a couple of examples to get familiar with the model.&lt;/p&gt;
+
+&lt;h1 id=&#34;setting-the-stage&#34;&gt;Setting the stage&lt;/h1&gt;
+
+&lt;p&gt;For the following exercises the internal database authentication has been used. That limits the examples to the restriction of one user is always in exactly one group. If a more flexible model is needed, where a user can be a member of multiple groups, an external authentication source like LDAP, Active Directory or FreeIPA (Red Hat Identity Manager) has to be used. But let&amp;rsquo;s keep it simple.&lt;/p&gt;
+
+&lt;p&gt;The way the user interface is designed, it makes sense to start with the role, then create the group and finally the user. Let&amp;rsquo;s keep tenants for later.&lt;/p&gt;
+
+&lt;h2 id=&#34;example-role-self-service&#34;&gt;Example Role &amp;ldquo;Self Service&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;Navigate to &amp;ldquo;Settings&amp;rdquo;, &amp;ldquo;Configuration&amp;rdquo; and click on &amp;ldquo;Access Control&amp;rdquo; in the pane on the left. and then click on &amp;ldquo;Roles&amp;rdquo;. Add a new role by clicking on &amp;ldquo;Configuration&amp;rdquo;, &amp;ldquo;Add a new Role&amp;rdquo; name it &amp;ldquo;Self Service&amp;rdquo;. Granting privileges to the role is very nicely implemented. The tree on the right represents all the menus and actions a user can perform in the UI. Enabling (checking) a feature grants the privilege to the role. By drilling down into sub folders, very fine grained permissions can be granted (e.g. power on, but not power off).&lt;/p&gt;
+
+&lt;p&gt;For the purpose of this demo, a role with full access to &amp;ldquo;Cloud Intel&amp;rdquo;, &amp;ldquo;Services&amp;rdquo;, &amp;ldquo;Compute&amp;rdquo;, &amp;ldquo;Settings&amp;rdquo; and &amp;ldquo;Access Rules for all Virtual Machines&amp;rdquo; - but no other privileges - is created.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-role-300x122.png&#34; alt=&#34;add role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;example-group-engineering&#34;&gt;Example Group &amp;ldquo;Engineering&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;In the next step a group called &amp;ldquo;Engineering&amp;rdquo; is created. All members of this group will have the role &amp;ldquo;Self Service&amp;rdquo; assigned, which was created in the previous step. For now, we skip tags and filters and keep them all unchecked.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/create-group.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/create-group-300x203.png&#34; alt=&#34;create group&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;example-user-joe-doe&#34;&gt;Example user Joe Doe&lt;/h2&gt;
+
+&lt;p&gt;In the last step a user &amp;ldquo;Joe Doe&amp;rdquo; is created. This will be a local user (stored in the database) and is a member of the Engineering group.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-user.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-user-300x184.png&#34; alt=&#34;add user&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+
+&lt;p&gt;If Joe Doe logs into the web interface and navigates to Providers, Hosts, Virtual Machines or Service Catalogs he will see all existing objects. When the user was created, he was assigned to a group which doesn&amp;rsquo;t have any restrictions on visibility, so this should not be a surprise.&lt;/p&gt;
+
+&lt;h1 id=&#34;granting-access-to-individual-objects&#34;&gt;Granting access to individual objects&lt;/h1&gt;
+
+&lt;p&gt;Joe Doe can now see all objects in the Web UI. Since Joe Doe is a member of the Engineering Department, we want to restrict his visibility to VMs associated to Engineering. To accomplish this, CloudForms/ManageIQ needs to know which VMs are part of the Engineering Department. This can be done by tagging those objects. But first, let&amp;rsquo;s restrict Joe Doe to only see objects tagged as Department/Engineering.&lt;/p&gt;
+
+&lt;p&gt;Navigate to the group, edit it and select the Department/Engineering Tag.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/edit-and-tag-engineering.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/edit-and-tag-engineering-300x458.png&#34; alt=&#34;edit and tag engineering&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When changing groups, roles or tenants, the user doesn&amp;rsquo;t need to logout and login again. Changes are reflected on the next reload of the UI. If Joe reloads the UI, he will see no Virtual Machines or other objects anymore! The scope for the group and hence the user, was just limited to objects which are tagged as Department/Engineering - and no objects have been tagged so far.&lt;/p&gt;
+
+&lt;p&gt;An object, like a Virtual Machine, a Host, Data Store etc. can be tagged by using the &amp;ldquo;Policy&amp;rdquo;, &amp;ldquo;Edit Tags&amp;rdquo; menu. After tagging a Virtual Machine and reloading the Web UI as Joe Doe, the VM will show up in the user interface.&lt;/p&gt;
+
+&lt;p&gt;This works the same way for all other objects. If Joe Doe should be able to order a specific item from the service catalog, the item (or bundle) has to be tagged with the Department/Engineering tag to make it visible.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-gotcha&#34;&gt;First Gotcha!&lt;/h2&gt;
+
+&lt;p&gt;You might have noticed, after setting the Department/Engineering Tag for the Group, no objects are showing up in the UI. This means, all relevant objects which should be visible for the user, must be tagged. As soon as you start using tags, you have to use them consistently.&lt;/p&gt;
+
+&lt;h1 id=&#34;working-with-multiple-tags&#34;&gt;Working with multiple tags&lt;/h1&gt;
+
+&lt;p&gt;If a Virtual Machine or any other object has to be visible to multiple Departments, it&amp;rsquo;s solved by just adding all the necessary Department tags. Adding the Department/Finance tag to a service catalog item, makes the item available for order to members of the Finance team.&lt;/p&gt;
+
+&lt;p&gt;Tags in the same tag category are logical OR relationships. If at least one tag of the list of group tags in this category matches with at least one tag of the category of the target object, access is granted. In this example, if a user is in Department/Finance OR Department/Engineering, he or she will see the object. Users which are not in Engineering or Finance, will not see the object. This also applies, if the object isn&amp;rsquo;t tagged with any Department tag - which means, nobody will see it.&lt;/p&gt;
+
+&lt;h2 id=&#34;second-gotcha&#34;&gt;Second Gotcha!&lt;/h2&gt;
+
+&lt;p&gt;This also includes Super Administrators! If you restrict visibility of Super Administrators by assigning them tags, they will no longer see those objects which they don&amp;rsquo;t have matching tags for! Since Super Administrators can always fix tag assignments (or remove the tag filter for their group), they can restore full visibility. But better make sure you never limit Super Administrators by accident&amp;hellip;&lt;/p&gt;
+
+&lt;h1 id=&#34;working-with-multiple-tag-categories&#34;&gt;Working with multiple tag categories&lt;/h1&gt;
+
+&lt;p&gt;When working in more complex environments, multiple tag categories have to be used. For example, tags can be used to separate Virtual Machines from different stages (Development, QA, Production), or different tag categories could be used to be more granular by granting access to service catalog items.&lt;/p&gt;
+
+&lt;p&gt;As soon as multiple tag categories are introduced, things get a bit more complicated.&lt;/p&gt;
+
+&lt;h2 id=&#34;third-gotcha&#34;&gt;Third Gotcha!&lt;/h2&gt;
+
+&lt;p&gt;When using multiple tag categories, there is a logical AND between tag categories. This is probably best explained with an example. There is already an example tag category called &amp;ldquo;Environment&amp;rdquo; with tags associated like &amp;ldquo;Development&amp;rdquo;, &amp;ldquo;Production&amp;rdquo; and others.&lt;/p&gt;
+
+&lt;p&gt;If the group &amp;ldquo;Engineering&amp;rdquo; of which Joe Doe is a member, gets the additional tag Environment/Development assigned, Joe can only see objects which have the Department/Engineering AND the Environment/Development tag assigned.  A Virtual Machine tagged as Department/Engineering and Environment/Production will be hidden from Joe.&lt;/p&gt;
+
+&lt;p&gt;This is very important and is often causing confusion. As soon as you start tagging objects of your infrastructure with tags of different tag categories, the logical AND comes into play!&lt;/p&gt;
+
+&lt;h1 id=&#34;tags-in-the-context-of-tenants&#34;&gt;Tags in the context of tenants&lt;/h1&gt;
+
+&lt;p&gt;Tenants can be used to go even one step further when it comes to isolation and separation of the virtual and cloud infrastructure. Tenants can be nested and can also have projects as child elements. When working with tenants, it is important to remember that they limit also the visibility of objects.&lt;/p&gt;
+
+&lt;p&gt;If Joe Doe moves into a new tenant, he will only see objects like Virtual Machines, which are owned by this tenant or one of its sub tenants. Tags are filtered with logical AND. This means, Joe will only see objects which are part of the tenant or any of the sub tenants AND are tagged appropriately. Objects which are owned by a parent or sibling tenant will never be visible to Joe, even if they are tagged with the proper tag (in this example Department/Engineering).&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion-think-before-you-tag&#34;&gt;Conclusion: Think before you tag&lt;/h1&gt;
+
+&lt;p&gt;Tags are a very simple and yet powerful way to manage access control lists. Sometimes people tend to over complicate things though and this makes it unnecessarily complicated. There are a few rules we try to follow when we plan tagging:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;don&amp;rsquo;t use tags for information which is already available as an attribute: For example tagging all Windows VMs as Operating System Windows and tagging all Linux VMs similarly, is in most cases not a good idea, since this information is already stored in an VM attribute (you can create a filter to find all Windows VMs, you don&amp;rsquo;t need a tag to do that)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;try to reduce the number of tags and tag categories: having a large number of categories and tags make things complicated. Think before you add a new tag. Also keep in mind that you might have to tag (again) everything you already have (remember, logical AND between tag categories)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;try to use auto tagging: instead of manually tagging the infrastructure, try to write some Automate Code which does it for you. For example during provisioning time.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create Cobbler PXE/TFTP Records during VM Provisioning</title>
+      <link>http://www.jung-christian.de/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</link>
+      <pubDate>Wed, 17 Aug 2016 14:46:11 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-satellite/&#34;&gt;Red Hat Satellite 5.x&lt;/a&gt; is using &lt;a href=&#34;https://cobbler.github.io/&#34;&gt;Cobbler&lt;/a&gt; to manage DHCP and TFTP configuration files. A while back, we posted an article on how to use &lt;a href=&#34;http://cloudformsblog.redhat.com/2013/05/03/cobbler-provisioning-via-cloudforms-2-0/&#34;&gt;Cobbler Provisioning via CloudForms 2.0&lt;/a&gt;. Since the original post was written for CloudForms 2.0 in 2013, it&amp;rsquo;s probably time for an update.&lt;/p&gt;
+
+&lt;p&gt;I rewrote the script and uploaded it to &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate/Integration/ConfigurationManagement/Cobbler.class&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To add a Cobbler system record during provisioning, an additional step in the provisioning state machine is necessary.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/cobbler-statemachine.png&#34; title=&#34;Cobbler State Machine&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/cobbler-statemachine-300x183.png&#34; alt=&#34;cobbler-statemachine&#34; title=&#34;Cobbler State Machine&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Please make sure you only use CreateCobblerRecord or RegisterForeman if the attributes for the instances have been declared. For Foreman this was &lt;a href=&#34;http://www.jung-christian.de/2015/04/how-to-provision-vms-with-foreman-and-manageiq/&#34;&gt;documented in a previous post&lt;/a&gt;, for Cobbler, it could look like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/cobbler-instance.png&#34; title=&#34;Cobbler Instance&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/cobbler-instance-300x114.png&#34; alt=&#34;cobbler-instance&#34; title=&#34;Cobbler Instance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Add an additional network interface on RHEV virtual machines</title>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
+      <pubDate>Fri, 05 Aug 2016 15:30:05 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
+      <description>&lt;p&gt;Similar to the previous post on how to &lt;a href=&#34;http://www.jung-christian.de/2016/08/add-an-additional-disk-on-rhev-virtual-machines/&#34;&gt;add additional disks for existing virtual machines&lt;/a&gt; running on RHEV, this article describes how to add additional network interfaces to virtual machines running in RHEV.&lt;/p&gt;
+
+&lt;p&gt;The implementation follows the same concept:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;use a dynamic drop down list to make the selection of available networks available to the user&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;specify the name of the new interface&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create a button to call the action&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;and the actual code which adds the network interfaces to the specified virtual machine&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since the setup is very similar to what was described in the previous post, here are the links to the &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-nic.yml&#34;&gt;Service Dialog&lt;/a&gt; and the &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Automate Code&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Add an additional disk on RHEV virtual machines</title>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
+      <pubDate>Fri, 05 Aug 2016 15:25:41 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
+      <description>
+
+&lt;p&gt;I was working on a script to add additional disks to existing virtual machines running on Red Hat Enterprise Virtualization (RHEV). I did find some code original written by Eduardo Minguez which I just polished a little bit. Thanks to him I published the full code on Github under the terms of the GPL.&lt;/p&gt;
+
+&lt;p&gt;There are actually multiple steps to build a user friendly way for adding the virtual disk:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;create an additional button for the VM object&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;provide a dialog to select disk size, data store and allocation policy (thin vs preallocated)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;select from a list of available datastores created by a dynamic dropdown list&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;the actual code which adds the virtual disk to the VM&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The code was tested on CloudForms 4.0/4.1 and RHEV 3.4 - but it should work with other versions and the respective OpenSource Projects too.&lt;/p&gt;
+
+&lt;h1 id=&#34;automate-code&#34;&gt;Automate Code&lt;/h1&gt;
+
+&lt;p&gt;There are two methods to implement this functionality. The first method &amp;ldquo;dialog_add_disk&amp;rdquo; will provide a dynamic drop down list from which the user will be able to select one of the existing RHEV data stores. The new virtual disk will be created on the selected storage.&lt;/p&gt;
+
+&lt;p&gt;The second method &amp;ldquo;hot_add_disk&amp;rdquo; will parse this information plus the other settings provided by the user (allocation policy and size) and create the virtual disk.&lt;/p&gt;
+
+&lt;p&gt;Both methods can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;service-dialog&#34;&gt;Service Dialog&lt;/h1&gt;
+
+&lt;p&gt;The second step is to create a service dialog which asks the user for required information. If you create the dialog manually, make sure the field are using the proper names, or the &amp;ldquo;hot_add_disk&amp;rdquo; method will not be able to find the values.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&amp;ldquo;size&amp;rdquo;: and integer value of the new disk size in GB&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&amp;ldquo;datastore&amp;rdquo;: the name of the data store, ideally coming from a dynamic dialog&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&amp;ldquo;allocpolicy&amp;rdquo;: allocation policy, possible values are &amp;ldquo;thick&amp;rdquo; or &amp;ldquo;thin&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For your convenience I exported my service dialog and put it on &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-disk.yml&#34;&gt;Github&lt;/a&gt; too.&lt;/p&gt;
+
+&lt;h1 id=&#34;button&#34;&gt;Button&lt;/h1&gt;
+
+&lt;p&gt;To put everything together, a button has to be created and associated to virtual machine objects. For the button it is important to specify the correct value for &amp;ldquo;System/Process&amp;rdquo; which should be set to &amp;ldquo;Request&amp;rdquo;, and the request name which has to match the name of the instance. In the provided Automate export the name of the instance is &amp;ldquo;hot_add_disk&amp;rdquo; which has to be put into the &amp;ldquo;Request&amp;rdquo; field.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;a-few-words-about-the-code&#34;&gt;A few words about the code&lt;/h1&gt;
+
+&lt;p&gt;The &amp;ldquo;dialog_add_disk&amp;rdquo; method has probably two blocks worth describing. The function &amp;ldquo;getstorages&amp;rdquo; will use the provided host name and credentials to retrieve a list of all available storage domains. This list is filtered by type &amp;ldquo;data&amp;rdquo; to exclude ISO and Export domains. The resulting list of storage domain is stored in an array which later stored in the $evm.object to populate the dynamic dialog fields.&lt;/p&gt;
+
+&lt;p&gt;The second noteworthy code block is the following section:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  vm=$evm.root[&#39;vm&#39;]
+  ext_mgt_system = vm.ext_management_system
+  rhevmhost = &amp;quot;https://#{ext_mgt_system.hostname}&amp;quot;
+  rhevmuser = ext_mgt_system.authentication_userid
+  rhevmpass = ext_mgt_system.authentication_password
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This piece of code does first retrieve the VM object (from which the button was clicked) and will then retrieve the details for the management system. This object does contain the host name and credentials to communicate to the provider. This is a nice way of retrieving those credentials from the internal database instead of hard coding them or providing them in the instance attributes.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Orchestrating OpenShift Enterprise with ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</link>
+      <pubDate>Fri, 03 Jun 2016 09:18:15 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</guid>
+      <description>&lt;p&gt;A nice post on how to scale &lt;a href=&#34;http://Orchestrating OpenShift Enterprise with ManageIQ&#34;&gt;OpenShift Applications with ManageIQ&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to provision Azure workloads with CloudForms</title>
+      <link>http://www.jung-christian.de/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</link>
+      <pubDate>Mon, 22 Feb 2016 10:21:15 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</guid>
+      <description>&lt;p&gt;Just found this very good video demonstration on &lt;a href=&#34;http://www.videoqe.com/videogallery/cloudforms-4-0-provision-azure-vm/&#34;&gt;how to provision workloads&lt;/a&gt; on Microsoft Azure with CloudForms.&lt;/p&gt;
+
+&lt;p&gt;Check out the site for other good video demonstrations too.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create Snapshots for a Service in OpenStack</title>
+      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
+      <pubDate>Thu, 17 Dec 2015 16:30:23 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
+      <description>&lt;p&gt;Based on the script to &lt;a href=&#34;http://www.jung-christian.de/2015/12/create-snapshots-in-openstack/&#34;&gt;create snapshots for OpenStack instances&lt;/a&gt;, this version provides similar functionality for service items.&lt;/p&gt;
+
+&lt;p&gt;It iterates through the list of instances belonging to a specific service and creates a snapshot for each instance. The complete method can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_service_snapshot.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This can be called from a custom button associated to service items.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create Snapshots in OpenStack</title>
+      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</link>
+      <pubDate>Thu, 17 Dec 2015 16:16:01 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</guid>
+      <description>&lt;p&gt;One of my first experiments using the Ruby fog library. ManageIQ or CloudForms can currently not create snapshots for OpenStack instances.&lt;/p&gt;
+
+&lt;p&gt;With a custom button and a method available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_snapshot.rb&#34;&gt;Github&lt;/a&gt;, you can easily add this functionality. The snapshot name and snapshot ID will be stored in custom attributes of the instance, so they show up in the Web UI (after a reload).&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Execute commands with RbVmomi</title>
+      <link>http://www.jung-christian.de/post/2015/12/execute-commands-with-rbvmomi/</link>
+      <pubDate>Thu, 17 Dec 2015 13:40:39 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/12/execute-commands-with-rbvmomi/</guid>
+      <description>&lt;p&gt;One way to execute remote commands on a running VMware VM is by using &lt;a href=&#34;https://github.com/vmware/rbvmomi&#34;&gt;RbVmomi&lt;/a&gt;. It&amp;rsquo;s a Ruby wrapper for VMware&amp;rsquo;s SOAP API.&lt;/p&gt;
+
+&lt;p&gt;RvVmomi is not installed on the appliance by default, but can be easily added:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gem install rbvmomi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make this work, the VMware Tools have to be installed and running inside the virtual machine. You also need the credentials to log into the virtual machine.&lt;/p&gt;
+
+&lt;p&gt;An example method on how to use this library can be found on my &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/vmware_execute_command/runProgramInGuest.rb&#34;&gt;Github page&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sharing information between service catalog items</title>
+      <link>http://www.jung-christian.de/post/2015/12/sharing-information-between-service-catalog-items/</link>
+      <pubDate>Thu, 17 Dec 2015 08:45:18 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/12/sharing-information-between-service-catalog-items/</guid>
+      <description>&lt;p&gt;In case of a deployment of an multi tiered application, it is often necessary to store information which was generated while provisioning the first VM, so it can be retrieved during provisioning of the following VMs.&lt;/p&gt;
+
+&lt;p&gt;A simple example could be a service catalog bundle consisting of one DB VM and two application servers. The two application servers have to be configured to use the previously created DB.&lt;/p&gt;
+
+&lt;p&gt;One way to store and retrieve this information, is to use the parent &lt;strong&gt;miq_request&lt;/strong&gt; object. The following code block is doing this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  db_ip = $evm.root[&#39;miq_provision&#39;].miq_request.get_option(:db_ip)
+  if db_ip.nil?
+    $evm.log(&amp;quot;info&amp;quot;, &amp;quot;#{@method} - Storing IP address #{vm.ipaddresses[0]} in db_ip for later use&amp;quot;)
+    $evm.root[&#39;miq_provision&#39;].miq_request.set_option(:db_ip,vm.ipaddresses[0])
+  else
+    $evm.log(&amp;quot;info&amp;quot;, &amp;quot;#{@method} - db_ip is #{db_ip}&amp;quot;)
+  end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, the option &lt;strong&gt;db_ip&lt;/strong&gt; is only set, if it was &lt;strong&gt;nil&lt;/strong&gt;. This should make it easier to reuse the same code in all provisioning state machines, but only set the &lt;strong&gt;db_ip&lt;/strong&gt; while provisioning the (first) Database instance.&lt;/p&gt;
+
+&lt;p&gt;When creating the service catalog bundle, it is important to make sure, the DB Instance is created first. The application servers are second - and since they do not depend on each, they can be deployed in parallel, to speed up the overall process.&lt;/p&gt;
+
+&lt;p&gt;To retreive the &lt;strong&gt;db_ip&lt;/strong&gt; during provisioning of the applicatin servers, this code block can be used:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;db_ip = $evm.root[&#39;miq_provision&#39;].miq_request.get_option(:db_ip)
+if not db_ip.nil?
+  $evm.log(&amp;quot;info&amp;quot;, &amp;quot;#{@method} - Found db_ip #{db_ip} and storing it for later...&amp;quot;)
+  prov.set_option(:db_ip,db_ip)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If this is added in the &lt;strong&gt;customize_request&lt;/strong&gt; method, the following methods can retrieve the &lt;strong&gt;db_ip&lt;/strong&gt; by using&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;db_ip = prov.get_option(:db_ip)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Retrieving the IP from the &lt;strong&gt;miq_request&lt;/strong&gt; and storing it in the &lt;strong&gt;prov.options&lt;/strong&gt; is optional. However, storing the information in the provisioning object is more efficient, if the variable is needed in multiple methods.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The definite guide to CloudForms and ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</link>
+      <pubDate>Mon, 05 Oct 2015 10:32:46 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;re looking for a good book about CloudForms and ManageIQ, check this one out.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.gitbook.com/book/pemcg/introduction-to-cloudforms-automation/details&#34;&gt;CloudForms &amp;amp; ManageIQ Automation How-To Guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It has all the gory details about Automate and probably everything else you would ever want to know. And in the true spirit of Open Source it&amp;rsquo;s hosted on &lt;a href=&#34;https://github.com/pemcg/cloudforms-automation-howto-guide&#34;&gt;GitHub&lt;/a&gt; to make this even better over time.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Install all available updates via Satellite 6</title>
+      <link>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</link>
+      <pubDate>Fri, 11 Sep 2015 10:24:38 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/products/red-hat-satellite&#34;&gt;Red Hat Satellite 6&lt;/a&gt; is a great tool to manage your RHEL virtual machines. In some scenarios you would like to be able to install all available updates for a given system from CloudForms or ManageIQ. I created a small script to accomplish this task.&lt;/p&gt;
+
+&lt;p&gt;To use this script, it is necessary to upgrade your Satellite Server to version 6.1.1 or later. Earlier versions do not expose the necessary API calls.&lt;/p&gt;
+
+&lt;p&gt;The script which is used here can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/install_all_updates&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To use this script, I created a custom button and a simple confirmation dialog. You can find an example dialog in the same git repository.&lt;/p&gt;
+
+&lt;p&gt;First step is to create a button which points to the Request object:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/install_all_updates-button.png&#34; title=&#34;Install all updates button&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/install_all_updates-button-300x310.png&#34; alt=&#34;install_all_updates-button&#34; title=&#34;Install all updates button&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Now create request object which points to the actual method. Like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/request.png&#34; title=&#34;Request object&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/request-300x63.png&#34; alt=&#34;request&#34; title=&#34;Request object&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Last but not least, the actual method. I put it into my personal datastore and namespace:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/foreman-class.png&#34; title=&#34;The Foreman Class&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/foreman-class-300x103.png&#34; alt=&#34;foreman-class&#34; title=&#34;The Foreman Class&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This will allow you to select any VM and install all available updates on it.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Manage VM snapshots in RHEV/oVirt with ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</link>
+      <pubDate>Wed, 17 Jun 2015 08:50:28 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</guid>
+      <description>&lt;p&gt;One feature which is still missing in &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; or &lt;a href=&#34;http://www.redhat.com/en/technologies/cloud-computing/cloudforms&#34;&gt;CloudForms&lt;/a&gt; is the capability to create, roll back and delete snapshots in &lt;a href=&#34;https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Virtualization&#34;&gt;RHEV&lt;/a&gt; or &lt;a href=&#34;http://www.ovirt.org&#34;&gt;oVirt&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I wrote three scripts to accomplish these tasks and made them available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/rhev&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Download the namespace cjung, zip and import it into the appliance by clicking &amp;ldquo;Automate, Import/Export&amp;rdquo; and upload the zip file. There is a YAML export of some simple example dialogs which can be used when designing the custom buttons. The custom menu for a VM could look something like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom_buttons.png&#34; title=&#34;Custom buttons&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom_buttons-300x46.png&#34; alt=&#34;custom_buttons&#34; title=&#34;Custom Buttons&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The create snapshot button only asks for the description of the new snapshot. To make the delete and revert snapshot functionality a bit more convenient to use, I wrote a dynamic drop down method. This method queries the list of all available snapshots from RHEV/oVirt and presents the list to the user. By choosing one of the provided options, the snapshot ID is send to the delete_snapshot or revert_snapshot method.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/dynamic_dropdown.png&#34; title=&#34;Dynamic Dropdown Lists&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/dynamic_dropdown-300x122.png&#34; alt=&#34;dynamic_dropdown&#34; title=&#34;Dynamic Dropdown Lists&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;All three scripts are using the RHEV/oVirt API to manage the snapshots. Actions are executed in the background, so it might take a few seconds until the action is executed.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Check provisioning state in ManageIQ with Foreman</title>
+      <link>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</link>
+      <pubDate>Wed, 10 Jun 2015 10:10:39 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;re using &lt;a href=&#34;http://www.theforman.org&#34;&gt;The Foreman&lt;/a&gt; for provisioning VMs, you might want the state machine to proceed only if the puppet run was completed successfully. I wrote a script which checks the puppet state of a given VM via Foreman&amp;rsquo;s API. It can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/check_puppet/checkpuppet.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To make this script work, the hostid of the provisioned VM has to be stored as an provisioning option. The following line in the script, retrieves the hostid:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;foreman_host_id &amp;lt;span class=&amp;quot;pl-k&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; prov.get_option(&amp;lt;span class=&amp;quot;pl-c1&amp;quot;&amp;gt;:hostid&amp;lt;/span&amp;gt;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If this variable is &lt;em&gt;nil&lt;/em&gt;, the status check will fail. I updated the register_foreman script, which can also be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/register_foreman/register_foreman.rb&#34;&gt;Github&lt;/a&gt;, accordingly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;json_parse = JSON.parse(rest_result)
+hostid = json_parse[&#39;id&#39;].to_s
+
+$evm.log(&amp;quot;info&amp;quot;, &amp;quot;Storing Foreman host ID of new VM: #{hostid}&amp;quot;)
+prov.set_option(:hostid,hostid)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/categories/compliance/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/categories/compliance/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ManageIQ vs CloudForms - what&#39;s the difference</title>
+      <link>http://www.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</link>
+      <pubDate>Sun, 29 Jan 2017 22:14:29 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://redhat.com/cloudforms&#34;&gt;Red Hat CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; both recently launched new releases of their software. The latest release of &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/release-notes/&#34;&gt;Red Hat CloudForms is 4.2&lt;/a&gt;, while ManageIQ is following an alphabetical versioning schema and &lt;a href=&#34;http://manageiq.org/blog/2016/12/manageiq-euwe-ga-announcement/&#34;&gt;released Euwe&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Red Hat is following an &amp;ldquo;upstream first&amp;rdquo; policy, meaning all new features are developed in the community driven project, in this case ManageIQ. Based on the work of the upstream project, every now and then a supported Red Hat Product is created, in this case Red Hat CloudForms. The most prominent example for this approach is &lt;a href=&#34;https://getfedora.org/&#34;&gt;Fedora&lt;/a&gt; which is the upstream community project for &lt;a href=&#34;https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux&#34;&gt;Red Hat Enterprise Linux&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s the difference between the upstream community project and the downstream supported product?&lt;/p&gt;
+
+&lt;h1 id=&#34;support&#34;&gt;Support&lt;/h1&gt;
+
+&lt;p&gt;For ManageIQ, there are a number of great ways to get support direclty from the &lt;a href=&#34;http://manageiq.org/community/&#34;&gt;upstream community&lt;/a&gt;. Gitter can be used for chat, there is a forum, links to social media and opportunities to meet face to face at several conferences.&lt;/p&gt;
+
+&lt;p&gt;As a Red Hat customer, you can open &lt;a href=&#34;http://access.redhat.com&#34;&gt;support cases&lt;/a&gt;, search the knowledge base, &lt;a href=&#34;http://www.redhat.com/training/&#34;&gt;train your staff at presence or virtual trainings&lt;/a&gt;, &lt;a href=&#34;http://www.redhat.com/consulting/&#34;&gt;hire consultants&lt;/a&gt; to design and implement your CloudForms environment. There is also a documented &lt;a href=&#34;https://access.redhat.com/support/policy/updates/cloudforms/&#34;&gt;Life Cycle&lt;/a&gt; which allows for better deployment planning.&lt;/p&gt;
+
+&lt;p&gt;Red Hat also performs additional quality assurance before releasing the CloudForms release. Certain features which are not deemed enterprise ready, might be in ManageIQ, but not in CloudForms.&lt;/p&gt;
+
+&lt;p&gt;For Red Hat CloudForms the &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/support-matrix/&#34;&gt;Support Matrix&lt;/a&gt; describes in detail which feature is supported and which isn&amp;rsquo;t. For example, in ManageIQ Euwe includes the capability to manage &lt;a href=&#34;https://github.com/ManageIQ/manageiq/blob/euwe/CHANGELOG.md&#34;&gt;VMware vCloud&lt;/a&gt;, which is currently not listed as being supported in CloudForms.&lt;/p&gt;
+
+&lt;h1 id=&#34;branding&#34;&gt;Branding&lt;/h1&gt;
+
+&lt;p&gt;The branding of the UI, naming of the images and packages, and the documentation are different too. Until recently, Red Hat CloudForms was using &lt;a href=&#34;http://www.adobe.com/&#34;&gt;Adobe Flash&lt;/a&gt; to render certain diagrams and graphs, while ManageIQ was using a JavaScript library to do the same. Starting with version 4.2 of CloudForms, it is using the same library and &lt;a href=&#34;http://www.jung-christian.de/post/2017/01/bye-bye-flash/&#34;&gt;got rid of Flash&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;upgrades&#34;&gt;Upgrades&lt;/h1&gt;
+
+&lt;p&gt;Red Hat CloudForms is a virtual appliances based on Red Hat Enterprise Linux. All software installed in the appliance is packaged in the RPM format. Customers can subscribe to Red Hat Network, Satellite or Update Infrastructure to deploy updates to the appliances.&lt;/p&gt;
+
+&lt;p&gt;ManageIQ virtual appliances are based on &lt;a href=&#34;http://www.centos.org&#34;&gt;CentOS&lt;/a&gt; and the additional software is basically just a git clone. To do an upgrade of the underlying OS, you can just do a &amp;ldquo;yum update&amp;rdquo; as usual, but this will not update the ManageIQ application.&lt;/p&gt;
+
+&lt;p&gt;Each Red Hat CloudForms release also comes with an &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/migrating-to-red-hat-cloudforms-42/&#34;&gt;step-by-step guide&lt;/a&gt; on how to perform upgrades. The &lt;a href=&#34;https://access.redhat.com/support/policy/updates/cloudforms/&#34;&gt;Life Cycle document&lt;/a&gt; helps to understand which upgrades are and will be supported.&lt;/p&gt;
+
+&lt;p&gt;ManageIQ does not have an official Life Cycle document. Upgrades also require &lt;a href=&#34;http://talk.manageiq.org/t/upgrading-from-darga-n-to-darga-n-1/1574/3&#34;&gt;more manual steps&lt;/a&gt; and a better understanding of Ruby, Rails, Linux and how to fix stuff is necessary.&lt;/p&gt;
+
+&lt;h1 id=&#34;automate&#34;&gt;Automate&lt;/h1&gt;
+
+&lt;p&gt;Users and customers can extend the out of the box functionality by adding their own code in what is called &amp;ldquo;Automate&amp;rdquo;. Although both versions ship with the &amp;ldquo;ManageIQ&amp;rdquo; domain, only Red Hat CloudForms comes with an additional &amp;ldquo;Red Hat&amp;rdquo; domain. This domain includes some additional integration examples and optimizations.&lt;/p&gt;
+
+&lt;h1 id=&#34;disclaimer&#34;&gt;Disclaimer&lt;/h1&gt;
+
+&lt;p&gt;This might not be a complete list of all differences between ManageIQ and CloudForms. It&amp;rsquo;s also - intentionally - not discussiong business value of the subscription and focuses exclusively on the technical characteristics.&lt;/p&gt;
+
+&lt;p&gt;There is also an article about the same topic on the &lt;a href=&#34;http://talk.manageiq.org/t/differences-between-red-hat-cloudforms-and-manageiq/728/4&#34;&gt;ManageIQ Forum&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Call a script from a Control Policy</title>
+      <link>http://www.jung-christian.de/post/2017/01/call-script-from-control-policy/</link>
+      <pubDate>Tue, 17 Jan 2017 22:14:29 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/01/call-script-from-control-policy/</guid>
+      <description>
+
+&lt;h1 id=&#34;control-and-compliance-policies&#34;&gt;Control and Compliance Policies&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://redhat.com/cloudforms&#34;&gt;Red Hat CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; allow users to create control and compliance policies to enforce compliance checks on the Cloud, IaaS and PaaS environment. There is &lt;a href=&#34;http://manageiq.org/docs/reference/latest/doc-Policies_and_Profiles_Guide/miq/&#34;&gt;Documentation&lt;/a&gt; available on how to create and manage Policies, so this post will skip going into further details on that.&lt;/p&gt;
+
+&lt;p&gt;With such a policy very powerful rules can be created and enabled. Sometimes a very simple example is all you need though. I&amp;rsquo;ve been asked several times how we could call a simple shell script or execute any command triggered by a control or compliance policy and this post should help to shed some light on it.&lt;/p&gt;
+
+&lt;h1 id=&#34;automate-method-to-run-a-system-command&#34;&gt;Automate Method to run a system command&lt;/h1&gt;
+
+&lt;p&gt;First we need a method which we can call from a Control Policy. You can import my &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Automate Datastore from Github&lt;/a&gt;. You can find a method which calls a System Command in cjung-git/Control/Methods/run_script.&lt;/p&gt;
+
+&lt;p&gt;The interesting part is just this one line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;system(&amp;quot;/bin/rpm -q cfme &amp;amp;&amp;gt; /tmp/cfme-release.txt&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This examples queries the system for the installed version of the CFME package and writes the result into a file in /tmp called cfme-release.txt. You could replace the system command with anything you want. Keep in mind though, that you can not user interactive commands which are asking for user input.&lt;/p&gt;
+
+&lt;h1 id=&#34;creating-a-control-policy&#34;&gt;Creating a Control Policy&lt;/h1&gt;
+
+&lt;p&gt;CloudForms has two types of Policies. Control Policies consist of an &lt;strong&gt;Event&lt;/strong&gt; which triggers the policy, a &lt;strong&gt;Condition&lt;/strong&gt; which has to be met and an &lt;strong&gt;Action&lt;/strong&gt; which will be performed.&lt;/p&gt;
+
+&lt;p&gt;Compliance Policies are slightly different. They are not trigered by an event and the result (compliant or not compliant) will be shown in the details of the affected object, for example a virtual machine. Control Policies can trigger a compliance check and the results of a compliance check can trigger a control policy.&lt;/p&gt;
+
+&lt;p&gt;For this example, we create a simple Compliance Policy.&lt;/p&gt;
+
+&lt;h2 id=&#34;create-a-new-action&#34;&gt;Create a new Action&lt;/h2&gt;
+
+&lt;p&gt;To be able to call our system command, we need to create a new action. Navigate to Control, Explorer, Actions and click Configuration, Add a new action. We want o run our own piece of code which is executed from Automate, so we have to select &amp;ldquo;Invoke a Custom Automation&amp;rdquo;. As usual, give your action a reasonable name.&lt;/p&gt;
+
+&lt;p&gt;In the Custom Automation fields which just appeared, we need to tell the system which action to perform. The Automate Datastore which you just imported has an Request defined which is called &amp;ldquo;run_script&amp;rdquo;. This has to go into the Request field. The message is in most cases &amp;ldquo;create&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;If you want to lean more about Automate, check out the book &lt;a href=&#34;https://access.redhat.com/mastering-cloudforms-automation&#34;&gt;&amp;ldquo;Master CloudForms Automation&amp;rdquo;&lt;/a&gt; - which also applies to ManageIQ.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-new-action.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-new-action-300x195.png&#34; alt=&#34;Add new Action&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;create-new-policy&#34;&gt;Create new Policy&lt;/h2&gt;
+
+&lt;p&gt;Navigate to Control, Explorer, Policies and select &amp;ldquo;VM Compliant Policies&amp;rdquo;. In the Configuration Menu click select add a new policy. Choose a reasonable name.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/control-policy-system-command.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/control-policy-system-command-300x145.png&#34; alt=&#34;Add Compliance Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to setup a PostgreSQL database for ManageIQ and CloudForms -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>How to setup a PostgreSQL database for ManageIQ and CloudForms</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Wed, Nov 23, 2016
+                 <br />
+                 In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/it">IT</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>
+
+                 <br />
+                 Tags 
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>When playing with several <a href="http://www.redhat.com/en/technologies/management/cloudforms">CloudForms</a> and <a href="http://www.manageiq.org">ManageIQ</a> appliances in my lab environment, I face the problem that I quickly run out of RAM on my virtual infrastructure. I&rsquo;m using a number of <a href="http://www.intel.com/content/www/us/en/nuc/overview.html">Intel NUC&rsquo;s</a> and although the newest models can go up to 32 GB of RAM, memory has always been my bottleneck. So I thought instead of running a PostgreSQL server in each virtual CloudForms or ManageIQ appliance, it might be more efficient to have a dedicated PostgreSQL Server for all of them. There are other use cases where one might want to use a external database:</p>
+
+<ul>
+<li><p>High Availability: built a PostgreSQL cluster to increase fault tolerance</p></li>
+
+<li><p>Scalability: a dedicated database server can make it easier to scale up</p></li>
+
+<li><p>Maintenance: if the database is clustered upgrades and other maintenance tasks can be performed on one node, while all other nodes continue to work</p></li>
+</ul>
+
+<p>These are just some examples and there are many more use cases and examples.</p>
+
+<h1 id="prepare-the-postgresql-server">Prepare the PostgreSQL Server</h1>
+
+<p>Obviously the first step is to setup the PostgreSQL Server on a physical or virtual machine (or multiple, if one wants to setup a clustered databse). This post will not go into any details on how to do that. It&rsquo;s covered in many other posts and documents. When tuning the database server, it is recommended to have a look at the example configuration which can be found on an CloudForms or ManageIQ virtual appliance.</p>
+
+<pre><code># example configuration on CloudForms Appliances
+/opt/rh/cfme-appliance/TEMPLATE/var/opt/rh/rh-postgresql94/lib/pgsql/data/
+# example configuration on ManageIQ Appliances
+/opt/manageiq/manageiq-appliance/TEMPLATE/var/opt/rh/rh-postgresql95/lib/pgsql/data
+</code></pre>
+
+<p>Make sure the applicable settings are transferred to your PostgreSQL Server to get best possible performance. Since the external database will be used a lot, its performance is crucial for the entire environment.</p>
+
+<p>Tools like <a href="https://www.postgresql.org/docs/current/static/pgbench.html">pg_bench</a> can help to verify database performance.</p>
+
+<h1 id="create-the-user-database-and-privileges">Create the user, database and privileges</h1>
+
+<p>After the database server has been installed, tuned and tested, it&rsquo;s time to create the user and database. I&rsquo;m using one database server for many CloudForms and ManageIQ appliances. To be able to isolate database access, I create a user for every appliance and restrict this user to its dedicated database.</p>
+
+<p>For the following example, let&rsquo;s assume there is a new <a href="http://www.manageiq.org">ManageIQ Appliance</a> running the <a href="http://manageiq.org/blog/2016/06/announce_e_name/">Euwe</a> release.</p>
+
+<pre><code># create a new user and grant super user privilegescreateuser -s -P miq-euwe# create a dedicate database and set ownercreatedb -O miq-euwe miq-euwe
+</code></pre>
+
+<p>We just created a user call <strong>miq-euwe</strong> and gave him ownership to the new database with the same name. Why this user was created as a super user, will be covered in the next paragraph. Before we move on, we need to grant this user remote login privileges. Modfy pg_hba.conf on the PostgreSQL server and add a line similar to this:</p>
+
+<pre><code>host all miq-euwe 192.168.1.1/32 md5
+</code></pre>
+
+<p>This will allow the user <strong>miq-euwe</strong> to login into all databases from the system with the IP <strong>192.168.1.1</strong> after authenticating with the correct password. Test the connection from the appliance with the <strong>psql</strong> command:</p>
+
+<pre><code>psql -h &lt;hostname&gt; -U miq-euwe -W miq-euwe
+</code></pre>
+
+<h1 id="configure-database-with-appliance-console">Configure database with appliance console</h1>
+
+<p>To configure the appliance to use the external database, the appliance_console can be used (on current version, you can just use the alias &ldquo;ap&rdquo;).</p>
+
+<pre><code>$ appliance_console
+</code></pre>
+
+<p>Chose Option 8 &ldquo;Configure Database&rdquo; and go through the guided procedure.</p>
+
+<h2 id="what-happens">What happens</h2>
+
+<p>The appliance performs a number of steps while configuring the database:</p>
+
+<ol>
+<li><p>connect to the database and try to login</p></li>
+
+<li><p>verify no process is currently using the database</p></li>
+
+<li><p>if no other process is using the database, delete it</p></li>
+
+<li><p>create a new database with the specified name and credentials</p></li>
+
+<li><p>populate the database with the initial tables and data</p></li>
+</ol>
+
+<p>On the first start of the evmserverd service, additional data is written into the database. During that phase the database can grow to around 30 to 40 MB.</p>
+
+<p>Now it might be clearer, why we needed a user with superuser privilege and why the pg_hba.conf has to allow access to all databases. But not all is lost, this can be fixed after the initial setup is done.</p>
+
+<h1 id="fix-database-configuration">Fix database configuration</h1>
+
+<p>After setting up the appliance and populating the initial data, I restrict database access to what is absolutely necessary. This is done by performing two simple steps.</p>
+
+<p>Fix pg_hba.conf:</p>
+
+<pre><code># only grant access to miq-euwe database
+host miq-euwe miq-euwe 192.168.1.1/32 md5
+</code></pre>
+
+<p>To make this change active, send a Hangup signal to the master PostgreSQL process:</p>
+
+<pre><code>kill -HUP &lt;PID&gt;
+</code></pre>
+
+<p>Remove superuser privilege from user:</p>
+
+<pre><code>pgsql=# alter role miq-euwe nosuperuser;
+</code></pre>
+
+<p>Verify the appliance still works correctly after applying those changes.</p>
+
+<h1 id="clean-up-the-appliance">Clean up the appliance</h1>
+
+<p>When logging into the appliance, the active database configuration can be found in the Configuration, Database menu.</p>
+
+<p><a href="http://www.jung-christian.de/images/external-database.png"><img src="http://www.jung-christian.de/images/external-database-300x69.png" alt="Verify external database configuration" /></a></p>
+
+<p>If everything works fine, the internal database role can be disabled, which will also free up some memory in the virtual machine.</p>
+
+<p><a href="http://www.jung-christian.de/images/disable-db-role.png"><img src="http://www.jung-christian.de/images/disable-db-role-300x157.png" alt="How to disable database role" /></a></p>
+
+<h1 id="wrap-up">Wrap up</h1>
+
+<p>I&rsquo;m using this setup since CloudForms 5.6, aka ManageIQ Darga on a daily basis. I also tested this with previous versions of CloudForms back to 5.3 and the basic steps have always been the same.</p>
+
+<p>To make ManageIQ and CloudForms work without superuser privileges during setup, a <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1364270">Bugzilla Ticket</a> has been created.</p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

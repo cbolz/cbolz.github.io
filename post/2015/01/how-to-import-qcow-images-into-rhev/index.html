@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to import qcow images into RHEV -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>How to import qcow images into RHEV</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Wed, Jan 14, 2015
+                 <br />
+                 In <a href="http://www.jung-christian.de/categories/it">IT</a>, <a href="http://www.jung-christian.de/categories/rhev">RHEV</a>
+
+                 <br />
+                 Tags 
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <p>Red Hat is providing KVM/QCOW2 images on the <a href="http://access.redhat.com">support portal</a> for easy access and use in virtualized or cloud environments. The images are stripped down and cloud-init enabled so they can be used for example in <a href="http://openstack.org">OpenStack</a>, <a href="http://redhat.com/rhev">RHEV</a>/<a href="http://www.ovirt.org">ovirt</a> or plain <a href="http://www.linux-kvm.org/page/Main_Page">KVM</a>. <a href="http://www.redhat.com/en/technologies/cloud-computing/cloudforms">CloudForms</a>/<a href="http://www.manageiq.org">ManageIQ</a> provides support for managing <a href="http://cloudinit.readthedocs.org/en/latest/">cloud-init</a> templates and the combination of those technologies dramatically simplifies template management.</p>
+
+<p>To use such an image on RHEV, you have to first import it. Sadly the rhevm-image-uploader does not support qcow images yet, so you have to import the image manually. This is the way I did - there might be better ways to do it.</p>
+
+<ol>
+<li><p>create a new VM in RHEV</p>
+
+<ol>
+<li><p>choose RHEL 6 or 7 depending on which template you want to import</p></li>
+
+<li><p>give it a reasonable name</p></li>
+
+<li><p>adjust other settings as you see fit</p></li>
+</ol></li>
+
+<li><p>add a disk to the new VM. The minimum size can be retrieved from the qcow image itself:
+<code>$ qemu-img info rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+image: rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+file format: qcow2
+virtual size: 16G (17179869184 bytes)
+disk size: 340M
+cluster_size: 65536</code>
+This image needs a minimum disk size of 16 GB. The image automatically grows on first boot, if you create a larger disk.</p></li>
+
+<li><p>Identify the associated file on disk. If you&rsquo;re using NFS, this is rather simple. You can try to find the newly created image directly on your disk, if you&rsquo;re already familiar with the internal structure. Or you can use the RHEV REST API to identify the file name.
+<code>https://&lt;rhev-hostname&gt;/api/templates
+</code>
+You should find a block similar to this one (output truncated):
+<code>&lt;template href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&quot; id=&quot;66081542-2ef7-4978-bf30-5e79173630e6&quot;&gt;
+&lt;actions&gt;&lt;link href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/export&quot; rel=&quot;export&quot;/&gt;&lt;/actions&gt;
+&lt;name&gt;rhel-6.6-cloudinit-2&lt;/name&gt;
+&lt;description&gt;CloudInit&lt;/description&gt;
+&lt;comment/&gt;
+&lt;link href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks&quot; rel=&quot;disks&quot;/&gt;
+</code>
+Try to access the link for the list of associated disks, e.g.:
+<code>https://&lt;rhev-hostname&gt;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks
+</code>
+You should get an output like this (output truncated):
+<code>&lt;disks&gt;
+&lt;disk href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52&quot; id=&quot;cde4a207-df4c-4b45-81bd-3ed0a72f4c52&quot;&gt;&lt;actions&gt;&lt;link href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52/export&quot; rel=&quot;export&quot;/&gt;
+&lt;link href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52/copy&quot; rel=&quot;copy&quot;/&gt;&lt;/actions&gt;
+&lt;name&gt;rhel-6.6-template_Disk1&lt;/name&gt;
+&lt;template href=&quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&quot; id=&quot;66081542-2ef7-4978-bf30-5e79173630e6&quot;/&gt;
+&lt;alias&gt;rhel-6.6-template_Disk1&lt;/alias&gt;
+&lt;image_id&gt;bfcffeba-8b81-4a64-82eb-9007a28557b4&lt;/image_id&gt;
+</code>
+You should find a file with the name matching the image ID on your NFS server.
+If you use fibre channel or iSCSI the on disk layout is different, but the above calls should help you to identify the proper LUN and logical volume.</p></li>
+
+<li><p><strong>Big fat warning!</strong> Do not continue if you&rsquo;re not absolutely sure you identified the correct file! You <strong>will</strong> ruin your RHEV environment and have been warned.</p></li>
+
+<li><p>Make sure you identified the correct file:
+<code>$ pwd
+/srv/rhev/storage1/9315c53c-767f-49bd-bd91-c8cf93ef74ca/images/cde4a207-df4c-4b45-81bd-3ed0a72f4c52
+</code>
+As you can see cde4a207-df4c-4b45-81bd-3ed0a72f4c52 matches the disk ID retrieved via the REST API. And there is a file in this directory matching the disk ID retrieved in the second API call:
+<code># ls
+bfcffeba-8b81-4a64-82eb-9007a28557b4
+bfcffeba-8b81-4a64-82eb-9007a28557b4.lease
+bfcffeba-8b81-4a64-82eb-9007a28557b4.meta
+</code>
+<strong>Again, do not proceed if the IDs do not match</strong></p></li>
+
+<li><p>Overwrite the image with qemu-img:
+<code># qemu-img convert -O raw /tmp/rhel-guest-image-6.6-20141222.1.x86_64.qcow2 bfcffeba-8b81-4a64-82eb-9007a28557b4</code>
+Make sure you convert to the appropriate on disk format. Check the <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.4/html/V2V_Guide/chap-V2V-VMS_To_Run_on_RHEV.html#Acceptable_Converted_Storage_Output_Formats">v2v guide</a> for details.</p></li>
+
+<li><p>If you now start this VM, it should come up with the RHEL KVM image.</p></li>
+</ol>
+
+<p>That&rsquo;s all folks!</p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

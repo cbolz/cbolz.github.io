@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>How to provision VMs with Foreman and ManageIQ -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>How to provision VMs with Foreman and ManageIQ</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Thu, Apr 30, 2015
+                 <br />
+                 In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/it">IT</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/the-foreman">The Foreman</a>
+
+                 <br />
+                 Tags 
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p><a href="http://www.theforman.org">The Foreman</a> is a very powerful tool for system management. Red Hat&rsquo;s new version of <a href="http://www.redhat.com/en/technologies/linux-platforms/satellite">Satellite</a> is also using Foreman as one of its core components. It&rsquo;s only consequent to setup both tools so they can benefit from each other.</p>
+
+<p>While Foreman is the better tool for deployment and configuration management, ManageIQ acting as an open hybrid cloud management platform has the better understanding of the multiple cloud and virtualization environments. One simple scenario is that ManageIQ decides which particular cloud provider has to be used based on user provided input and then Foreman will do the actual installation of the guest operating system including configuration of the installed application.</p>
+
+<p>Right now ManageIQ can not directly use Foreman to deploy new virtual machines. Due to ManageIQ&rsquo;s very extensible Automate Framework, this can be solved quite easily with some custom code.</p>
+
+<p>To accomplish the goal, a number of changes have to be implemented and are described further below:</p>
+
+<ul>
+<li><p>disable automatic VM start during provisioning</p></li>
+
+<li><p>create a new class &ldquo;register_foreman&rdquo;</p></li>
+
+<li><p>provide all the necessary credentials and data to &ldquo;register_foreman&rdquo;</p></li>
+
+<li><p>modify the provisioning state machine to add an additional step</p></li>
+</ul>
+
+<p>All the scripts described below can be found on <a href="https://github.com/cbolz/ManageIQ/tree/master/register_foreman">GitHub</a>.</p>
+
+<h1 id="disable-vm-autostart">Disable VM autostart</h1>
+
+<p>During provisoning of virtual machines, ManageIQ will automatically power on the new VM. This is usually exactly what you want. In some scenarios you better want the VM to be powered on in a later stage of the provisioning process - this is possible by setting the option &ldquo;vm_auto_start&rdquo; to false.</p>
+
+<p>In most cases you use the entry point /Service/Provisioning/StateMachines/ServiceProvision_Template/CatalogItemInitialization to kick of the service provisioning task. This instance is pointing to a method with the same name. Copy the method to your datastore and do a small modification. In the code block which populates all options into the child object, set the provisioning option &ldquo;vm_auto_start&rdquo; to false:</p>
+
+<pre><code>gc.set_option(:vm_auto_start,[false,0])
+</code></pre>
+
+<p>An example can be found in my <a href="https://github.com/cbolz/ManageIQ/blob/master/register_foreman/CatalogItemInitialization.rb">GitHub repository</a>.</p>
+
+<h1 id="register-in-foreman">Register in Foreman</h1>
+
+<p>The Foreman provides an REST API which is used to register the new virtual machine. Since Satellite 6 is using the same API, the script will work with both versions.</p>
+
+<p>To utilize Foreman from ManageIQ the following data has to be stored in the Automate class:</p>
+
+<ul>
+<li><p>Organization</p></li>
+
+<li><p>Location</p></li>
+
+<li><p>Host group</p></li>
+</ul>
+
+<p>The necessary steps are described below.</p>
+
+<p>Here&rsquo;s a quick outline what the code does:</p>
+
+<ul>
+<li><p>parse variables from the Automate class and store them locally (foreman_host, foreman_user, foreman_password, hostgroup_name, organization_name, location_name)</p></li>
+
+<li><p>establish a connection to Foreman</p></li>
+
+<li><p>query the hostgroup ID, location ID and organization ID from Foreman</p></li>
+
+<li><p>create a new host record in Foreman with VM name, MAC address, hostgroup ID, location ID and organization ID</p></li>
+
+<li><p>query host and store details in the logs</p></li>
+</ul>
+
+<p>There is still a huge potential for future improvements. Error handling is very basic for example.</p>
+
+<p>The full script can be found in my <a href="https://github.com/cbolz/ManageIQ/blob/master/register_foreman/register_foreman.rb">GitHub repository</a>.</p>
+
+<h1 id="creating-the-register-foreman-class">Creating the register_foreman class</h1>
+
+<p>To use the register_foreman method during provisining, a new class has to be created. It&rsquo;s a very simple one though and easy to create.</p>
+
+<p>First create a new datastore with the namespace /custom/methods or anything else you prefer. In that namespace, create a new class and call it &ldquo;register_foreman&rdquo;.</p>
+
+<p>Modify the schema of the class according to this screenshot:</p>
+
+<p><img src="https://raw.githubusercontent.com/cbolz/ManageIQ/master/register_foreman/register_foreman-class.png" alt="" /></p>
+
+<p>Pay special attention to the foreman_password attribute which is a password field. This makes sure that ManageIQ never shows the clear text password in the UI or in the log files.</p>
+
+<p>After defining the schema, add a new instance and method called &ldquo;register_foreman&rdquo;. Import the code found on <a href="https://github.com/cbolz/ManageIQ/blob/master/register_foreman/register_foreman.rb">GitHub</a> into the &ldquo;register_foreman&rdquo; method. When creating the &ldquo;register_foreman&rdquo; instance, you obviously have to fill out all the data:</p>
+
+<ul>
+<li><p>foreman_host: the FQDN of your Foreman server</p></li>
+
+<li><p>foreman_user: the user which ManageIQ will use to log into Foreman. Make sure this user has enough privileges to query hosts, locations, organizations and host groups and can also add new hosts</p></li>
+
+<li><p>foreman_password: password of this user. Make sure the attribute is set to &ldquo;password&rdquo; to never expose it as clear text</p></li>
+
+<li><p>location_name: the location of the new host</p></li>
+
+<li><p>organization_name: the name of your organization</p></li>
+
+<li><p>hostgroup_name: the name of the host group used during registration. Host groups define which OS is installed, which puppet groups are used etc.</p></li>
+</ul>
+
+<h1 id="modify-the-provisioning-state-machine">Modify the provisioning state machine</h1>
+
+<p>The state machines in ManageIQ are very powerful and flexible. Although there is no step to register a host in Foreman, it&rsquo;s quite easy to add one. As an alternative, you could re-use one of the existing states. It&rsquo;s important that you re-use one of the states following &ldquo;provisioning&rdquo; to make sure all the requirements (e.g. the VM must exist before the &ldquo;register_foreman&rdquo; method is executed) are met.</p>
+
+<p>To be able to modify an existing state machine, it has to be copied first. Navigate to /Infrastructure/VM/Provisioning/StateMachines/VMProvision_VM/Provision VM from Template (template) and copy that instance to your datastore.</p>
+
+<p>After the instance has been copied, it becomes editable. First modify the parent class (VMProvision_VM) and change the schema. Add an additional state &ldquo;register_foreman&rdquo;. If you used the structure and name described in the previous step, use /custom/methods/register_foreman/register_foreman as the default value. Also set the Max Retries to 100 to avoid endless loops in case of an error.</p>
+
+<p>Now you have to change the sequence and move the new step &ldquo;register_foreman&rdquo; between &ldquo;CheckProvisioned&rdquo; and &ldquo;PostProvision&rdquo;. The result should look similar to this:</p>
+
+<p><img src="https://raw.githubusercontent.com/cbolz/ManageIQ/master/register_foreman/vmprovision_vm-class.png" alt="" /></p>
+
+<h1 id="disclaimer">Disclaimer</h1>
+
+<p>All of the above was successfully implemented and tested with CloudForms Management Engine 5.3.3 and Satellite 6.0.8. All the relevant APIs in Satellite and Foreman should be the same, but I haven&rsquo;t tested this in detail. Nevertheless the provided scripts should give you an idea on how to implement this level of integration.</p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

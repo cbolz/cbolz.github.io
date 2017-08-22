@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Call a script from a Control Policy -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Call a script from a Control Policy</h1>
+               <h2 class="subheading">How to run a custom script from a control policy</h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Tue, Jan 17, 2017
+                 <br />
+                 In <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/control">Control</a>, <a href="http://www.jung-christian.de/categories/compliance">Compliance</a>
+
+                 <br />
+                 Tags <a href="http://www.jung-christian.de/tags/system">system</a>, <a href="http://www.jung-christian.de/tags/script">script</a>, <a href="http://www.jung-christian.de/tags/automate">automate</a>
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="control-and-compliance-policies">Control and Compliance Policies</h1>
+
+<p><a href="http://redhat.com/cloudforms">Red Hat CloudForms</a> and <a href="http://www.manageiq.org">ManageIQ</a> allow users to create control and compliance policies to enforce compliance checks on the Cloud, IaaS and PaaS environment. There is <a href="http://manageiq.org/docs/reference/latest/doc-Policies_and_Profiles_Guide/miq/">Documentation</a> available on how to create and manage Policies, so this post will skip going into further details on that.</p>
+
+<p>With such a policy very powerful rules can be created and enabled. Sometimes a very simple example is all you need though. I&rsquo;ve been asked several times how we could call a simple shell script or execute any command triggered by a control or compliance policy and this post should help to shed some light on it.</p>
+
+<h1 id="automate-method-to-run-a-system-command">Automate Method to run a system command</h1>
+
+<p>First we need a method which we can call from a Control Policy. You can import my <a href="https://github.com/cbolz/ManageIQ/tree/master/Automate">Automate Datastore from Github</a>. You can find a method which calls a System Command in cjung-git/Control/Methods/run_script.</p>
+
+<p>The interesting part is just this one line:</p>
+
+<pre><code>system(&quot;/bin/rpm -q cfme &amp;&gt; /tmp/cfme-release.txt&quot;)
+</code></pre>
+
+<p>This examples queries the system for the installed version of the CFME package and writes the result into a file in /tmp called cfme-release.txt. You could replace the system command with anything you want. Keep in mind though, that you can not user interactive commands which are asking for user input.</p>
+
+<h1 id="creating-a-control-policy">Creating a Control Policy</h1>
+
+<p>CloudForms has two types of Policies. Control Policies consist of an <strong>Event</strong> which triggers the policy, a <strong>Condition</strong> which has to be met and an <strong>Action</strong> which will be performed.</p>
+
+<p>Compliance Policies are slightly different. They are not trigered by an event and the result (compliant or not compliant) will be shown in the details of the affected object, for example a virtual machine. Control Policies can trigger a compliance check and the results of a compliance check can trigger a control policy.</p>
+
+<p>For this example, we create a simple Compliance Policy.</p>
+
+<h2 id="create-a-new-action">Create a new Action</h2>
+
+<p>To be able to call our system command, we need to create a new action. Navigate to Control, Explorer, Actions and click Configuration, Add a new action. We want o run our own piece of code which is executed from Automate, so we have to select &ldquo;Invoke a Custom Automation&rdquo;. As usual, give your action a reasonable name.</p>
+
+<p>In the Custom Automation fields which just appeared, we need to tell the system which action to perform. The Automate Datastore which you just imported has an Request defined which is called &ldquo;run_script&rdquo;. This has to go into the Request field. The message is in most cases &ldquo;create&rdquo;.</p>
+
+<p>If you want to lean more about Automate, check out the book <a href="https://access.redhat.com/mastering-cloudforms-automation">&ldquo;Master CloudForms Automation&rdquo;</a> - which also applies to ManageIQ.</p>
+
+<p><a href="http://www.jung-christian.de/images/add-new-action.png"><img src="http://www.jung-christian.de/images/add-new-action-300x195.png" alt="Add new Action" /></a></p>
+
+<h2 id="create-new-policy">Create new Policy</h2>
+
+<p>Navigate to Control, Explorer, Policies and select &ldquo;VM Compliant Policies&rdquo;. In the Configuration Menu click select add a new policy. Choose a reasonable name.</p>
+
+<p><a href="http://www.jung-christian.de/images/control-policy-system-command.png"><img src="http://www.jung-christian.de/images/control-policy-system-command-300x145.png" alt="Add Compliance Policy" /></a></p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
