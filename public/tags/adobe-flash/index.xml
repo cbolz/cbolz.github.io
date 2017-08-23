@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://github.jung-christian.de/tags/adobe-flash/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://github.jung-christian.de/tags/adobe-flash/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Bye Bye Flash</title>
+      <link>http://github.jung-christian.de/post/2017/01/bye-bye-flash/</link>
+      <pubDate>Thu, 12 Jan 2017 18:10:50 +0100</pubDate>
+      
+      <guid>http://github.jung-christian.de/post/2017/01/bye-bye-flash/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://www.adobe.com/de/products/flash.html&#34;&gt;Adobe&amp;rsquo;s Flash Plugin&lt;/a&gt; is well known for its security flaws and for causing browser crashes. ManageIQ got rid of Flash already in the Anand Release and replaced all relevant parts of the code with a JavaScript library to render graphs and diagrams. Finally &lt;a href=&#34;http://cloudformsblog.redhat.com/2017/01/04/announcing-cloudforms-4-2/&#34;&gt;Red Hat CloudForms 4.2&lt;/a&gt; was released and is now using the same JavaScript library and does not require Flash anymore.&lt;/p&gt;
+
+&lt;p&gt;So the first thing I did is running the following command on all my machines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rpm -e flash-plugin
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

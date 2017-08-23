@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://github.jung-christian.de/tags/smartstate/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://github.jung-christian.de/tags/smartstate/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SmartProxy Affinity</title>
+      <link>http://github.jung-christian.de/post/2017/02/smart-proxy-affinity/</link>
+      <pubDate>Thu, 23 Feb 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://github.jung-christian.de/post/2017/02/smart-proxy-affinity/</guid>
+      <description>
+
+&lt;h1 id=&#34;smartstate-analysis&#34;&gt;SmartState Analysis&lt;/h1&gt;
+
+&lt;p&gt;CloudForms and ManageIQ can collect information from the configured providers to build its internal inventory. For virtual machines or instances this includes information like the name, associated IP addresses, virtual hardware specification and many more. Additional information can be retrieved by executing a &lt;em&gt;SmartState Analysis&lt;/em&gt;. SmartState is implemented agentless and uses temporary snapshots to analyze virtual machines and templates.&lt;/p&gt;
+
+&lt;p&gt;To collect the information from VMware, the VDDK library has to be installed on all applicable appliances manually. For CloudForms there is a &lt;a href=&#34;https://access.redhat.com/articles/2078103&#34;&gt;knowledge base article&lt;/a&gt; which describes the setup process in detail.&lt;/p&gt;
+
+&lt;h1 id=&#34;zones-and-regions&#34;&gt;Zones and Regions&lt;/h1&gt;
+
+&lt;p&gt;When designing large deployments, multiple appliances are usually deployed. Zones and regions make it possible to implement security isolation and to distribute actions between multiple appliances. SmartState Analysis is comprised of two roles which can be enabled or disabled on each individual appliance. Details about roles can be found in the &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.2/html/general_configuration/configuration#servers&#34;&gt;General Configuration&lt;/a&gt; Guide.&lt;/p&gt;
+
+&lt;h1 id=&#34;role-assignment&#34;&gt;Role assignment&lt;/h1&gt;
+
+&lt;p&gt;When a user requests a SmartState Analysis to be performed, ManageIQ or CloudForms tries to assign the job to an appropriate appliance. It&amp;rsquo;s using the information about the regions and zones and tries to find an appliance which is in the same zone as the provider on which the virtual machine or instance is located.&lt;/p&gt;
+
+&lt;p&gt;Any appliance which is in the same zone as the parent provider, is eligable to execute the job.&lt;/p&gt;
+
+&lt;h1 id=&#34;smart-proxy-affinity&#34;&gt;Smart Proxy Affinity&lt;/h1&gt;
+
+&lt;p&gt;In some cases the above logic is not ideal. The following is a list of different scenarios, where the automatic assignment is not ideal or not possible. This is not a complete list, just some examples.&lt;/p&gt;
+
+&lt;h2 id=&#34;no-appliance-is-in-the-appropriate-zone&#34;&gt;No appliance is in the appropriate zone&lt;/h2&gt;
+
+&lt;p&gt;To make the described logic work, at least one appliance has to be in the same zone as the provider on which the VM or instance is located. For small providers (for example test environments) it might not be necessary to have dedicated appliances, so this provider has to be managed by appliances which are in the same zone, but not running on the same provider.&lt;/p&gt;
+
+&lt;h2 id=&#34;openstack-best-practice&#34;&gt;OpenStack best practice&lt;/h2&gt;
+
+&lt;p&gt;For OpenStack OverCloud and UnderCloud providers, it is often considered best practice to run the management infrastructure outside of the OpenStack environment. In such a setup the appliance would run on a different virtual infrastructure, but with the necessary connectivity in place to reach the API endpoints.&lt;/p&gt;
+
+&lt;h2 id=&#34;performance-and-sociability&#34;&gt;Performance and Sociability&lt;/h2&gt;
+
+&lt;p&gt;For very large providers or if a lot of SmartState Analysis jobs are executed, it might be necessary to assign specific appliances to a subset of the infrastructure.&lt;/p&gt;
+
+&lt;h1 id=&#34;affinity-assignment&#34;&gt;Affinity assignment&lt;/h1&gt;
+
+&lt;p&gt;For those few special cases where the normal automatic logic based on zones and regions doesn&amp;rsquo;t work, SmartProxy Affinity can be used to manually assign appliances to specific parts of the infrastructure.&lt;/p&gt;
+
+&lt;p&gt;The configuration can be found by navigating to the configuration menu (click on the user name on the top right menu), on the tree in the left pane, select the zone and then the tab &amp;ldquo;SmartProxy Affinity&amp;rdquo;. It is possible to drill down and enable or disable the affinity for fine grained control.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://github.jung-christian.de/images/ssa-affinity.png&#34;&gt;&lt;img src=&#34;http://github.jung-christian.de/images/ssa-affinity-300x125.png&#34; alt=&#34;SmartProxy Affinity&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;gotcha&#34;&gt;Gotcha&lt;/h1&gt;
+
+&lt;p&gt;If SmartProxy Affinity assignments are used, changes of the infrastructure will require the settings to be updated. For example if a new datastore or hypervisor is added, none of the appliances will be assigned until the configuration is updated.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

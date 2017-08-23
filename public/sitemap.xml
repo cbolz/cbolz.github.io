@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://github.jung-christian.de/</loc>
+    <lastmod>2017-02-23T12:19:49+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2017/02/smart-proxy-affinity/</loc>
+    <lastmod>2017-02-23T12:19:49+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</loc>
+    <lastmod>2017-01-29T22:14:29+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2017/01/call-script-from-control-policy/</loc>
+    <lastmod>2017-01-17T22:14:29+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2017/01/bye-bye-flash/</loc>
+    <lastmod>2017-01-12T18:10:50+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/12/blog-relaunch/</loc>
+    <lastmod>2016-12-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</loc>
+    <lastmod>2016-11-23T14:44:44+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/08/using-tags-for-access-control/</loc>
+    <lastmod>2016-08-25T18:35:15+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</loc>
+    <lastmod>2016-08-17T14:46:11+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</loc>
+    <lastmod>2016-08-05T15:30:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</loc>
+    <lastmod>2016-08-05T15:25:41+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</loc>
+    <lastmod>2016-06-03T09:18:15+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</loc>
+    <lastmod>2016-02-22T10:21:15+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</loc>
+    <lastmod>2016-02-10T08:29:09+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</loc>
+    <lastmod>2015-12-17T16:30:23+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</loc>
+    <lastmod>2015-12-17T16:16:01+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/12/execute-commands-with-rbvmomi/</loc>
+    <lastmod>2015-12-17T13:40:39+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/12/sharing-information-between-service-catalog-items/</loc>
+    <lastmod>2015-12-17T08:45:18+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</loc>
+    <lastmod>2015-10-05T10:32:46+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</loc>
+    <lastmod>2015-09-11T10:24:38+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</loc>
+    <lastmod>2015-06-17T08:50:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</loc>
+    <lastmod>2015-06-10T10:10:39+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/06/delete-vm-from-foreman-during-retirement/</loc>
+    <lastmod>2015-06-02T14:09:18+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/04/how-to-provision-vms-with-foreman-and-manageiq/</loc>
+    <lastmod>2015-04-30T11:51:24+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/03/preserve-data-in-manageiq-state-machines/</loc>
+    <lastmod>2015-03-30T12:37:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/01/how-to-use-cloudinit-in-cloudforms-or-manageiq/</loc>
+    <lastmod>2015-01-28T13:30:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2015/01/how-to-import-qcow-images-into-rhev/</loc>
+    <lastmod>2015-01-14T10:19:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/12/external-authentication-in-manageiq/</loc>
+    <lastmod>2014-12-11T06:16:35+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/12/what-you-see-is-what-you-get/</loc>
+    <lastmod>2014-12-04T17:31:15+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/11/videos-manageiq-community-event/</loc>
+    <lastmod>2014-11-03T03:10:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/10/manageiq-at-linuxcon/</loc>
+    <lastmod>2014-10-14T11:34:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/10/linuxcon/</loc>
+    <lastmod>2014-10-13T07:27:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/08/googles-iron-grip-on-android-controlling-open-source-by-any-means-necessary-ars-technica/</loc>
+    <lastmod>2014-08-29T07:18:21+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/07/manageiq/</loc>
+    <lastmod>2014-07-21T03:03:53+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/07/we-are-all-friends/</loc>
+    <lastmod>2014-07-15T02:37:22+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/07/rhel7-was-released/</loc>
+    <lastmod>2014-07-10T14:48:15+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/about/</loc>
+    <lastmod>2014-06-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/06/say-what/</loc>
+    <lastmod>2014-06-25T17:10:27+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/06/spelling/</loc>
+    <lastmod>2014-06-25T16:55:40+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/06/error/</loc>
+    <lastmod>2014-06-25T16:46:02+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://github.jung-christian.de/post/2014/06/hello-world-2/</loc>
+    <lastmod>2014-06-25T16:42:17+00:00</lastmod>
+  </url>
+  
+</urlset>

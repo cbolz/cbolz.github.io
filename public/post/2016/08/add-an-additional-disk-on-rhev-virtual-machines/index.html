@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Add an additional disk on RHEV virtual machines -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://github.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://github.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://github.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://github.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://github.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://github.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://github.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://github.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Add an additional disk on RHEV virtual machines</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Fri, Aug 5, 2016
+                 <br />
+                 In <a href="http://github.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://github.jung-christian.de/categories/it">IT</a>, <a href="http://github.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://github.jung-christian.de/categories/rhev">RHEV</a>
+
+                 <br />
+                 Tags 
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>I was working on a script to add additional disks to existing virtual machines running on Red Hat Enterprise Virtualization (RHEV). I did find some code original written by Eduardo Minguez which I just polished a little bit. Thanks to him I published the full code on Github under the terms of the GPL.</p>
+
+<p>There are actually multiple steps to build a user friendly way for adding the virtual disk:</p>
+
+<ul>
+<li><p>create an additional button for the VM object</p></li>
+
+<li><p>provide a dialog to select disk size, data store and allocation policy (thin vs preallocated)</p></li>
+
+<li><p>select from a list of available datastores created by a dynamic dropdown list</p></li>
+
+<li><p>the actual code which adds the virtual disk to the VM</p></li>
+</ul>
+
+<p>The code was tested on CloudForms 4.0/4.1 and RHEV 3.4 - but it should work with other versions and the respective OpenSource Projects too.</p>
+
+<h1 id="automate-code">Automate Code</h1>
+
+<p>There are two methods to implement this functionality. The first method &ldquo;dialog_add_disk&rdquo; will provide a dynamic drop down list from which the user will be able to select one of the existing RHEV data stores. The new virtual disk will be created on the selected storage.</p>
+
+<p>The second method &ldquo;hot_add_disk&rdquo; will parse this information plus the other settings provided by the user (allocation policy and size) and create the virtual disk.</p>
+
+<p>Both methods can be found on <a href="https://github.com/cbolz/ManageIQ/tree/master/Automate">Github</a>.</p>
+
+<h1 id="service-dialog">Service Dialog</h1>
+
+<p>The second step is to create a service dialog which asks the user for required information. If you create the dialog manually, make sure the field are using the proper names, or the &ldquo;hot_add_disk&rdquo; method will not be able to find the values.</p>
+
+<ul>
+<li><p>&ldquo;size&rdquo;: and integer value of the new disk size in GB</p></li>
+
+<li><p>&ldquo;datastore&rdquo;: the name of the data store, ideally coming from a dynamic dialog</p></li>
+
+<li><p>&ldquo;allocpolicy&rdquo;: allocation policy, possible values are &ldquo;thick&rdquo; or &ldquo;thin&rdquo;</p></li>
+</ul>
+
+<p>For your convenience I exported my service dialog and put it on <a href="https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-disk.yml">Github</a> too.</p>
+
+<h1 id="button">Button</h1>
+
+<p>To put everything together, a button has to be created and associated to virtual machine objects. For the button it is important to specify the correct value for &ldquo;System/Process&rdquo; which should be set to &ldquo;Request&rdquo;, and the request name which has to match the name of the instance. In the provided Automate export the name of the instance is &ldquo;hot_add_disk&rdquo; which has to be put into the &ldquo;Request&rdquo; field.</p>
+
+<p><a href="http://github.jung-christian.de/images/button-hot-add-disk.png" title="Button for hot add disk"><img src="http://github.jung-christian.de/images/button-hot-add-disk-300x308.png" alt="button-hot-add-disk" title="Button for hot add disk" /></a></p>
+
+<h1 id="a-few-words-about-the-code">A few words about the code</h1>
+
+<p>The &ldquo;dialog_add_disk&rdquo; method has probably two blocks worth describing. The function &ldquo;getstorages&rdquo; will use the provided host name and credentials to retrieve a list of all available storage domains. This list is filtered by type &ldquo;data&rdquo; to exclude ISO and Export domains. The resulting list of storage domain is stored in an array which later stored in the $evm.object to populate the dynamic dialog fields.</p>
+
+<p>The second noteworthy code block is the following section:</p>
+
+<pre><code>  vm=$evm.root['vm']
+  ext_mgt_system = vm.ext_management_system
+  rhevmhost = &quot;https://#{ext_mgt_system.hostname}&quot;
+  rhevmuser = ext_mgt_system.authentication_userid
+  rhevmpass = ext_mgt_system.authentication_password
+</code></pre>
+
+<p>This piece of code does first retrieve the VM object (from which the button was clicked) and will then retrieve the details for the management system. This object does contain the host name and credentials to communicate to the provider. This is a nice way of retrieving those credentials from the internal database instead of hard coding them or providing them in the instance attributes.</p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://github.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://github.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://github.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

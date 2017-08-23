@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://github.jung-christian.de/tags/difference/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://github.jung-christian.de/tags/difference/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ManageIQ vs CloudForms - what&#39;s the difference</title>
+      <link>http://github.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</link>
+      <pubDate>Sun, 29 Jan 2017 22:14:29 +0100</pubDate>
+      
+      <guid>http://github.jung-christian.de/post/2017/01/manageiq-vs-cloudforms/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://redhat.com/cloudforms&#34;&gt;Red Hat CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; both recently launched new releases of their software. The latest release of &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/release-notes/&#34;&gt;Red Hat CloudForms is 4.2&lt;/a&gt;, while ManageIQ is following an alphabetical versioning schema and &lt;a href=&#34;http://manageiq.org/blog/2016/12/manageiq-euwe-ga-announcement/&#34;&gt;released Euwe&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Red Hat is following an &amp;ldquo;upstream first&amp;rdquo; policy, meaning all new features are developed in the community driven project, in this case ManageIQ. Based on the work of the upstream project, every now and then a supported Red Hat Product is created, in this case Red Hat CloudForms. The most prominent example for this approach is &lt;a href=&#34;https://getfedora.org/&#34;&gt;Fedora&lt;/a&gt; which is the upstream community project for &lt;a href=&#34;https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux&#34;&gt;Red Hat Enterprise Linux&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s the difference between the upstream community project and the downstream supported product?&lt;/p&gt;
+
+&lt;h1 id=&#34;support&#34;&gt;Support&lt;/h1&gt;
+
+&lt;p&gt;For ManageIQ, there are a number of great ways to get support direclty from the &lt;a href=&#34;http://manageiq.org/community/&#34;&gt;upstream community&lt;/a&gt;. Gitter can be used for chat, there is a forum, links to social media and opportunities to meet face to face at several conferences.&lt;/p&gt;
+
+&lt;p&gt;As a Red Hat customer, you can open &lt;a href=&#34;http://access.redhat.com&#34;&gt;support cases&lt;/a&gt;, search the knowledge base, &lt;a href=&#34;http://www.redhat.com/training/&#34;&gt;train your staff at presence or virtual trainings&lt;/a&gt;, &lt;a href=&#34;http://www.redhat.com/consulting/&#34;&gt;hire consultants&lt;/a&gt; to design and implement your CloudForms environment. There is also a documented &lt;a href=&#34;https://access.redhat.com/support/policy/updates/cloudforms/&#34;&gt;Life Cycle&lt;/a&gt; which allows for better deployment planning.&lt;/p&gt;
+
+&lt;p&gt;Red Hat also performs additional quality assurance before releasing the CloudForms release. Certain features which are not deemed enterprise ready, might be in ManageIQ, but not in CloudForms.&lt;/p&gt;
+
+&lt;p&gt;For Red Hat CloudForms the &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/support-matrix/&#34;&gt;Support Matrix&lt;/a&gt; describes in detail which feature is supported and which isn&amp;rsquo;t. For example, in ManageIQ Euwe includes the capability to manage &lt;a href=&#34;https://github.com/ManageIQ/manageiq/blob/euwe/CHANGELOG.md&#34;&gt;VMware vCloud&lt;/a&gt;, which is currently not listed as being supported in CloudForms.&lt;/p&gt;
+
+&lt;h1 id=&#34;branding&#34;&gt;Branding&lt;/h1&gt;
+
+&lt;p&gt;The branding of the UI, naming of the images and packages, and the documentation are different too. Until recently, Red Hat CloudForms was using &lt;a href=&#34;http://www.adobe.com/&#34;&gt;Adobe Flash&lt;/a&gt; to render certain diagrams and graphs, while ManageIQ was using a JavaScript library to do the same. Starting with version 4.2 of CloudForms, it is using the same library and &lt;a href=&#34;http://github.jung-christian.de/post/2017/01/bye-bye-flash/&#34;&gt;got rid of Flash&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;upgrades&#34;&gt;Upgrades&lt;/h1&gt;
+
+&lt;p&gt;Red Hat CloudForms is a virtual appliances based on Red Hat Enterprise Linux. All software installed in the appliance is packaged in the RPM format. Customers can subscribe to Red Hat Network, Satellite or Update Infrastructure to deploy updates to the appliances.&lt;/p&gt;
+
+&lt;p&gt;ManageIQ virtual appliances are based on &lt;a href=&#34;http://www.centos.org&#34;&gt;CentOS&lt;/a&gt; and the additional software is basically just a git clone. To do an upgrade of the underlying OS, you can just do a &amp;ldquo;yum update&amp;rdquo; as usual, but this will not update the ManageIQ application.&lt;/p&gt;
+
+&lt;p&gt;Each Red Hat CloudForms release also comes with an &lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-cloudforms/4.2/paged/migrating-to-red-hat-cloudforms-42/&#34;&gt;step-by-step guide&lt;/a&gt; on how to perform upgrades. The &lt;a href=&#34;https://access.redhat.com/support/policy/updates/cloudforms/&#34;&gt;Life Cycle document&lt;/a&gt; helps to understand which upgrades are and will be supported.&lt;/p&gt;
+
+&lt;p&gt;ManageIQ does not have an official Life Cycle document. Upgrades also require &lt;a href=&#34;http://talk.manageiq.org/t/upgrading-from-darga-n-to-darga-n-1/1574/3&#34;&gt;more manual steps&lt;/a&gt; and a better understanding of Ruby, Rails, Linux and how to fix stuff is necessary.&lt;/p&gt;
+
+&lt;h1 id=&#34;automate&#34;&gt;Automate&lt;/h1&gt;
+
+&lt;p&gt;Users and customers can extend the out of the box functionality by adding their own code in what is called &amp;ldquo;Automate&amp;rdquo;. Although both versions ship with the &amp;ldquo;ManageIQ&amp;rdquo; domain, only Red Hat CloudForms comes with an additional &amp;ldquo;Red Hat&amp;rdquo; domain. This domain includes some additional integration examples and optimizations.&lt;/p&gt;
+
+&lt;h1 id=&#34;disclaimer&#34;&gt;Disclaimer&lt;/h1&gt;
+
+&lt;p&gt;This might not be a complete list of all differences between ManageIQ and CloudForms. It&amp;rsquo;s also - intentionally - not discussiong business value of the subscription and focuses exclusively on the technical characteristics.&lt;/p&gt;
+
+&lt;p&gt;There is also an article about the same topic on the &lt;a href=&#34;http://talk.manageiq.org/t/differences-between-red-hat-cloudforms-and-manageiq/728/4&#34;&gt;ManageIQ Forum&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
