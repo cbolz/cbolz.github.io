@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>https://cbolz.github.io/tags/smartproxy/index.xml</link>
+    <link>http://www.jung-christian.de/tags/smartproxy/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="https://cbolz.github.io/tags/smartproxy/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.jung-christian.de/tags/smartproxy/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>SmartProxy Affinity</title>
-      <link>https://cbolz.github.io/post/2017/02/smart-proxy-affinity/</link>
+      <link>http://www.jung-christian.de/post/2017/02/smart-proxy-affinity/</link>
       <pubDate>Thu, 23 Feb 2017 12:19:49 +0100</pubDate>
       
-      <guid>https://cbolz.github.io/post/2017/02/smart-proxy-affinity/</guid>
+      <guid>http://www.jung-christian.de/post/2017/02/smart-proxy-affinity/</guid>
       <description>
 
 &lt;h1 id=&#34;smartstate-analysis&#34;&gt;SmartState Analysis&lt;/h1&gt;
@@ -55,7 +55,7 @@
 
 &lt;p&gt;The configuration can be found by navigating to the configuration menu (click on the user name on the top right menu), on the tree in the left pane, select the zone and then the tab &amp;ldquo;SmartProxy Affinity&amp;rdquo;. It is possible to drill down and enable or disable the affinity for fine grained control.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/ssa-affinity.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/ssa-affinity-300x125.png&#34; alt=&#34;SmartProxy Affinity&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/ssa-affinity.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/ssa-affinity-300x125.png&#34; alt=&#34;SmartProxy Affinity&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;gotcha&#34;&gt;Gotcha&lt;/h1&gt;
 

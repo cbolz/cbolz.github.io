@@ -1,0 +1,35 @@
++++
+date = "2017-04-01T12:00:00+01:00"
+title = "Instead of Approval - ask for Forgiveness"
+tags = [
+  "Approval",
+  "Forgiveness",
+]
+categories = [
+  "CloudForms",
+  "ManageIQ",
+]
+#image = "/img/about-bg.jpg"
+description = "Instead of complicated processes to ask for approval - ask for forgiveness instead"
++++
+# Approval
+Enterprise customers are often asking for rather complex ways of approval processes. When ordering a service from the catalog, a manager has to look at the request and can approve or deny the request for different reasons. To be able to deploy services in a short time frame (minutes, not days or weeks) this is adding unnecessary delays. Some customers even ask for more sophisticated approval processes, like per approval, multi level approval, or worse.
+
+# Quota instead of Approval
+The motivation to have approval processes in the first place is often the fear of over usage of the available resources. While public cloud providers encourage you to spend as much money on their platform as possible, private cloud providers try to keep cost under control. Approval is often seen as a way to make sure people are not using an excessive amount of resoures.
+
+But approval processes contradict the idea of deploying services in a quick and timely manor. One way to address the problem is to implement quotas instead of approval processes. Quotas are a way to control resource usage and can limit the excessive and unpreticable use of resources.
+
+# Don't ask for approval - ask for forgiveness
+An alternative approach is to deploy now and ask for forgiveness later. Instead of slowing down the provisioning process, users have a way to appologize for what they just deployed and can provide excuses for their decision. 
+
+# Custom button sto say "I'm sorry"
+Create a button ...
+
+# Select an excuse
+
+# How do you plan to redeem yourself
+Several options can be provided to the oroginal requester to redeem themselves. Depending on how excessive the original request was, anything from a free coffee to a fancy dinner invite is available. 
+
+# Different ways to appologize
+It is also possible to appologize more than once. 

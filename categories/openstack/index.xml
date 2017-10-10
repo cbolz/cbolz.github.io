@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>https://cbolz.github.io/categories/openstack/index.xml</link>
+    <link>http://www.jung-christian.de/categories/openstack/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="https://cbolz.github.io/categories/openstack/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.jung-christian.de/categories/openstack/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Create Snapshots for a Service in OpenStack</title>
-      <link>https://cbolz.github.io/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
+      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
       <pubDate>Thu, 17 Dec 2015 16:30:23 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
+      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
       <description>&lt;p&gt;Based on the script to &lt;a href=&#34;http://www.jung-christian.de/2015/12/create-snapshots-in-openstack/&#34;&gt;create snapshots for OpenStack instances&lt;/a&gt;, this version provides similar functionality for service items.&lt;/p&gt;
 
 &lt;p&gt;It iterates through the list of instances belonging to a specific service and creates a snapshot for each instance. The complete method can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_service_snapshot.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
@@ -25,10 +25,10 @@
     
     <item>
       <title>Create Snapshots in OpenStack</title>
-      <link>https://cbolz.github.io/post/2015/12/create-snapshots-in-openstack/</link>
+      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</link>
       <pubDate>Thu, 17 Dec 2015 16:16:01 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/12/create-snapshots-in-openstack/</guid>
+      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</guid>
       <description>&lt;p&gt;One of my first experiments using the Ruby fog library. ManageIQ or CloudForms can currently not create snapshots for OpenStack instances.&lt;/p&gt;
 
 &lt;p&gt;With a custom button and a method available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_snapshot.rb&#34;&gt;Github&lt;/a&gt;, you can easily add this functionality. The snapshot name and snapshot ID will be stored in custom attributes of the instance, so they show up in the Web UI (after a reload).&lt;/p&gt;

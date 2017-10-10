@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>https://cbolz.github.io/categories/it/index.xml</link>
+    <link>http://www.jung-christian.de/categories/it/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="https://cbolz.github.io/categories/it/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.jung-christian.de/categories/it/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>How to setup a PostgreSQL database for ManageIQ and CloudForms</title>
-      <link>https://cbolz.github.io/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</link>
+      <link>http://www.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</link>
       <pubDate>Wed, 23 Nov 2016 14:44:44 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</guid>
+      <guid>http://www.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</guid>
       <description>
 
 &lt;p&gt;When playing with several &lt;a href=&#34;http://www.redhat.com/en/technologies/management/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; appliances in my lab environment, I face the problem that I quickly run out of RAM on my virtual infrastructure. I&amp;rsquo;m using a number of &lt;a href=&#34;http://www.intel.com/content/www/us/en/nuc/overview.html&#34;&gt;Intel NUC&amp;rsquo;s&lt;/a&gt; and although the newest models can go up to 32 GB of RAM, memory has always been my bottleneck. So I thought instead of running a PostgreSQL server in each virtual CloudForms or ManageIQ appliance, it might be more efficient to have a dedicated PostgreSQL Server for all of them. There are other use cases where one might want to use a external database:&lt;/p&gt;
@@ -117,11 +117,11 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 
 &lt;p&gt;When logging into the appliance, the active database configuration can be found in the Configuration, Database menu.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/external-database.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/external-database-300x69.png&#34; alt=&#34;Verify external database configuration&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/external-database.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/external-database-300x69.png&#34; alt=&#34;Verify external database configuration&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;If everything works fine, the internal database role can be disabled, which will also free up some memory in the virtual machine.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/disable-db-role.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/disable-db-role-300x157.png&#34; alt=&#34;How to disable database role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/disable-db-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/disable-db-role-300x157.png&#34; alt=&#34;How to disable database role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;wrap-up&#34;&gt;Wrap up&lt;/h1&gt;
 
@@ -133,10 +133,10 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Using Tags for access control</title>
-      <link>https://cbolz.github.io/post/2016/08/using-tags-for-access-control/</link>
+      <link>http://www.jung-christian.de/post/2016/08/using-tags-for-access-control/</link>
       <pubDate>Thu, 25 Aug 2016 18:35:15 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/08/using-tags-for-access-control/</guid>
+      <guid>http://www.jung-christian.de/post/2016/08/using-tags-for-access-control/</guid>
       <description>
 
 &lt;p&gt;UPDATE 2016-10-14: A more polished version of this article can now be found on the &lt;a href=&#34;http://cloudformsblog.redhat.com/2016/10/13/using-tags-for-access-control/&#34;&gt;Official Red Hat CloudForms Blog&lt;/a&gt;.&lt;/p&gt;
@@ -175,19 +175,19 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 
 &lt;p&gt;For the purpose of this demo, a role with full access to &amp;ldquo;Cloud Intel&amp;rdquo;, &amp;ldquo;Services&amp;rdquo;, &amp;ldquo;Compute&amp;rdquo;, &amp;ldquo;Settings&amp;rdquo; and &amp;ldquo;Access Rules for all Virtual Machines&amp;rdquo; - but no other privileges - is created.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/add-role.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/add-role-300x122.png&#34; alt=&#34;add role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-role-300x122.png&#34; alt=&#34;add role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;example-group-engineering&#34;&gt;Example Group &amp;ldquo;Engineering&amp;rdquo;&lt;/h2&gt;
 
 &lt;p&gt;In the next step a group called &amp;ldquo;Engineering&amp;rdquo; is created. All members of this group will have the role &amp;ldquo;Self Service&amp;rdquo; assigned, which was created in the previous step. For now, we skip tags and filters and keep them all unchecked.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/create-group.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/create-group-300x203.png&#34; alt=&#34;create group&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/create-group.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/create-group-300x203.png&#34; alt=&#34;create group&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;example-user-joe-doe&#34;&gt;Example user Joe Doe&lt;/h2&gt;
 
 &lt;p&gt;In the last step a user &amp;ldquo;Joe Doe&amp;rdquo; is created. This will be a local user (stored in the database) and is a member of the Engineering group.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/add-user.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/add-user-300x184.png&#34; alt=&#34;add user&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-user.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-user-300x184.png&#34; alt=&#34;add user&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
 
@@ -199,7 +199,7 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 
 &lt;p&gt;Navigate to the group, edit it and select the Department/Engineering Tag.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/edit-and-tag-engineering.png&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/edit-and-tag-engineering-300x458.png&#34; alt=&#34;edit and tag engineering&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/edit-and-tag-engineering.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/edit-and-tag-engineering-300x458.png&#34; alt=&#34;edit and tag engineering&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;When changing groups, roles or tenants, the user doesn&amp;rsquo;t need to logout and login again. Changes are reflected on the next reload of the UI. If Joe reloads the UI, he will see no Virtual Machines or other objects anymore! The scope for the group and hence the user, was just limited to objects which are tagged as Department/Engineering - and no objects have been tagged so far.&lt;/p&gt;
 
@@ -257,30 +257,30 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Create Cobbler PXE/TFTP Records during VM Provisioning</title>
-      <link>https://cbolz.github.io/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</link>
+      <link>http://www.jung-christian.de/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</link>
       <pubDate>Wed, 17 Aug 2016 14:46:11 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</guid>
+      <guid>http://www.jung-christian.de/post/2016/08/create-cobbler-pxetftp-records-during-vm-provisioning/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/documentation/en/red-hat-satellite/&#34;&gt;Red Hat Satellite 5.x&lt;/a&gt; is using &lt;a href=&#34;https://cobbler.github.io/&#34;&gt;Cobbler&lt;/a&gt; to manage DHCP and TFTP configuration files. A while back, we posted an article on how to use &lt;a href=&#34;http://cloudformsblog.redhat.com/2013/05/03/cobbler-provisioning-via-cloudforms-2-0/&#34;&gt;Cobbler Provisioning via CloudForms 2.0&lt;/a&gt;. Since the original post was written for CloudForms 2.0 in 2013, it&amp;rsquo;s probably time for an update.&lt;/p&gt;
 
 &lt;p&gt;I rewrote the script and uploaded it to &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate/Integration/ConfigurationManagement/Cobbler.class&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;To add a Cobbler system record during provisioning, an additional step in the provisioning state machine is necessary.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/cobbler-statemachine.png&#34; title=&#34;Cobbler State Machine&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/cobbler-statemachine-300x183.png&#34; alt=&#34;cobbler-statemachine&#34; title=&#34;Cobbler State Machine&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/cobbler-statemachine.png&#34; title=&#34;Cobbler State Machine&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/cobbler-statemachine-300x183.png&#34; alt=&#34;cobbler-statemachine&#34; title=&#34;Cobbler State Machine&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Please make sure you only use CreateCobblerRecord or RegisterForeman if the attributes for the instances have been declared. For Foreman this was &lt;a href=&#34;http://www.jung-christian.de/2015/04/how-to-provision-vms-with-foreman-and-manageiq/&#34;&gt;documented in a previous post&lt;/a&gt;, for Cobbler, it could look like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/cobbler-instance.png&#34; title=&#34;Cobbler Instance&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/cobbler-instance-300x114.png&#34; alt=&#34;cobbler-instance&#34; title=&#34;Cobbler Instance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/cobbler-instance.png&#34; title=&#34;Cobbler Instance&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/cobbler-instance-300x114.png&#34; alt=&#34;cobbler-instance&#34; title=&#34;Cobbler Instance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Add an additional network interface on RHEV virtual machines</title>
-      <link>https://cbolz.github.io/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
       <pubDate>Fri, 05 Aug 2016 15:30:05 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
       <description>&lt;p&gt;Similar to the previous post on how to &lt;a href=&#34;http://www.jung-christian.de/2016/08/add-an-additional-disk-on-rhev-virtual-machines/&#34;&gt;add additional disks for existing virtual machines&lt;/a&gt; running on RHEV, this article describes how to add additional network interfaces to virtual machines running in RHEV.&lt;/p&gt;
 
 &lt;p&gt;The implementation follows the same concept:&lt;/p&gt;
@@ -301,10 +301,10 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Add an additional disk on RHEV virtual machines</title>
-      <link>https://cbolz.github.io/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
       <pubDate>Fri, 05 Aug 2016 15:25:41 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
       <description>
 
 &lt;p&gt;I was working on a script to add additional disks to existing virtual machines running on Red Hat Enterprise Virtualization (RHEV). I did find some code original written by Eduardo Minguez which I just polished a little bit. Thanks to him I published the full code on Github under the terms of the GPL.&lt;/p&gt;
@@ -349,7 +349,7 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 
 &lt;p&gt;To put everything together, a button has to be created and associated to virtual machine objects. For the button it is important to specify the correct value for &amp;ldquo;System/Process&amp;rdquo; which should be set to &amp;ldquo;Request&amp;rdquo;, and the request name which has to match the name of the instance. In the provided Automate export the name of the instance is &amp;ldquo;hot_add_disk&amp;rdquo; which has to be put into the &amp;ldquo;Request&amp;rdquo; field.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;a-few-words-about-the-code&#34;&gt;A few words about the code&lt;/h1&gt;
 
@@ -370,20 +370,20 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Orchestrating OpenShift Enterprise with ManageIQ</title>
-      <link>https://cbolz.github.io/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</link>
+      <link>http://www.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</link>
       <pubDate>Fri, 03 Jun 2016 09:18:15 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</guid>
+      <guid>http://www.jung-christian.de/post/2016/06/orchestrating-openshift-enterprise-with-manageiq/</guid>
       <description>&lt;p&gt;A nice post on how to scale &lt;a href=&#34;http://Orchestrating OpenShift Enterprise with ManageIQ&#34;&gt;OpenShift Applications with ManageIQ&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>How to provision Azure workloads with CloudForms</title>
-      <link>https://cbolz.github.io/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</link>
+      <link>http://www.jung-christian.de/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</link>
       <pubDate>Mon, 22 Feb 2016 10:21:15 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</guid>
+      <guid>http://www.jung-christian.de/post/2016/02/how-to-provision-azure-workloads-with-cloudforms/</guid>
       <description>&lt;p&gt;Just found this very good video demonstration on &lt;a href=&#34;http://www.videoqe.com/videogallery/cloudforms-4-0-provision-azure-vm/&#34;&gt;how to provision workloads&lt;/a&gt; on Microsoft Azure with CloudForms.&lt;/p&gt;
 
 &lt;p&gt;Check out the site for other good video demonstrations too.&lt;/p&gt;
@@ -392,10 +392,10 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Create Snapshots for a Service in OpenStack</title>
-      <link>https://cbolz.github.io/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
+      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
       <pubDate>Thu, 17 Dec 2015 16:30:23 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
+      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
       <description>&lt;p&gt;Based on the script to &lt;a href=&#34;http://www.jung-christian.de/2015/12/create-snapshots-in-openstack/&#34;&gt;create snapshots for OpenStack instances&lt;/a&gt;, this version provides similar functionality for service items.&lt;/p&gt;
 
 &lt;p&gt;It iterates through the list of instances belonging to a specific service and creates a snapshot for each instance. The complete method can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_service_snapshot.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
@@ -406,10 +406,10 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Create Snapshots in OpenStack</title>
-      <link>https://cbolz.github.io/post/2015/12/create-snapshots-in-openstack/</link>
+      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</link>
       <pubDate>Thu, 17 Dec 2015 16:16:01 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/12/create-snapshots-in-openstack/</guid>
+      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</guid>
       <description>&lt;p&gt;One of my first experiments using the Ruby fog library. ManageIQ or CloudForms can currently not create snapshots for OpenStack instances.&lt;/p&gt;
 
 &lt;p&gt;With a custom button and a method available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_snapshot.rb&#34;&gt;Github&lt;/a&gt;, you can easily add this functionality. The snapshot name and snapshot ID will be stored in custom attributes of the instance, so they show up in the Web UI (after a reload).&lt;/p&gt;
@@ -418,10 +418,10 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Execute commands with RbVmomi</title>
-      <link>https://cbolz.github.io/post/2015/12/execute-commands-with-rbvmomi/</link>
+      <link>http://www.jung-christian.de/post/2015/12/execute-commands-with-rbvmomi/</link>
       <pubDate>Thu, 17 Dec 2015 13:40:39 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/12/execute-commands-with-rbvmomi/</guid>
+      <guid>http://www.jung-christian.de/post/2015/12/execute-commands-with-rbvmomi/</guid>
       <description>&lt;p&gt;One way to execute remote commands on a running VMware VM is by using &lt;a href=&#34;https://github.com/vmware/rbvmomi&#34;&gt;RbVmomi&lt;/a&gt;. It&amp;rsquo;s a Ruby wrapper for VMware&amp;rsquo;s SOAP API.&lt;/p&gt;
 
 &lt;p&gt;RvVmomi is not installed on the appliance by default, but can be easily added:&lt;/p&gt;
@@ -437,10 +437,10 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
     
     <item>
       <title>Sharing information between service catalog items</title>
-      <link>https://cbolz.github.io/post/2015/12/sharing-information-between-service-catalog-items/</link>
+      <link>http://www.jung-christian.de/post/2015/12/sharing-information-between-service-catalog-items/</link>
       <pubDate>Thu, 17 Dec 2015 08:45:18 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/12/sharing-information-between-service-catalog-items/</guid>
+      <guid>http://www.jung-christian.de/post/2015/12/sharing-information-between-service-catalog-items/</guid>
       <description>&lt;p&gt;In case of a deployment of an multi tiered application, it is often necessary to store information which was generated while provisioning the first VM, so it can be retrieved during provisioning of the following VMs.&lt;/p&gt;
 
 &lt;p&gt;A simple example could be a service catalog bundle consisting of one DB VM and two application servers. The two application servers have to be configured to use the previously created DB.&lt;/p&gt;
@@ -480,10 +480,10 @@ end
     
     <item>
       <title>The definite guide to CloudForms and ManageIQ</title>
-      <link>https://cbolz.github.io/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</link>
+      <link>http://www.jung-christian.de/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</link>
       <pubDate>Mon, 05 Oct 2015 10:32:46 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</guid>
+      <guid>http://www.jung-christian.de/post/2015/10/the-definite-guide-to-cloudforms-and-manageiq/</guid>
       <description>&lt;p&gt;If you&amp;rsquo;re looking for a good book about CloudForms and ManageIQ, check this one out.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://www.gitbook.com/book/pemcg/introduction-to-cloudforms-automation/details&#34;&gt;CloudForms &amp;amp; ManageIQ Automation How-To Guide&lt;/a&gt;&lt;/p&gt;
@@ -494,10 +494,10 @@ end
     
     <item>
       <title>Install all available updates via Satellite 6</title>
-      <link>https://cbolz.github.io/post/2015/09/install-all-available-updates-via-satellite-6/</link>
+      <link>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</link>
       <pubDate>Fri, 11 Sep 2015 10:24:38 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/09/install-all-available-updates-via-satellite-6/</guid>
+      <guid>http://www.jung-christian.de/post/2015/09/install-all-available-updates-via-satellite-6/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://access.redhat.com/products/red-hat-satellite&#34;&gt;Red Hat Satellite 6&lt;/a&gt; is a great tool to manage your RHEL virtual machines. In some scenarios you would like to be able to install all available updates for a given system from CloudForms or ManageIQ. I created a small script to accomplish this task.&lt;/p&gt;
 
 &lt;p&gt;To use this script, it is necessary to upgrade your Satellite Server to version 6.1.1 or later. Earlier versions do not expose the necessary API calls.&lt;/p&gt;
@@ -508,15 +508,15 @@ end
 
 &lt;p&gt;First step is to create a button which points to the Request object:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/install_all_updates-button.png&#34; title=&#34;Install all updates button&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/install_all_updates-button-300x310.png&#34; alt=&#34;install_all_updates-button&#34; title=&#34;Install all updates button&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/install_all_updates-button.png&#34; title=&#34;Install all updates button&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/install_all_updates-button-300x310.png&#34; alt=&#34;install_all_updates-button&#34; title=&#34;Install all updates button&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Now create request object which points to the actual method. Like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/request.png&#34; title=&#34;Request object&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/request-300x63.png&#34; alt=&#34;request&#34; title=&#34;Request object&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/request.png&#34; title=&#34;Request object&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/request-300x63.png&#34; alt=&#34;request&#34; title=&#34;Request object&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Last but not least, the actual method. I put it into my personal datastore and namespace:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/foreman-class.png&#34; title=&#34;The Foreman Class&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/foreman-class-300x103.png&#34; alt=&#34;foreman-class&#34; title=&#34;The Foreman Class&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/foreman-class.png&#34; title=&#34;The Foreman Class&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/foreman-class-300x103.png&#34; alt=&#34;foreman-class&#34; title=&#34;The Foreman Class&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This will allow you to select any VM and install all available updates on it.&lt;/p&gt;
 </description>
@@ -524,21 +524,21 @@ end
     
     <item>
       <title>Manage VM snapshots in RHEV/oVirt with ManageIQ</title>
-      <link>https://cbolz.github.io/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</link>
+      <link>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</link>
       <pubDate>Wed, 17 Jun 2015 08:50:28 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</guid>
+      <guid>http://www.jung-christian.de/post/2015/06/manage-vm-snapshots-in-rhevovirt-with-manageiq/</guid>
       <description>&lt;p&gt;One feature which is still missing in &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; or &lt;a href=&#34;http://www.redhat.com/en/technologies/cloud-computing/cloudforms&#34;&gt;CloudForms&lt;/a&gt; is the capability to create, roll back and delete snapshots in &lt;a href=&#34;https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Virtualization&#34;&gt;RHEV&lt;/a&gt; or &lt;a href=&#34;http://www.ovirt.org&#34;&gt;oVirt&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;I wrote three scripts to accomplish these tasks and made them available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/rhev&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Download the namespace cjung, zip and import it into the appliance by clicking &amp;ldquo;Automate, Import/Export&amp;rdquo; and upload the zip file. There is a YAML export of some simple example dialogs which can be used when designing the custom buttons. The custom menu for a VM could look something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/custom_buttons.png&#34; title=&#34;Custom buttons&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/custom_buttons-300x46.png&#34; alt=&#34;custom_buttons&#34; title=&#34;Custom Buttons&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom_buttons.png&#34; title=&#34;Custom buttons&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom_buttons-300x46.png&#34; alt=&#34;custom_buttons&#34; title=&#34;Custom Buttons&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The create snapshot button only asks for the description of the new snapshot. To make the delete and revert snapshot functionality a bit more convenient to use, I wrote a dynamic drop down method. This method queries the list of all available snapshots from RHEV/oVirt and presents the list to the user. By choosing one of the provided options, the snapshot ID is send to the delete_snapshot or revert_snapshot method.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://cbolz.github.io/images/dynamic_dropdown.png&#34; title=&#34;Dynamic Dropdown Lists&#34;&gt;&lt;img src=&#34;https://cbolz.github.io/images/dynamic_dropdown-300x122.png&#34; alt=&#34;dynamic_dropdown&#34; title=&#34;Dynamic Dropdown Lists&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/dynamic_dropdown.png&#34; title=&#34;Dynamic Dropdown Lists&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/dynamic_dropdown-300x122.png&#34; alt=&#34;dynamic_dropdown&#34; title=&#34;Dynamic Dropdown Lists&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;All three scripts are using the RHEV/oVirt API to manage the snapshots. Actions are executed in the background, so it might take a few seconds until the action is executed.&lt;/p&gt;
 </description>
@@ -546,10 +546,10 @@ end
     
     <item>
       <title>Check provisioning state in ManageIQ with Foreman</title>
-      <link>https://cbolz.github.io/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</link>
+      <link>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</link>
       <pubDate>Wed, 10 Jun 2015 10:10:39 +0000</pubDate>
       
-      <guid>https://cbolz.github.io/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</guid>
+      <guid>http://www.jung-christian.de/post/2015/06/check-provisioning-state-in-manageiq-with-foreman/</guid>
       <description>&lt;p&gt;If you&amp;rsquo;re using &lt;a href=&#34;http://www.theforman.org&#34;&gt;The Foreman&lt;/a&gt; for provisioning VMs, you might want the state machine to proceed only if the puppet run was completed successfully. I wrote a script which checks the puppet state of a given VM via Foreman&amp;rsquo;s API. It can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/check_puppet/checkpuppet.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;To make this script work, the hostid of the provisioned VM has to be stored as an provisioning option. The following line in the script, retrieves the hostid:&lt;/p&gt;
