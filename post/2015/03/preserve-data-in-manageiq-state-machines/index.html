@@ -119,18 +119,17 @@
 
 <p>Example:</p>
 
-<pre><code>&lt;code class=&quot;lang-ruby hljs&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;hljs-variable&quot;&gt;$evm&lt;/span&gt;.state_var_exist?(&lt;span class=&quot;hljs-string&quot;&gt;&quot;test_data&quot;&lt;/span&gt;)
-    test_data = &lt;span class=&quot;hljs-variable&quot;&gt;$evm&lt;/span&gt;.get_state_var(&lt;span class=&quot;hljs-string&quot;&gt;&quot;test_data&quot;&lt;/span&gt;)
-    &lt;span class=&quot;hljs-comment&quot;&gt;# TODO: Something interesting&lt;/span&gt;
-&lt;span class=&quot;hljs-keyword&quot;&gt;else&lt;/span&gt;
-    &lt;span class=&quot;hljs-comment&quot;&gt;# First time through, initialize data&lt;/span&gt;
-    &lt;span class=&quot;hljs-variable&quot;&gt;$evm&lt;/span&gt;.set_state_var(&lt;span class=&quot;hljs-string&quot;&gt;&quot;test_data&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;)
-&lt;span class=&quot;hljs-keyword&quot;&gt;end&lt;/span&gt;&lt;/code&gt;
+<pre><code>    if $evm.state_var_exist?(&quot;test_data&quot;)
+          test_data = $evm.get_state_var(&quot;test_data&quot;)
+          # TODO: Something interesting
+    else
+          # First time through, initialize data
+          $evm.set_state_var(&quot;test_data&quot;, 1)
+    end
 </code></pre>
 
-<p>Found this here:</p>
-
-<p><a href="http://talk.manageiq.org/t/how-to-maintain-stateful-data-through-state-retries/538"> http://talk.manageiq.org/t/how-to-maintain-stateful-data-through-state-retries/538</a></p>
+<p>Found this here:
+<a href="http://talk.manageiq.org/t/how-to-maintain-stateful-data-through-state-retries/538"> http://talk.manageiq.org/t/how-to-maintain-stateful-data-through-state-retries/538</a></p>
 
                 </div>
             </div>

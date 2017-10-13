@@ -9,6 +9,7 @@ categories = [
   "CloudForms",
   "ManageIQ",
 ]
+draft = true
 #image = "/img/about-bg.jpg"
 description = "Instead of complicated processes to ask for approval - ask for forgiveness instead"
 +++

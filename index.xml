@@ -7,8 +7,198 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <lastBuildDate>Thu, 23 Feb 2017 12:19:49 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 10 Oct 2017 12:19:49 +0100</lastBuildDate>
     <atom:link href="http://www.jung-christian.de/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Custom Smart State Analysis Profiles</title>
+      <link>http://www.jung-christian.de/post/2017/10/modify-ssa-profile/</link>
+      <pubDate>Tue, 10 Oct 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/10/modify-ssa-profile/</guid>
+      <description>
+
+&lt;h1 id=&#34;about-smart-state-analysis&#34;&gt;About Smart State Analysis&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; have a feature called &amp;ldquo;Smart State Analysis&amp;rdquo; which allows them to analyse the disk of a Virtual Machine, Instance, Template or Image and retrieve data about the installed Operating System, applications, local groups and users and more. This is implemented completely without the need of additional agents and as a consequence is independent of the VM power state.&lt;/p&gt;
+
+&lt;p&gt;Smart State can be also sued for Containers and Hypervisors, but the following example focuses on Virtual Machines.&lt;/p&gt;
+
+&lt;h1 id=&#34;smart-state-analysis-profiles&#34;&gt;Smart State Analysis Profiles&lt;/h1&gt;
+
+&lt;p&gt;A Smart State Analysis Profile defines which information is retrieved from the Virtual Machine. By default the following information is retrieved:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Services: Which services are installed (Works for Windows and Linux including SysV and SystemD)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;User Accounts: Retrieves information about local user and group accounts&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Software: Information about installed applications (on Windows retrieved from the registry, on Linux by running a query against the RPM or dpkg database)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;VM Configuration and System: some additional information about the VM&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Administrators can create their own Analysis Profiles and define a list of additional files which should be retrieved. The Profile can either only check for the existence of the specified file, or also retrieve the content of the file.&lt;/p&gt;
+
+&lt;h1 id=&#34;create-a-custom-smart-state-analysis-profile&#34;&gt;Create a custom Smart State Analysis Profile&lt;/h1&gt;
+
+&lt;p&gt;It is very simple to create a customized Profile. Simply copy the out of the box &amp;ldquo;sample&amp;rdquo; Profile and name the copy &amp;ldquo;default&amp;rdquo;.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;log into the appliance with administrator privileges&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; by clicking on the username on the top right corner&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Analysis Profiles&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;simple&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;em&gt;Copy selected analysis profile&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/copy-analysis-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/copy-analysis-profile-300x112.png&#34; alt=&#34;copy analysis profile&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;make sure the copy is called &amp;ldquo;default&amp;rdquo; and check or un-check the appropriate options&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/copy-ssa-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/copy-ssa-profile-300x132.png&#34; alt=&#34;name the profile default&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If the Profile is not called &amp;ldquo;default&amp;rdquo; it will not be used unless it is explicitly assigned. Read the chapter &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/assigning_a_custom_analysis_profile_to_a_virtual_machine/index&#34;&gt;Assigning a Custom Analysis Profile to a Virtual Machine&lt;/a&gt; in the CloudForms Documentation for more details.&lt;/p&gt;
+
+&lt;h1 id=&#34;modify-the-smart-state-analysis-profile&#34;&gt;Modify the Smart State Analysis Profile&lt;/h1&gt;
+
+&lt;p&gt;To show how this feature works, add an additional file. In the example below, the content of /etc/sysconfig/selinux is retrieved during Smart State Analysis. There is another blog post about &lt;a href=&#34;../control-policy-selinux/&#34;&gt;How to create a Compliance Policy to enforce SELinux mode&lt;/a&gt; illustrating why this can be useful.&lt;/p&gt;
+
+&lt;p&gt;Edit the previously created State Analysis Profile:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;log into the appliance with administrator privileges&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; by clicking on the username on the top right corner&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Analysis Profiles&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;default&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;click on the tab &lt;strong&gt;&lt;em&gt;file&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;add a new line:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Name:&lt;/em&gt;&lt;/strong&gt; /etc/sysconfig/selinux&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Collect Contents?&lt;/em&gt;&lt;/strong&gt; click (check the box)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-selinux-to-analysis-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-selinux-to-analysis-profile-300x95.png&#34; alt=&#34;Add selinux to Analysis Profile&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;&lt;em&gt;save&lt;/em&gt;&lt;/strong&gt; on the right in the same row of the table&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;click &lt;strong&gt;&lt;em&gt;Add&lt;/em&gt;&lt;/strong&gt; to save all modifications&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/strong&gt; It is important the name of the Profile is &amp;ldquo;default&amp;rdquo;. To use a different Profile name, check the chapter &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/assigning_a_custom_analysis_profile_to_a_virtual_machine/index&#34;&gt;Assigning a Custom Analysis Profile to a Virtual Machine&lt;/a&gt; in the CloudForms Documentation for more information.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SELinux Compliance Policy</title>
+      <link>http://www.jung-christian.de/post/2017/10/control-policy-selinux/</link>
+      <pubDate>Tue, 10 Oct 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/10/control-policy-selinux/</guid>
+      <description>
+
+&lt;h1 id=&#34;compliance-policies&#34;&gt;Compliance Policies&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; allow the definition of Compliance Policies which can be used to verify consistency of Virtual Machines, Instances, Hypervisors and other objects, in the entire environment. Compliance Policies can  trigger actions to be able to notify about non-compliance or to go one step further and enforce compliance, for example by using Ansible Playbooks to fix the problem.&lt;/p&gt;
+
+&lt;p&gt;There are a number of examples about Compliance Policies on the &lt;a href=&#34;http://cloudformsblog.redhat.com/tag/compliance/&#34;&gt;official Red Hat CloudForms blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;adjust-the-smart-state-analysis-profile&#34;&gt;Adjust the Smart State Analysis Profile&lt;/h1&gt;
+
+&lt;p&gt;A separate blog post goes into details on how to &lt;a href=&#34;../modify-ssa-profile/&#34;&gt;create and modify a Smart State Analysis Profile&lt;/a&gt;. When creating the profile, it is important its name is &amp;ldquo;default&amp;rdquo; and the policy retrieves the content of the file /etc/sysconfig/selinux.&lt;/p&gt;
+
+&lt;h1 id=&#34;control-policies&#34;&gt;Control Policies&lt;/h1&gt;
+
+&lt;p&gt;Policies in CloudForms and ManageIQ are always a combination of three items:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Event: the event triggers the evaluation of the condition. An event can be something like &amp;ldquo;VM Power On&amp;rdquo;, &amp;ldquo;Analysis completed&amp;rdquo; and many more. A list of out of the box events can be found by clicking on &lt;strong&gt;&lt;em&gt;Control&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt;, and then clicking on &lt;strong&gt;&lt;em&gt;Events&lt;/em&gt;&lt;/strong&gt; in the accordion on the left&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/list-of-events.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/list-of-events-300x96.png&#34; alt=&#34;out of the box events&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The screenshot only shows a subset of all available events.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Condition: the condition is evaluated after the specified event was detected. A condition can verify that a specific Operating System is installed, the VM configuration meets certain criteria and many more&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Action: after detecting the event and validating the condition, an action can be triggered. Actions can be specified differently if the condition was TRUE or FALSE. A Control Policy can can send an email alert, trigger a SNMP trap or any customized action. A number of actions are already shipped out of the box and can be found by clicking on &lt;strong&gt;&lt;em&gt;Control&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt; and then &lt;strong&gt;&lt;em&gt;Actions&lt;/em&gt;&lt;/strong&gt; in the accordion on the left&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/list-of-actions.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/list-of-actions-300x95.png&#34; alt=&#34;list of actions&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The screenshot only shows a subset of all available actions.&lt;/p&gt;
+
+&lt;h1 id=&#34;compliance-policies-1&#34;&gt;Compliance Policies&lt;/h1&gt;
+
+&lt;p&gt;Compliance policies are similar to Control Policies, but do not listen to events. To validate a Compliance Policy, the user can click on &lt;strong&gt;&lt;em&gt;Policy&lt;/em&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;em&gt;Check Compliance of Last Known Configuration&lt;/em&gt;&lt;/strong&gt;, or a Control Policy can trigger an Compliance Policy Check as an Action.&lt;/p&gt;
+
+&lt;p&gt;Compliance Policies can also mark the evaluated object as either Compliant or Non-Compliant. This information can also be used in Reports and Dashboards for a better overview or to be exported for further analysis. More information about Control and Compliance Policies can be found in the &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/policies_and_profiles_guide/&#34;&gt;Policies and Profiles Guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;create-a-compliance-policy-for-selinux&#34;&gt;Create a Compliance Policy for SELinux&lt;/h1&gt;
+
+&lt;p&gt;To check if SELinux is in enforcing mode, a compliance policy like this can be used:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Condition: analyse the content of /etc/sysconfig/selinux and verify &amp;ldquo;SELinux=enforcing&amp;rdquo; is found in the file&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Action: mark the VM as compliant or non-compliant&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;An example of such a policy can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/control-policies&#34;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;enable-the-policy&#34;&gt;Enable the Policy&lt;/h1&gt;
+
+&lt;p&gt;To enable the Compliance Policy, it has to be part of a Policy Profile. The example found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/control-policies&#34;&gt;Github&lt;/a&gt; is pre-configured accordingly.&lt;/p&gt;
+
+&lt;p&gt;As one last step the Policy has to be enabled. This can be done on individual VMs or instances or any where in the hierarchy, up to the provider level. Policies are inherited to their child objects, for example if the Policy is enabled on a specific provider, it automatically applies to all objects found on this provider.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Navigate to the provider, e.g. &lt;strong&gt;&lt;em&gt;Compute&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Infrastructure&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Providers&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select the provider and click on &lt;strong&gt;&lt;em&gt;Policy&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Manage Policies&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/manage-policies.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/manage-policies-300x82.png&#34; alt=&#34;Manage Policies&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Check the box next to the Policy&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/enable-policy-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/enable-policy-profile-300x274.png&#34; alt=&#34;Enable Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Click &lt;strong&gt;&lt;em&gt;Save&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The icon shows a yellow shield to illustrate the a Policy is enabled&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/provider-policy-enabled.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/provider-policy-enabled-300x77.png&#34; alt=&#34;Provider with enabled Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;verify&#34;&gt;Verify&lt;/h1&gt;
+
+&lt;p&gt;To verify the configuration, navigate to a VM or instances on the selected provider. Click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Perform SmartState Analysis&lt;/em&gt;&lt;/strong&gt;. Depending on the performance of the environment, this usually takes up to two minutes. In some environments it can also take much longer (in particular on OpenStack providers).&lt;/p&gt;
+
+&lt;p&gt;Configuration of Smart State is out of scope for this document. There is a knowledge base article &lt;a href=&#34;https://access.redhat.com/articles/435283&#34;&gt;Virtual Machine SmartState Analysis Checklist&lt;/a&gt; with some useful links.&lt;/p&gt;
+
+&lt;p&gt;System is not compliant:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/system-non-compliant.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/system-non-compliant-300x58.png&#34; alt=&#34;System is not compliant&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;System is compliant:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/system-compliant.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/system-compliant-300x61.png&#34; alt=&#34;System is not compliant&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>SmartProxy Affinity</title>
@@ -591,32 +781,6 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 &lt;p&gt;When CloudForms sets the memory to 2 GB, it doesn&amp;rsquo;t adjust the amount of reserved memory while doing it. A template with 4 GB memory usually has about 2.7 GB of reserved memory - which is more than the amount of memory you try to allocate and hence the error.&lt;/p&gt;
 
 &lt;p&gt;The fix is quite simple: Modify the VM template and set the memory size in the template to 1 GB. This will make sure whatever value CloudForms tries to set during provisioning, will not be below the reserved memory size.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Create Snapshots for a Service in OpenStack</title>
-      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
-      <pubDate>Thu, 17 Dec 2015 16:30:23 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
-      <description>&lt;p&gt;Based on the script to &lt;a href=&#34;http://www.jung-christian.de/2015/12/create-snapshots-in-openstack/&#34;&gt;create snapshots for OpenStack instances&lt;/a&gt;, this version provides similar functionality for service items.&lt;/p&gt;
-
-&lt;p&gt;It iterates through the list of instances belonging to a specific service and creates a snapshot for each instance. The complete method can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_service_snapshot.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;This can be called from a custom button associated to service items.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Create Snapshots in OpenStack</title>
-      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</link>
-      <pubDate>Thu, 17 Dec 2015 16:16:01 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</guid>
-      <description>&lt;p&gt;One of my first experiments using the Ruby fog library. ManageIQ or CloudForms can currently not create snapshots for OpenStack instances.&lt;/p&gt;
-
-&lt;p&gt;With a custom button and a method available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_snapshot.rb&#34;&gt;Github&lt;/a&gt;, you can easily add this functionality. The snapshot name and snapshot ID will be stored in custom attributes of the instance, so they show up in the Web UI (after a reload).&lt;/p&gt;
 </description>
     </item>
     

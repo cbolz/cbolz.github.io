@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SELinux Compliance Policy -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>SELinux Compliance Policy</h1>
+               <h2 class="subheading">How to create a Compliance Policy to enforce SELinux mode</h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Tue, Oct 10, 2017
+                 <br />
+                 In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/compliance">Compliance</a>, <a href="http://www.jung-christian.de/categories/smartstate">SmartState</a>
+
+                 <br />
+                 Tags <a href="http://www.jung-christian.de/tags/compliance">compliance</a>, <a href="http://www.jung-christian.de/tags/selinux">selinux</a>, <a href="http://www.jung-christian.de/tags/smartstate">smartstate</a>, <a href="http://www.jung-christian.de/tags/ssa">ssa</a>
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="compliance-policies">Compliance Policies</h1>
+
+<p><a href="http://www.redhat.com/cloudforms">CloudForms</a> and <a href="http://www.manageiq.org">ManageIQ</a> allow the definition of Compliance Policies which can be used to verify consistency of Virtual Machines, Instances, Hypervisors and other objects, in the entire environment. Compliance Policies can  trigger actions to be able to notify about non-compliance or to go one step further and enforce compliance, for example by using Ansible Playbooks to fix the problem.</p>
+
+<p>There are a number of examples about Compliance Policies on the <a href="http://cloudformsblog.redhat.com/tag/compliance/">official Red Hat CloudForms blog</a>.</p>
+
+<h1 id="adjust-the-smart-state-analysis-profile">Adjust the Smart State Analysis Profile</h1>
+
+<p>A separate blog post goes into details on how to <a href="../modify-ssa-profile/">create and modify a Smart State Analysis Profile</a>. When creating the profile, it is important its name is &ldquo;default&rdquo; and the policy retrieves the content of the file /etc/sysconfig/selinux.</p>
+
+<h1 id="control-policies">Control Policies</h1>
+
+<p>Policies in CloudForms and ManageIQ are always a combination of three items:</p>
+
+<ul>
+<li>Event: the event triggers the evaluation of the condition. An event can be something like &ldquo;VM Power On&rdquo;, &ldquo;Analysis completed&rdquo; and many more. A list of out of the box events can be found by clicking on <strong><em>Control</em></strong>, <strong><em>Explorer</em></strong>, and then clicking on <strong><em>Events</em></strong> in the accordion on the left</li>
+</ul>
+
+<p><a href="http://www.jung-christian.de/images/list-of-events.png"><img src="http://www.jung-christian.de/images/list-of-events-300x96.png" alt="out of the box events" /></a></p>
+
+<p>The screenshot only shows a subset of all available events.</p>
+
+<ul>
+<li><p>Condition: the condition is evaluated after the specified event was detected. A condition can verify that a specific Operating System is installed, the VM configuration meets certain criteria and many more</p></li>
+
+<li><p>Action: after detecting the event and validating the condition, an action can be triggered. Actions can be specified differently if the condition was TRUE or FALSE. A Control Policy can can send an email alert, trigger a SNMP trap or any customized action. A number of actions are already shipped out of the box and can be found by clicking on <strong><em>Control</em></strong>, <strong><em>Explorer</em></strong> and then <strong><em>Actions</em></strong> in the accordion on the left</p></li>
+</ul>
+
+<p><a href="http://www.jung-christian.de/images/list-of-actions.png"><img src="http://www.jung-christian.de/images/list-of-actions-300x95.png" alt="list of actions" /></a></p>
+
+<p>The screenshot only shows a subset of all available actions.</p>
+
+<h1 id="compliance-policies-1">Compliance Policies</h1>
+
+<p>Compliance policies are similar to Control Policies, but do not listen to events. To validate a Compliance Policy, the user can click on <strong><em>Policy</em></strong> and <strong><em>Check Compliance of Last Known Configuration</em></strong>, or a Control Policy can trigger an Compliance Policy Check as an Action.</p>
+
+<p>Compliance Policies can also mark the evaluated object as either Compliant or Non-Compliant. This information can also be used in Reports and Dashboards for a better overview or to be exported for further analysis. More information about Control and Compliance Policies can be found in the <a href="https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/policies_and_profiles_guide/">Policies and Profiles Guide</a>.</p>
+
+<h1 id="create-a-compliance-policy-for-selinux">Create a Compliance Policy for SELinux</h1>
+
+<p>To check if SELinux is in enforcing mode, a compliance policy like this can be used:</p>
+
+<ul>
+<li><p>Condition: analyse the content of /etc/sysconfig/selinux and verify &ldquo;SELinux=enforcing&rdquo; is found in the file</p></li>
+
+<li><p>Action: mark the VM as compliant or non-compliant</p></li>
+</ul>
+
+<p>An example of such a policy can be found on <a href="https://github.com/cbolz/ManageIQ/tree/master/control-policies">Github</a></p>
+
+<h1 id="enable-the-policy">Enable the Policy</h1>
+
+<p>To enable the Compliance Policy, it has to be part of a Policy Profile. The example found on <a href="https://github.com/cbolz/ManageIQ/tree/master/control-policies">Github</a> is pre-configured accordingly.</p>
+
+<p>As one last step the Policy has to be enabled. This can be done on individual VMs or instances or any where in the hierarchy, up to the provider level. Policies are inherited to their child objects, for example if the Policy is enabled on a specific provider, it automatically applies to all objects found on this provider.</p>
+
+<ol>
+<li><p>Navigate to the provider, e.g. <strong><em>Compute</em></strong>, <strong><em>Infrastructure</em></strong>, <strong><em>Providers</em></strong></p></li>
+
+<li><p>Select the provider and click on <strong><em>Policy</em></strong>, <strong><em>Manage Policies</em></strong></p></li>
+</ol>
+
+<p><a href="http://www.jung-christian.de/images/manage-policies.png"><img src="http://www.jung-christian.de/images/manage-policies-300x82.png" alt="Manage Policies" /></a></p>
+
+<ol>
+<li>Check the box next to the Policy</li>
+</ol>
+
+<p><a href="http://www.jung-christian.de/images/enable-policy-profile.png"><img src="http://www.jung-christian.de/images/enable-policy-profile-300x274.png" alt="Enable Policy" /></a></p>
+
+<ol>
+<li><p>Click <strong><em>Save</em></strong></p></li>
+
+<li><p>The icon shows a yellow shield to illustrate the a Policy is enabled</p></li>
+</ol>
+
+<p><a href="http://www.jung-christian.de/images/provider-policy-enabled.png"><img src="http://www.jung-christian.de/images/provider-policy-enabled-300x77.png" alt="Provider with enabled Policy" /></a></p>
+
+<h1 id="verify">Verify</h1>
+
+<p>To verify the configuration, navigate to a VM or instances on the selected provider. Click on <strong><em>Configuration</em></strong>, <strong><em>Perform SmartState Analysis</em></strong>. Depending on the performance of the environment, this usually takes up to two minutes. In some environments it can also take much longer (in particular on OpenStack providers).</p>
+
+<p>Configuration of Smart State is out of scope for this document. There is a knowledge base article <a href="https://access.redhat.com/articles/435283">Virtual Machine SmartState Analysis Checklist</a> with some useful links.</p>
+
+<p>System is not compliant:</p>
+
+<p><a href="http://www.jung-christian.de/images/system-non-compliant.png"><img src="http://www.jung-christian.de/images/system-non-compliant-300x58.png" alt="System is not compliant" /></a></p>
+
+<p>System is compliant:</p>
+
+<p><a href="http://www.jung-christian.de/images/system-compliant.png"><img src="http://www.jung-christian.de/images/system-compliant-300x61.png" alt="System is not compliant" /></a></p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+

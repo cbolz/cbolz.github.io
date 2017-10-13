@@ -189,72 +189,83 @@ users:
 
 &lt;p&gt;To use such an image on RHEV, you have to first import it. Sadly the rhevm-image-uploader does not support qcow images yet, so you have to import the image manually. This is the way I did - there might be better ways to do it.&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;create a new VM in RHEV&lt;/p&gt;
+&lt;p&gt;create a new VM in RHEV
+    * choose RHEL 6 or 7 depending on which template you want to import
+    * give it a reasonable name
+    * adjust other settings as you see fit&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;choose RHEL 6 or 7 depending on which template you want to import&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;add a disk to the new VM. The minimum size can be retrieved from the qcow image itself:&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;give it a reasonable name&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;$ qemu-img info rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+  image: rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+  file format: qcow2
+  virtual size: 16G (17179869184 bytes)
+  disk size: 340M
+  cluster_size: 65536&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;adjust other settings as you see fit&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
+&lt;p&gt;This image needs a minimum disk size of 16 GB. The image automatically grows on first boot, if you create a larger disk.&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;add a disk to the new VM. The minimum size can be retrieved from the qcow image itself:
-&lt;code&gt;$ qemu-img info rhel-guest-image-6.6-20141222.0.x86_64.qcow2
-image: rhel-guest-image-6.6-20141222.0.x86_64.qcow2
-file format: qcow2
-virtual size: 16G (17179869184 bytes)
-disk size: 340M
-cluster_size: 65536&lt;/code&gt;
-This image needs a minimum disk size of 16 GB. The image automatically grows on first boot, if you create a larger disk.&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;Identify the associated file on disk. If you&amp;rsquo;re using NFS, this is rather simple. You can try to find the newly created image directly on your disk, if you&amp;rsquo;re already familiar with the internal structure. Or you can use the RHEV REST API to identify the file name.&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;Identify the associated file on disk. If you&amp;rsquo;re using NFS, this is rather simple. You can try to find the newly created image directly on your disk, if you&amp;rsquo;re already familiar with the internal structure. Or you can use the RHEV REST API to identify the file name.
-&lt;code&gt;https://&amp;lt;rhev-hostname&amp;gt;/api/templates
-&lt;/code&gt;
-You should find a block similar to this one (output truncated):
-&lt;code&gt;&amp;lt;template href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&amp;quot; id=&amp;quot;66081542-2ef7-4978-bf30-5e79173630e6&amp;quot;&amp;gt;
+&lt;pre&gt;&lt;code&gt;https://&amp;lt;rhev-hostname&amp;gt;/api/templates
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should find a block similar to this one (output truncated):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;template href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&amp;quot; id=&amp;quot;66081542-2ef7-4978-bf30-5e79173630e6&amp;quot;&amp;gt;
 &amp;lt;actions&amp;gt;&amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/export&amp;quot; rel=&amp;quot;export&amp;quot;/&amp;gt;&amp;lt;/actions&amp;gt;
 &amp;lt;name&amp;gt;rhel-6.6-cloudinit-2&amp;lt;/name&amp;gt;
 &amp;lt;description&amp;gt;CloudInit&amp;lt;/description&amp;gt;
 &amp;lt;comment/&amp;gt;
 &amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks&amp;quot; rel=&amp;quot;disks&amp;quot;/&amp;gt;
-&lt;/code&gt;
-Try to access the link for the list of associated disks, e.g.:
-&lt;code&gt;https://&amp;lt;rhev-hostname&amp;gt;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks
-&lt;/code&gt;
-You should get an output like this (output truncated):
-&lt;code&gt;&amp;lt;disks&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Try to access the link for the list of associated disks, e.g.:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;https://&amp;lt;rhev-hostname&amp;gt;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should get an output like this (output truncated):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;disks&amp;gt;
 &amp;lt;disk href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52&amp;quot; id=&amp;quot;cde4a207-df4c-4b45-81bd-3ed0a72f4c52&amp;quot;&amp;gt;&amp;lt;actions&amp;gt;&amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52/export&amp;quot; rel=&amp;quot;export&amp;quot;/&amp;gt;
 &amp;lt;link href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6/disks/cde4a207-df4c-4b45-81bd-3ed0a72f4c52/copy&amp;quot; rel=&amp;quot;copy&amp;quot;/&amp;gt;&amp;lt;/actions&amp;gt;
 &amp;lt;name&amp;gt;rhel-6.6-template_Disk1&amp;lt;/name&amp;gt;
 &amp;lt;template href=&amp;quot;/api/templates/66081542-2ef7-4978-bf30-5e79173630e6&amp;quot; id=&amp;quot;66081542-2ef7-4978-bf30-5e79173630e6&amp;quot;/&amp;gt;
 &amp;lt;alias&amp;gt;rhel-6.6-template_Disk1&amp;lt;/alias&amp;gt;
 &amp;lt;image_id&amp;gt;bfcffeba-8b81-4a64-82eb-9007a28557b4&amp;lt;/image_id&amp;gt;
-&lt;/code&gt;
-You should find a file with the name matching the image ID on your NFS server.
-If you use fibre channel or iSCSI the on disk layout is different, but the above calls should help you to identify the proper LUN and logical volume.&lt;/p&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Big fat warning!&lt;/strong&gt; Do not continue if you&amp;rsquo;re not absolutely sure you identified the correct file! You &lt;strong&gt;will&lt;/strong&gt; ruin your RHEV environment and have been warned.&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;You should find a file with the name matching the image ID on your NFS server.&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;Make sure you identified the correct file:
-&lt;code&gt;$ pwd
+&lt;p&gt;If you use fibre channel or iSCSI the on disk layout is different, but the above calls should help you to identify the proper LUN and logical volume.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Big fat warning!&lt;/strong&gt; Do not continue if you&amp;rsquo;re not absolutely sure you identified the correct file! You &lt;strong&gt;will&lt;/strong&gt; ruin your RHEV environment and have been warned.&lt;/p&gt;
+
+&lt;p&gt;Make sure you identified the correct file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pwd
 /srv/rhev/storage1/9315c53c-767f-49bd-bd91-c8cf93ef74ca/images/cde4a207-df4c-4b45-81bd-3ed0a72f4c52
-&lt;/code&gt;
-As you can see cde4a207-df4c-4b45-81bd-3ed0a72f4c52 matches the disk ID retrieved via the REST API. And there is a file in this directory matching the disk ID retrieved in the second API call:
-&lt;code&gt;# ls
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see cde4a207-df4c-4b45-81bd-3ed0a72f4c52 matches the disk ID retrieved via the REST API. And there is a file in this directory matching the disk ID retrieved in the second API call:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# ls
 bfcffeba-8b81-4a64-82eb-9007a28557b4
 bfcffeba-8b81-4a64-82eb-9007a28557b4.lease
 bfcffeba-8b81-4a64-82eb-9007a28557b4.meta
-&lt;/code&gt;
-&lt;strong&gt;Again, do not proceed if the IDs do not match&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;li&gt;&lt;p&gt;Overwrite the image with qemu-img:
-&lt;code&gt;# qemu-img convert -O raw /tmp/rhel-guest-image-6.6-20141222.1.x86_64.qcow2 bfcffeba-8b81-4a64-82eb-9007a28557b4&lt;/code&gt;
-Make sure you convert to the appropriate on disk format. Check the &lt;a href=&#34;https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.4/html/V2V_Guide/chap-V2V-VMS_To_Run_on_RHEV.html#Acceptable_Converted_Storage_Output_Formats&#34;&gt;v2v guide&lt;/a&gt; for details.&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;&lt;strong&gt;Again, do not proceed if the IDs do not match&lt;/strong&gt;&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;If you now start this VM, it should come up with the RHEL KVM image.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;Overwrite the image with qemu-img:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# qemu-img convert -O raw /tmp/rhel-guest-image-6.6-20141222.1.x86_64.qcow2 bfcffeba-8b81-4a64-82eb-9007a28557b4`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Make sure you convert to the appropriate on disk format. Check the &lt;a href=&#34;https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.4/html/V2V_Guide/chap-V2V-VMS_To_Run_on_RHEV.html#Acceptable_Converted_Storage_Output_Formats&#34;&gt;v2vguide&lt;/a&gt; for details.&lt;/p&gt;
+
+&lt;p&gt;If you now start this VM, it should come up with the RHEL KVM image.&lt;/p&gt;
 
 &lt;p&gt;That&amp;rsquo;s all folks!&lt;/p&gt;
 </description>
