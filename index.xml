@@ -79,6 +79,8 @@
 
 &lt;p&gt;Developer Guides for &lt;a href=&#34;http://manageiq.org/docs/guides/architecture&#34;&gt;ManageIQ&lt;/a&gt;.&lt;/p&gt;
 
+&lt;p&gt;Discussion &lt;a href=&#34;https://github.com/ManageIQ/manageiq-content/issues/8&#34;&gt;Convert Automate Methods to new style using classes&lt;/a&gt;&lt;/p&gt;
+
 &lt;h2 id=&#34;working-with-domains&#34;&gt;Working with Domains&lt;/h2&gt;
 
 &lt;p&gt;As a basic setup code and configuration details should be split into two domains. E.g.&lt;/p&gt;
