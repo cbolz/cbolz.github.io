@@ -22,7 +22,7 @@
 
 &lt;p&gt;The idea of this document is to collaboratively collect coding style recommendations and best practices to give guidance on how to use Automate in &lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The following tips are meant for guidance and should give you some hints and ideas on how to do things “the clean way”. There are always exceptions from those rules. This document does not claim to be complete but should provide some recommendations and guidance. Feedback is, as always, very much appraciated.&lt;/p&gt;
+&lt;p&gt;The following tips are meant for guidance and should give you some hints and ideas on how to do things “the clean way”. There are always exceptions from those rules. This document does not claim to be complete but should provide some recommendations and guidance. Feedback is, as always, very much appreciated.&lt;/p&gt;
 
 &lt;h1 id=&#34;naming-convention&#34;&gt;Naming Convention&lt;/h1&gt;
 
