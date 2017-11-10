@@ -126,7 +126,7 @@
 
 &lt;p&gt;Each Automate domain can be imported from a specific Git repository. CloudForms and ManageIQ also detects branches and tags which allows to be even more flexible.&lt;/p&gt;
 
-&lt;p&gt;More information can be found in the [Continuous Integration with CloudForms or ManageIQ Automate]() post.&lt;/p&gt;
+&lt;p&gt;More information can be found in the &lt;a href=&#34;http://www.jung-christian.de/post/2017/11/continuous-integration-with-automate/&#34;&gt;Continuous Integration with CloudForms or ManageIQ Automate&lt;/a&gt; post.&lt;/p&gt;
 
 &lt;h1 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h1&gt;
 
