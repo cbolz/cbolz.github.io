@@ -45,7 +45,7 @@
 
 &lt;p&gt;Before you can add a Git repository, the necessary role has to be enabled. Click on the top right menu which shows your user name and then &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;. Make sure you enable the &amp;ldquo;Git Repositories Owner&amp;rdquo; role (you might have to scroll down to see all the roles, depending on your screen resolution).&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;enable-git-repo-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/enable-git-repo-role-300x138.png&#34; alt=&#34;Enable Git Repositories Role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/enable-git-repo-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/enable-git-repo-role-300x138.png&#34; alt=&#34;Enable Git Repositories Role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;It can take a few moments for the services to start in the background.&lt;/p&gt;
 
@@ -63,7 +63,7 @@
 
 &lt;p&gt;If successful, the next screen will allow you to chose which tag or branch you want to checkout. For this example, we use the master branch.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag-300x160.png&#34;&gt;1&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag.png&#34;&gt;Select Branch or Tag&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag.png&#34;&gt;1&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag-300x160.png&#34;&gt;Select Branch or Tag&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The import can once more take a few seconds, after which you should get a message, the import was successful.&lt;/p&gt;
 
@@ -71,7 +71,7 @@
 
 &lt;p&gt;Navigate to &lt;strong&gt;&lt;em&gt;Automation&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Automate&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt; to see the domain after the import. Note that the domain is always read only. Code has to be changed in Git and can not be changed in the builtin editor anymore.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/git-domain-300x65.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/git-domain.png&#34; alt=&#34;Automate Domain coming from Git&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/git-domain.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/git-domain-300x65.png&#34; alt=&#34;Automate Domain coming from Git&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;After clicking on the Domain, a refresh can be initiated from the &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; menu and &lt;strong&gt;&lt;em&gt;Refresh with new branch or tag&lt;/em&gt;&lt;/strong&gt;. This can also be used to change the branch or tag used to retrieve the code from Git.&lt;/p&gt;
 
@@ -94,7 +94,7 @@
 
 &lt;li&gt;&lt;p&gt;Drill into &lt;strong&gt;&lt;em&gt;Automation&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Automate&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Automate Domains&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Modify&lt;/em&gt;&lt;/strong&gt; and enable &lt;strong&gt;&lt;em&gt;Refresh&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/only-enable-automate-refresh-300x341.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/only-enable-automate-refresh.png&#34; alt=&#34;Only enable Automate Refresh privilege&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/only-enable-automate-refresh.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/only-enable-automate-refresh-300x341.png&#34; alt=&#34;Only enable Automate Refresh privilege&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Add the new role&lt;/p&gt;&lt;/li&gt;
 
@@ -106,7 +106,7 @@
 
 &lt;li&gt;&lt;p&gt;Select the parent tenant&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-git-group-300x159.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-git-group.png&#34; alt=&#34;Add the new group&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-git-group.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-git-group-300x159.png&#34; alt=&#34;Add the new group&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Add the new group&lt;/p&gt;&lt;/li&gt;
 
@@ -116,7 +116,7 @@
 
 &lt;li&gt;&lt;p&gt;Make sure to select the previously created group in the &amp;ldquo;Group&amp;rdquo; drop down list&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-git-user-300x259.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-git-user.png&#34; alt=&#34;Add the new user&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-git-user.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-git-user-300x259.png&#34; alt=&#34;Add the new user&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Add the new User.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
