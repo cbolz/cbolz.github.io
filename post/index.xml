@@ -63,7 +63,7 @@
 
 &lt;p&gt;If successful, the next screen will allow you to chose which tag or branch you want to checkout. For this example, we use the master branch.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag.png&#34;&gt;1&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag-300x160.png&#34;&gt;Select Branch or Tag&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/select-branch-or-tag.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/select-branch-or-tag-300x160.png&#34; alt=&#34;Select Branch or Tag&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The import can once more take a few seconds, after which you should get a message, the import was successful.&lt;/p&gt;
 
