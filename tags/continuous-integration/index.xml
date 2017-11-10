@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Christian&#39;s Blog</title>
-    <link>http://www.jung-christian.de/categories/automate/index.xml</link>
+    <link>http://www.jung-christian.de/tags/continuous-integration/index.xml</link>
     <description>Recent content on Christian&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <atom:link href="http://www.jung-christian.de/categories/automate/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://www.jung-christian.de/tags/continuous-integration/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>SELinux Compliance Policy</title>
@@ -160,147 +160,6 @@ script:
 &lt;p&gt;After committing the build script, you can start doing changes to your Automate repository. Every time you commit a change, the build script should be executed and refresh the Automate domain.&lt;/p&gt;
 
 &lt;p&gt;Note that it can take a few seconds unless the CI/CD server detects the change and they show up in CloudForms.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Best Practice recommendations for Automate</title>
-      <link>http://www.jung-christian.de/post/2017/10/automate-best-practice/</link>
-      <pubDate>Tue, 10 Oct 2017 12:19:49 +0100</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2017/10/automate-best-practice/</guid>
-      <description>
-
-&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
-
-&lt;p&gt;The idea of this document is to collaboratively collect coding style recommendations and best practices to give guidance on how to use Automate in &lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The following tips are meant for guidance and should give you some hints and ideas on how to do things “the clean way”. There are always exceptions from those rules. This document does not claim to be complete but should provide some recommendations and guidance. Feedback is, as always, very much appreciated.&lt;/p&gt;
-
-&lt;h1 id=&#34;naming-convention&#34;&gt;Naming Convention&lt;/h1&gt;
-
-&lt;h2 id=&#34;name-spaces&#34;&gt;Name spaces&lt;/h2&gt;
-
-&lt;p&gt;To “overload” existing code from other domains it is necessary to keep the structure of name spaces, classes, methods and instances identical. Custom name spaces should follow the existing structure.&lt;/p&gt;
-
-&lt;p&gt;For example integration code into external (third party) software should follow the structure used in the Red Hat/Integration domain.&lt;/p&gt;
-
-&lt;p&gt;Proposed structure:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;    ├── ConfigurationManagement (Namespace (NS)
-    │   ├── Ansible (Class)
-    │   │   ├── instance1
-    │   │   ├── instance2
-    │   │   ├── method1
-    │   │   └── method2
-    │   └── Foreman (Class)
-    │     ├── create (Instance/Method)
-    │     ├── delete (Instance/Method)
-    │     ├── read (Instance/Method)
-    │     ├── Instance/Method
-    │     └── update (Instance/Method)
-    ├── RedHat (NS)
-    │   ├── OpenStack (NS)
-    │   │   ├── Cinder (Class)
-    │   │   │   ├── create (Instance/Method)
-    │   │   │   ├── delete (Instance/Method)
-    │   │   │   ├── read (Instance/Method)
-    │   │   │   └── update (Instance/Method)
-    │   │   ├── LBaaS (Class)
-    │   │   │   ├── create (Instance/Method)
-    │   │   │   ├── delete (Instance/Method)
-    │   │   │   ├── read (Instance/Method)
-    │   │   │   └── update (Instance/Method)
-    │   │   └── Snapshots (Class)
-    │   │     ├── create (Instance/Method)
-    │   │     ├── delete (Instance/Method)
-    │   │     ├── read (Instance/Method)
-    │   │     └── update (Instance/Method)
-    │   ├── RHEV (Class)
-    │   └── Satellite (Class)
-    └── Vendor (NS)
-    ├── Application1 (Class)
-    ├── Application2 (Class)
-    └── Application3 (Class)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;more-details&#34;&gt;More Details&lt;/h3&gt;
-
-&lt;p&gt;Miscellaneous tips in &lt;a href=&#34;https://pemcg.gitbooks.io/introduction-to-cloudforms-automation/content/chapter23/miscellaneous_tips.html&#34;&gt;Peter McGowan&amp;rsquo;s Automate Book&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Instance names and methods should both be snake case, see also the discussion on the the &lt;a href=&#34;http://talk.manageiq.org/t/naming-and-the-style-guide/&#34;&gt;ManageIQ Forum&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Developer Guides for &lt;a href=&#34;http://manageiq.org/docs/guides/architecture&#34;&gt;ManageIQ&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Discussion &lt;a href=&#34;https://github.com/ManageIQ/manageiq-content/issues/8&#34;&gt;Convert Automate Methods to new style using classes&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;working-with-domains&#34;&gt;Working with Domains&lt;/h2&gt;
-
-&lt;p&gt;As a basic setup code and configuration details should be split into two domains. E.g.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;    Customer-config
-    Customer-code
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This will make it easier to reuse the code at other customers or make it available in a source code repository (like git/SVN). Additional domains for staging might be useful in larger deployments.&lt;/p&gt;
-
-&lt;p&gt;Example: (sorted by priority)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;    Customer-config
-    Customer-dev
-    Customer-qa
-    Customer-prod
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;production&#34;&gt;Production&lt;/h3&gt;
-
-&lt;p&gt;Customer-prod contains already “released” code, this means this domain is a 1:1 copy of the one used in production. In the production environment the -dev and -qa domains don’t exist, are empty or disabled.&lt;/p&gt;
-
-&lt;h3 id=&#34;qa&#34;&gt;QA&lt;/h3&gt;
-
-&lt;p&gt;In the QA or test environment the &amp;ldquo;customer-prod&amp;rdquo; domain contains a 1:1 copy of the production domain, but is overloaded by the -qa domain. This allows testing of QA code in combination with existing production code. After all QA tests have been completed, the QA code moves into the production domain (leaving the QA domain empty).&lt;/p&gt;
-
-&lt;h3 id=&#34;development&#34;&gt;Development&lt;/h3&gt;
-
-&lt;p&gt;&amp;ldquo;Development&amp;rdquo; is following the same approach. It contains a 1:1 copy of -prod and -qa domains but is also overloaded by content from the -dev domain. This allows for development work to be based on current production and QA code, By separating -dev into a dedicated domain, the -dev domain can for example temporarily be disabled for root cause analysis or debugging purposes.&lt;/p&gt;
-
-&lt;h3 id=&#34;configuration&#34;&gt;Configuration&lt;/h3&gt;
-
-&lt;p&gt;Finally the -config domain contains &lt;em&gt;ALL&lt;/em&gt; configuration data. E.g. host names to external systems, login credentials, environment specific settings. There are dedicated -config domains for each stage which will never coexist (e.g. the -config domain for QA exclusively contains QA specific settings and never uses settings for production). Consequently there is no configuration information in any of the domains listed above.&lt;/p&gt;
-
-&lt;p&gt;Depending on the specific needs more (e.g. Pre-Prod) or less domains (QA might not always be needed) can be used.&lt;/p&gt;
-
-&lt;h1 id=&#34;git-integration&#34;&gt;Git integration&lt;/h1&gt;
-
-&lt;p&gt;Automate Domains can be imported from Git (including but not limited to &lt;a href=&#34;http://gitlab.com&#34;&gt;Gitlab&lt;/a&gt; and &lt;a href=&#34;http://github.com&#34;&gt;GitHub&lt;/a&gt;). The &lt;a href=&#34;http://manageiq.org/docs/api&#34;&gt;REST API&lt;/a&gt; also provides a call to &lt;a href=&#34;http://manageiq.org/docs/reference/latest/api/reference/automate_domains#refresh-from-source&#34;&gt;refresh a specific Automate domain&lt;/a&gt;. This allows the integration with a CI/CD pipeline like Jenkins or Travis. A simple hook script can be used to trigger a refresh of the Automate Domain whenever new code is committed.&lt;/p&gt;
-
-&lt;p&gt;The Role Based Access control can be used to create a specific role which only grants the privilege to trigger a domain refresh:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/automate-refresh-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/automate-refresh-role-300x214.png&#34; alt=&#34;RBAC role for Automate refresh&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Each Automate domain can be imported from a specific Git repository. CloudForms and ManageIQ also detects branches and tags which allows to be even more flexible.&lt;/p&gt;
-
-&lt;p&gt;More information can be found in the [Continuous Integration with CloudForms or ManageIQ Automate]() post.&lt;/p&gt;
-
-&lt;h1 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h1&gt;
-
-&lt;p&gt;Automate methods can usually not be used outside of the context of CloudForms or ManageIQ. To increase code quality and use automated unit tests, it is recommended to write every method generic enough, so it can be called in the context of a state machine, a button, from Simulate and the REST API.&lt;/p&gt;
-
-&lt;p&gt;Since it is now possible to call any method from REST, it is recommended to follow some coding best practices to accomplish this goal. More information can be found in the chapter &lt;a href=&#34;https://pemcg.gitbooks.io/introduction-to-cloudforms-automation/content/chapter10/ways_of_entering_automation.html&#34;&gt;Writing Generic Methods&lt;/a&gt; of the Automate Book. Examples for &lt;a href=&#34;https://pemcg.gitbooks.io/introduction-to-cloudforms-automation/content/chapter20/calling_automation_from_api.html&#34;&gt;using the REST API to call Automate&lt;/a&gt; can be found as well.&lt;/p&gt;
-
-&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
-
-&lt;p&gt;Obviously some methods in Automate will not be able to do any reasonable tests without the appropriate context (e.g. a method which is used during provisioning can probably not provide a reasonable unit test if called without the context of a provisioned VM. )&lt;/p&gt;
-
-&lt;h1 id=&#34;code-documentation-with-rdoc&#34;&gt;Code Documentation with RDoc&lt;/h1&gt;
-
-&lt;p&gt;RDoc is part of Ruby and can automatically create documentation based on existing Ruby code. It analysis the code and tries to build the proper structure and relationships automatically.&lt;/p&gt;
-
-&lt;p&gt;The use of RDoc in the context of Automate is somewhat limited though. Although CloudForms and ManageIQ are using Namespaces and Classes, this information is stored in YAML files and can not automatically be used by RDoc when it creates the documentation.&lt;/p&gt;
-
-&lt;p&gt;In conclusion RDoc can still be used to create automated documentation, but requires some discipline from the developer and will not be able to automatically detect the namespace and class structure of Automate.&lt;/p&gt;
-
-&lt;p&gt;More information about RDoc can be found in the &lt;a href=&#34;http://ruby-doc.org/stdlib-1.8.7/libdoc/rdoc/rdoc/index.html&#34;&gt;Ruby Documentation&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
