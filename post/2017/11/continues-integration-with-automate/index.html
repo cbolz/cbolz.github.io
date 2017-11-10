@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SELinux Compliance Policy -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>SELinux Compliance Policy</h1>
+               <h2 class="subheading">How to create a Compliance Policy to enforce SELinux mode</h2>
+               <span class="meta">Posted by <a href="#">Christian Jung</a> on Tue, Oct 10, 2017
+                 <br />
+                 In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/compliance">Compliance</a>, <a href="http://www.jung-christian.de/categories/smartstate">SmartState</a>
+
+                 <br />
+                 Tags <a href="http://www.jung-christian.de/tags/compliance">compliance</a>, <a href="http://www.jung-christian.de/tags/selinux">selinux</a>, <a href="http://www.jung-christian.de/tags/smartstate">smartstate</a>, <a href="http://www.jung-christian.de/tags/ssa">ssa</a>
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="continuous-integration-with-cloudforms-or-manageiq-automate">Continuous Integration with CloudForms or ManageIQ Automate</h1>
+
+<p>CloudForms and ManageIQ have an embedded editor which allows you to write and edit Automate code. This is convenient and easy to use for smaller modifications. As soon as you want to work on larger projects, you probably want more:</p>
+
+<ul>
+<li>history: be able to go back to previous versions of your code</li>
+<li>branches: be able to create branches for test features or specific bug fixes</li>
+<li>better editor: the built in HTML editor is good enough for simple coding, but eventually you might want to use a more sophisticated editor. Popular editors amongst CloudForms users are Sublime, Atom, Visual Studio Code, or maybe just your optimized configuration of VI or Emacs.</li>
+<li>logs: as soon as you collaborate working on Automate code, you want to be able to see how did which change</li>
+</ul>
+
+<p>Automate code can not only be written in the built in HTML editor, it can also be imported from a Git repository. For continuous integration, the REST API can be used to trigger a refresh every time new code is committed.</p>
+
+<h1 id="the-setup">The setup</h1>
+
+<p><a href="http://github.com">GitHub</a> and <a href="http://gitlab.com">GitLab</a> are probably the most popular tools for Open Source Source Code Management tools currently used. The example below will work with either one of them, and should also work with any Git/CI combination, but might require some additional steps.</p>
+
+<p>For the example below, GitLab is used, since it has builtin CI/CD features. If you prefer GitHub, the following instructions should work as well, but you might need an additional tool, for example <a href="http://www.travis-ci.org">Travis CI</a>, for the CI part.</p>
+
+<p>Every time new code is committed to the Git repository, a CI/CD Tool will detect that change and use an CloudForms API call to trigger a refresh. As a consequence, the script which is running on the CI/CD server must be able to open a TCP connection on port 443 to the CloudForms appliance by using its IP address or DNS name.</p>
+
+<h1 id="adding-a-git-repository">Adding a Git repository</h1>
+
+<p>Create your Git repository with your Automate code. It is easier if you start with an existing repository, which actually already has some code checked in.</p>
+
+<p>Before you can add a Git repository, the necessary role has to be enabled. Click on the top right menu which shows your user name and then <strong><em>Configuration</em></strong>. Make sure you enable the &ldquo;Git Repositories Owner&rdquo; role (you might have to scroll down to see all the roles, depending on your screen resolution).</p>
+
+<p><a href="enable-git-repo-role.png"><img src="images/enable-git-repo-role-300x138.png" alt="Enable Git Repositories Role" /></a></p>
+
+<p>It can take a few moments for the services to start in the background.</p>
+
+<p>Navigate to <strong><em>Automation</em></strong>, <strong><em>Automate</em></strong>, <strong><em>Import/Export</em></strong>. If the submit button is still greyed out, the role has not been activated yet. The question mark icon next to the submit button will give you an according hint. in this case wait another minute and reload the page.</p>
+
+<p>From your Git repository, copy the HTML URL (SSH will not work). Paste the URL into the &ldquo;Git URL&rdquo; field.</p>
+
+<p><strong><em>Note:</em></strong> A Git URL is pointing to a file with the suffix .git. For example, the Git URL for the repository used for this example is <a href="https://gitlab.com/cjung/automate.git">https://gitlab.com/cjung/automate.git</a></p>
+
+<p>The Username and Password are optional, as indicated in the UI. If you have a public repository on GitLab or GitHub, you will not need it. For private repositories, the user credentials have to be provided. CloudForms or ManageIQ will only need privileges to pull code, so a read only account is enough.</p>
+
+<p><a href="images/git-repo-credentials.png"><img src="images/git-repo-credentials-300x285.png" alt="Provide details for Git repository" /></a></p>
+
+<p>After clicking on <strong><em>Submit</em></strong> it can take a few seconds before you see the next screen. During this delay, CloudForms/ManageIQ will try to access the repository and check if it can find an valid Automate repository.</p>
+
+<p>If successful, the next screen will allow you to chose which tag or branch you want to checkout. For this example, we use the master branch.</p>
+
+<p><a href="images/select-branch-or-tag-300x160.png">1<a href="images/select-branch-or-tag.png">Select Branch or Tag</a></a></p>
+
+<p>The import can once more take a few seconds, after which you should get a message, the import was successful.</p>
+
+<h2 id="verify-the-new-automate-domain">Verify the new Automate domain</h2>
+
+<p>Navigate to <strong><em>Automation</em></strong>, <strong><em>Automate</em></strong>, <strong><em>Explorer</em></strong> to see the domain after the import. Note that the domain is always read only. Code has to be changed in Git and can not be changed in the builtin editor anymore.</p>
+
+<p><a href="images/git-domain-300x65.png"><img src="images/git-domain.png" alt="Automate Domain coming from Git" /></a></p>
+
+<p>After clicking on the Domain, a refresh can be initiated from the <strong><em>Configuration</em></strong> menu and <strong><em>Refresh with new branch or tag</em></strong>. This can also be used to change the branch or tag used to retrieve the code from Git.</p>
+
+<h1 id="create-a-locked-down-role">Create a locked down role</h1>
+
+<p>So far we have manually imported Automate code from an existing Git repository. For a continuous integration workflow, we need an automatism to update the code in CloudForms, every time we commit a change to Git.</p>
+
+<p>To be able to accomplish this, we need a user with the necessary privileges to refresh the Automate domain. This user has to log into CloudForms and perform a refresh by sending an API call.</p>
+
+<p>For security reasons, it is advised to create an account with restricted privileges. Fortunately CloudForms allows us to create a user which can only perform a refresh, but no other action.</p>
+
+<ul>
+<li><p>Navigate to <strong><em>Configuration</em></strong> by clicking on your username on the top right corner and click on <strong><em>Access control</em></strong></p></li>
+
+<li><p>Click on <strong><em>Roles</em></strong> and open the <strong><em>Configuration</em></strong> menu and <strong><em>Add a new Role</em></strong></p></li>
+
+<li><p>Give the new role a name, for example &ldquo;Git&rdquo;</p></li>
+
+<li><p>Disable all privileges by making sure the box next to &ldquo;Everything&rdquo; is disabled</p></li>
+
+<li><p>Drill into <strong><em>Automation</em></strong>, <strong><em>Automate</em></strong>, <strong><em>Explorer</em></strong>, <strong><em>Automate Domains</em></strong>, <strong><em>Modify</em></strong> and enable <strong><em>Refresh</em></strong></p>
+
+<p><a href="images/only-enable-automate-refresh-300x341.png"><img src="images/only-enable-automate-refresh.png" alt="Only enable Automate Refresh privilege" /></a></p></li>
+
+<li><p>Add the new role</p></li>
+
+<li><p>Navigate to <strong><em>Groups</em></strong>, click on <strong><em>Configuration</em></strong> and <strong><em>Add a new Group</em></strong></p></li>
+
+<li><p>Enter a description, for example &ldquo;Git&rdquo;</p></li>
+
+<li><p>Select the previously created role in the &ldquo;Role&rdquo; drop down list</p></li>
+
+<li><p>Select the parent tenant</p>
+
+<p><a href="images/add-git-group-300x159.png"><img src="images/add-git-group.png" alt="Add the new group" /></a></p></li>
+
+<li><p>Add the new group</p></li>
+
+<li><p>Last but not least, navigate to <strong><em>Users</em></strong> and click on <strong><em>Configuration</em></strong>, <strong><em>Add a new User</em></strong></p></li>
+
+<li><p>Fill in the fields for &ldquo;Full Name&rdquo; and &ldquo;Username&rdquo;, also set a password for the new user. Make sure to remember the username and password, since you will need both later. The email address is optional.</p></li>
+
+<li><p>Make sure to select the previously created group in the &ldquo;Group&rdquo; drop down list</p>
+
+<p><a href="images/add-git-user-300x259.png"><img src="images/add-git-user.png" alt="Add the new user" /></a></p></li>
+
+<li><p>Add the new User.</p></li>
+</ul>
+
+<h1 id="build-a-ci-pipeline">Build a CI pipeline</h1>
+
+<p>The final piece in the puzzle is the script which is executed on the CI/CD server which triggers CloudForms to refresh the Automate domain.</p>
+
+<h2 id="gitlab">GitLab</h2>
+
+<p>This example is using GitLab:</p>
+
+<ul>
+<li><p>create a new file called &ldquo;.gitlab-ci.yml&rdquo; in the root directory of the git repository</p></li>
+
+<li><p>add the following lines:</p>
+
+<pre><code>job1:
+  script:
+    - curl -k -X POST -d'{&quot;action&quot;:&quot;refresh_from_source&quot;}' https://&lt;username&gt;:&lt;password&gt;@&lt;FQDN or IP of CloudForms Appliance&gt;/api/automate_domains/&lt;name of Automate domain&gt;
+</code></pre></li>
+</ul>
+
+<h2 id="travis-ci">Travis CI</h2>
+
+<ul>
+<li><p>create a new file called &ldquo;.travis.yml&rdquo; in the root directory of the git repository</p></li>
+
+<li><p>add the following lines:</p>
+
+<pre><code>language: ruby
+
+script:
+- curl -k -X POST -d'{&quot;action&quot;:&quot;refresh_from_source&quot;}' https://&lt;username&gt;:&lt;password&gt;@&lt;FQDN or IP of CloudForms Appliance&gt;/api/automate_domains/&lt;name of Automate domain&gt;
+</code></pre></li>
+
+<li><p>save the file and commit it to the repository</p></li>
+</ul>
+
+<h1 id="testing">Testing</h1>
+
+<p>After committing the build script, you can start doing changes to your Automate repository. Every time you commit a change, the build script should be executed and refresh the Automate domain.</p>
+
+<p>Note that it can take a few seconds unless the CI/CD server detects the change and they show up in CloudForms.</p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:blog@jung-christian.de">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'XX-00000000-0', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+
+</html>
+
