@@ -7,8 +7,337 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <lastBuildDate>Thu, 23 Feb 2017 12:19:49 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 10 Oct 2017 12:19:49 +0100</lastBuildDate>
     <atom:link href="http://www.jung-christian.de/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Best Practice recommendations for Automate</title>
+      <link>http://www.jung-christian.de/post/2017/10/automate-best-practice/</link>
+      <pubDate>Tue, 10 Oct 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/10/automate-best-practice/</guid>
+      <description>
+
+&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
+
+&lt;p&gt;The idea of this document is to collaboratively collect coding style recommendations and best practices to give guidance on how to use Automate in &lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The following tips are meant for guidance and should give you some hints and ideas on how to do things “the clean way”. There are always exceptions from those rules. This document does not claim to be complete but should provide some recommendations and guidance. Feedback is, as always, very much appreciated.&lt;/p&gt;
+
+&lt;h1 id=&#34;naming-convention&#34;&gt;Naming Convention&lt;/h1&gt;
+
+&lt;h2 id=&#34;name-spaces&#34;&gt;Name spaces&lt;/h2&gt;
+
+&lt;p&gt;To “overload” existing code from other domains it is necessary to keep the structure of name spaces, classes, methods and instances identical. Custom name spaces should follow the existing structure.&lt;/p&gt;
+
+&lt;p&gt;For example integration code into external (third party) software should follow the structure used in the Red Hat/Integration domain.&lt;/p&gt;
+
+&lt;p&gt;Proposed structure:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    ├── ConfigurationManagement (Namespace (NS)
+    │   ├── Ansible (Class)
+    │   │   ├── instance1
+    │   │   ├── instance2
+    │   │   ├── method1
+    │   │   └── method2
+    │   └── Foreman (Class)
+    │     ├── create (Instance/Method)
+    │     ├── delete (Instance/Method)
+    │     ├── read (Instance/Method)
+    │     ├── Instance/Method
+    │     └── update (Instance/Method)
+    ├── RedHat (NS)
+    │   ├── OpenStack (NS)
+    │   │   ├── Cinder (Class)
+    │   │   │   ├── create (Instance/Method)
+    │   │   │   ├── delete (Instance/Method)
+    │   │   │   ├── read (Instance/Method)
+    │   │   │   └── update (Instance/Method)
+    │   │   ├── LBaaS (Class)
+    │   │   │   ├── create (Instance/Method)
+    │   │   │   ├── delete (Instance/Method)
+    │   │   │   ├── read (Instance/Method)
+    │   │   │   └── update (Instance/Method)
+    │   │   └── Snapshots (Class)
+    │   │     ├── create (Instance/Method)
+    │   │     ├── delete (Instance/Method)
+    │   │     ├── read (Instance/Method)
+    │   │     └── update (Instance/Method)
+    │   ├── RHEV (Class)
+    │   └── Satellite (Class)
+    └── Vendor (NS)
+    ├── Application1 (Class)
+    ├── Application2 (Class)
+    └── Application3 (Class)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;more-details&#34;&gt;More Details&lt;/h3&gt;
+
+&lt;p&gt;Miscellaneous tips in &lt;a href=&#34;https://pemcg.gitbooks.io/introduction-to-cloudforms-automation/content/chapter23/miscellaneous_tips.html&#34;&gt;Peter McGowan&amp;rsquo;s Automate Book&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Instance names and methods should both be snake case, see also the discussion on the the &lt;a href=&#34;http://talk.manageiq.org/t/naming-and-the-style-guide/&#34;&gt;ManageIQ Forum&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Developer Guides for &lt;a href=&#34;http://manageiq.org/docs/guides/architecture&#34;&gt;ManageIQ&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Discussion &lt;a href=&#34;https://github.com/ManageIQ/manageiq-content/issues/8&#34;&gt;Convert Automate Methods to new style using classes&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;working-with-domains&#34;&gt;Working with Domains&lt;/h2&gt;
+
+&lt;p&gt;As a basic setup code and configuration details should be split into two domains. E.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    Customer-config
+    Customer-code
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will make it easier to reuse the code at other customers or make it available in a source code repository (like git/SVN). Additional domains for staging might be useful in larger deployments.&lt;/p&gt;
+
+&lt;p&gt;Example: (sorted by priority)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    Customer-config
+    Customer-dev
+    Customer-qa
+    Customer-prod
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;production&#34;&gt;Production&lt;/h3&gt;
+
+&lt;p&gt;Customer-prod contains already “released” code, this means this domain is a 1:1 copy of the one used in production. In the production environment the -dev and -qa domains don’t exist, are empty or disabled.&lt;/p&gt;
+
+&lt;h3 id=&#34;qa&#34;&gt;QA&lt;/h3&gt;
+
+&lt;p&gt;In the QA or test environment the &amp;ldquo;customer-prod&amp;rdquo; domain contains a 1:1 copy of the production domain, but is overloaded by the -qa domain. This allows testing of QA code in combination with existing production code. After all QA tests have been completed, the QA code moves into the production domain (leaving the QA domain empty).&lt;/p&gt;
+
+&lt;h3 id=&#34;development&#34;&gt;Development&lt;/h3&gt;
+
+&lt;p&gt;&amp;ldquo;Development&amp;rdquo; is following the same approach. It contains a 1:1 copy of -prod and -qa domains but is also overloaded by content from the -dev domain. This allows for development work to be based on current production and QA code, By separating -dev into a dedicated domain, the -dev domain can for example temporarily be disabled for root cause analysis or debugging purposes.&lt;/p&gt;
+
+&lt;h3 id=&#34;configuration&#34;&gt;Configuration&lt;/h3&gt;
+
+&lt;p&gt;Finally the -config domain contains &lt;em&gt;ALL&lt;/em&gt; configuration data. E.g. host names to external systems, login credentials, environment specific settings. There are dedicated -config domains for each stage which will never coexist (e.g. the -config domain for QA exclusively contains QA specific settings and never uses settings for production). Consequently there is no configuration information in any of the domains listed above.&lt;/p&gt;
+
+&lt;p&gt;Depending on the specific needs more (e.g. Pre-Prod) or less domains (QA might not always be needed) can be used.&lt;/p&gt;
+
+&lt;h1 id=&#34;git-integration&#34;&gt;Git integration&lt;/h1&gt;
+
+&lt;p&gt;Automate Domains can be imported from Git (including but not limited to &lt;a href=&#34;http://gitlab.com&#34;&gt;Gitlab&lt;/a&gt; and &lt;a href=&#34;http://github.com&#34;&gt;GitHub&lt;/a&gt;). The &lt;a href=&#34;http://manageiq.org/docs/api&#34;&gt;REST API&lt;/a&gt; also provides a call to &lt;a href=&#34;http://manageiq.org/docs/reference/latest/api/reference/automate_domains#refresh-from-source&#34;&gt;refresh a specific Automate domain&lt;/a&gt;. This allows the integration with a CI/CD pipeline like Jenkins or Travis. A simple hook script can be used to trigger a refresh of the Automate Domain whenever new code is committed.&lt;/p&gt;
+
+&lt;p&gt;The Role Based Access control can be used to create a specific role which only grants the privilege to trigger a domain refresh:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/automate-refresh-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/automate-refresh-role-300x214.png&#34; alt=&#34;RBAC role for Automate refresh&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Each Automate domain can be imported from a specific Git repository. CloudForms and ManageIQ also detects branches and tags which allows to be even more flexible.&lt;/p&gt;
+
+&lt;h1 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h1&gt;
+
+&lt;p&gt;Automate methods can usually not be used outside of the context of CloudForms or ManageIQ. To increase code quality and use automated unit tests, it is recommended to write every method generic enough, so it can be called in the context of a state machine, a button, from Simulate and the REST API.&lt;/p&gt;
+
+&lt;p&gt;Since it is now possible to call any method from REST, it is recommended to follow some coding best practices to accomplish this goal. More information can be found in the chapter &lt;a href=&#34;https://pemcg.gitbooks.io/introduction-to-cloudforms-automation/content/chapter10/ways_of_entering_automation.html&#34;&gt;Writing Generic Methods&lt;/a&gt; of the Automate Book. Examples for &lt;a href=&#34;https://pemcg.gitbooks.io/introduction-to-cloudforms-automation/content/chapter20/calling_automation_from_api.html&#34;&gt;using the REST API to call Automate&lt;/a&gt; can be found as well.&lt;/p&gt;
+
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
+
+&lt;p&gt;Obviously some methods in Automate will not be able to do any reasonable tests without the appropriate context (e.g. a method which is used during provisioning can probably not provide a reasonable unit test if called without the context of a provisioned VM. )&lt;/p&gt;
+
+&lt;h1 id=&#34;code-documentation-with-rdoc&#34;&gt;Code Documentation with RDoc&lt;/h1&gt;
+
+&lt;p&gt;RDoc is part of Ruby and can automatically create documentation based on existing Ruby code. It analysis the code and tries to build the proper structure and relationships automatically.&lt;/p&gt;
+
+&lt;p&gt;The use of RDoc in the context of Automate is somewhat limited though. Although CloudForms and ManageIQ are using Namespaces and Classes, this information is stored in YAML files and can not automatically be used by RDoc when it creates the documentation.&lt;/p&gt;
+
+&lt;p&gt;In conclusion RDoc can still be used to create automated documentation, but requires some discipline from the developer and will not be able to automatically detect the namespace and class structure of Automate.&lt;/p&gt;
+
+&lt;p&gt;More information about RDoc can be found in the &lt;a href=&#34;http://ruby-doc.org/stdlib-1.8.7/libdoc/rdoc/rdoc/index.html&#34;&gt;Ruby Documentation&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Custom Smart State Analysis Profiles</title>
+      <link>http://www.jung-christian.de/post/2017/10/modify-ssa-profile/</link>
+      <pubDate>Tue, 10 Oct 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/10/modify-ssa-profile/</guid>
+      <description>
+
+&lt;h1 id=&#34;about-smart-state-analysis&#34;&gt;About Smart State Analysis&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; have a feature called &amp;ldquo;Smart State Analysis&amp;rdquo; which allows them to analyse the disk of a Virtual Machine, Instance, Template or Image and retrieve data about the installed Operating System, applications, local groups and users and more. This is implemented completely without the need of additional agents and as a consequence is independent of the VM power state.&lt;/p&gt;
+
+&lt;p&gt;Smart State can be also sued for Containers and Hypervisors, but the following example focuses on Virtual Machines.&lt;/p&gt;
+
+&lt;h1 id=&#34;smart-state-analysis-profiles&#34;&gt;Smart State Analysis Profiles&lt;/h1&gt;
+
+&lt;p&gt;A Smart State Analysis Profile defines which information is retrieved from the Virtual Machine. By default the following information is retrieved:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Services: Which services are installed (Works for Windows and Linux including SysV and SystemD)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;User Accounts: Retrieves information about local user and group accounts&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Software: Information about installed applications (on Windows retrieved from the registry, on Linux by running a query against the RPM or dpkg database)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;VM Configuration and System: some additional information about the VM&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Administrators can create their own Analysis Profiles and define a list of additional files which should be retrieved. The Profile can either only check for the existence of the specified file, or also retrieve the content of the file.&lt;/p&gt;
+
+&lt;h1 id=&#34;create-a-custom-smart-state-analysis-profile&#34;&gt;Create a custom Smart State Analysis Profile&lt;/h1&gt;
+
+&lt;p&gt;It is very simple to create a customized Profile. Simply copy the out of the box &amp;ldquo;sample&amp;rdquo; Profile and name the copy &amp;ldquo;default&amp;rdquo;.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;log into the appliance with administrator privileges&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; by clicking on the username on the top right corner&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Analysis Profiles&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;simple&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;em&gt;Copy selected analysis profile&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/copy-analysis-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/copy-analysis-profile-300x112.png&#34; alt=&#34;copy analysis profile&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;make sure the copy is called &amp;ldquo;default&amp;rdquo; and check or un-check the appropriate options&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/copy-ssa-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/copy-ssa-profile-300x132.png&#34; alt=&#34;name the profile default&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If the Profile is not called &amp;ldquo;default&amp;rdquo; it will not be used unless it is explicitly assigned. Read the chapter &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/assigning_a_custom_analysis_profile_to_a_virtual_machine/index&#34;&gt;Assigning a Custom Analysis Profile to a Virtual Machine&lt;/a&gt; in the CloudForms Documentation for more details.&lt;/p&gt;
+
+&lt;h1 id=&#34;modify-the-smart-state-analysis-profile&#34;&gt;Modify the Smart State Analysis Profile&lt;/h1&gt;
+
+&lt;p&gt;To show how this feature works, add an additional file. In the example below, the content of /etc/sysconfig/selinux is retrieved during Smart State Analysis. There is another blog post about &lt;a href=&#34;../control-policy-selinux/&#34;&gt;How to create a Compliance Policy to enforce SELinux mode&lt;/a&gt; illustrating why this can be useful.&lt;/p&gt;
+
+&lt;p&gt;Edit the previously created State Analysis Profile:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;log into the appliance with administrator privileges&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; by clicking on the username on the top right corner&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;navigate to &lt;strong&gt;&lt;em&gt;Analysis Profiles&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;default&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;click on the tab &lt;strong&gt;&lt;em&gt;file&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;add a new line:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Name:&lt;/em&gt;&lt;/strong&gt; /etc/sysconfig/selinux&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Collect Contents?&lt;/em&gt;&lt;/strong&gt; click (check the box)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-selinux-to-analysis-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-selinux-to-analysis-profile-300x95.png&#34; alt=&#34;Add selinux to Analysis Profile&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Click &lt;strong&gt;&lt;em&gt;save&lt;/em&gt;&lt;/strong&gt; on the right in the same row of the table&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;click &lt;strong&gt;&lt;em&gt;Add&lt;/em&gt;&lt;/strong&gt; to save all modifications&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/strong&gt; It is important the name of the Profile is &amp;ldquo;default&amp;rdquo;. To use a different Profile name, check the chapter &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/assigning_a_custom_analysis_profile_to_a_virtual_machine/index&#34;&gt;Assigning a Custom Analysis Profile to a Virtual Machine&lt;/a&gt; in the CloudForms Documentation for more information.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SELinux Compliance Policy</title>
+      <link>http://www.jung-christian.de/post/2017/10/control-policy-selinux/</link>
+      <pubDate>Tue, 10 Oct 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/10/control-policy-selinux/</guid>
+      <description>
+
+&lt;h1 id=&#34;compliance-policies&#34;&gt;Compliance Policies&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; allow the definition of Compliance Policies which can be used to verify consistency of Virtual Machines, Instances, Hypervisors and other objects, in the entire environment. Compliance Policies can  trigger actions to be able to notify about non-compliance or to go one step further and enforce compliance, for example by using Ansible Playbooks to fix the problem.&lt;/p&gt;
+
+&lt;p&gt;There are a number of examples about Compliance Policies on the &lt;a href=&#34;http://cloudformsblog.redhat.com/tag/compliance/&#34;&gt;official Red Hat CloudForms blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;adjust-the-smart-state-analysis-profile&#34;&gt;Adjust the Smart State Analysis Profile&lt;/h1&gt;
+
+&lt;p&gt;A separate blog post goes into details on how to &lt;a href=&#34;../modify-ssa-profile/&#34;&gt;create and modify a Smart State Analysis Profile&lt;/a&gt;. When creating the profile, it is important its name is &amp;ldquo;default&amp;rdquo; and the policy retrieves the content of the file /etc/sysconfig/selinux.&lt;/p&gt;
+
+&lt;h1 id=&#34;control-policies&#34;&gt;Control Policies&lt;/h1&gt;
+
+&lt;p&gt;Policies in CloudForms and ManageIQ are always a combination of three items:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Event: the event triggers the evaluation of the condition. An event can be something like &amp;ldquo;VM Power On&amp;rdquo;, &amp;ldquo;Analysis completed&amp;rdquo; and many more. A list of out of the box events can be found by clicking on &lt;strong&gt;&lt;em&gt;Control&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt;, and then clicking on &lt;strong&gt;&lt;em&gt;Events&lt;/em&gt;&lt;/strong&gt; in the accordion on the left&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/list-of-events.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/list-of-events-300x96.png&#34; alt=&#34;out of the box events&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The screenshot only shows a subset of all available events.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Condition: the condition is evaluated after the specified event was detected. A condition can verify that a specific Operating System is installed, the VM configuration meets certain criteria and many more&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Action: after detecting the event and validating the condition, an action can be triggered. Actions can be specified differently if the condition was TRUE or FALSE. A Control Policy can can send an email alert, trigger a SNMP trap or any customized action. A number of actions are already shipped out of the box and can be found by clicking on &lt;strong&gt;&lt;em&gt;Control&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt; and then &lt;strong&gt;&lt;em&gt;Actions&lt;/em&gt;&lt;/strong&gt; in the accordion on the left&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/list-of-actions.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/list-of-actions-300x95.png&#34; alt=&#34;list of actions&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The screenshot only shows a subset of all available actions.&lt;/p&gt;
+
+&lt;h1 id=&#34;compliance-policies-1&#34;&gt;Compliance Policies&lt;/h1&gt;
+
+&lt;p&gt;Compliance policies are similar to Control Policies, but do not listen to events. To validate a Compliance Policy, the user can click on &lt;strong&gt;&lt;em&gt;Policy&lt;/em&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;em&gt;Check Compliance of Last Known Configuration&lt;/em&gt;&lt;/strong&gt;, or a Control Policy can trigger an Compliance Policy Check as an Action.&lt;/p&gt;
+
+&lt;p&gt;Compliance Policies can also mark the evaluated object as either Compliant or Non-Compliant. This information can also be used in Reports and Dashboards for a better overview or to be exported for further analysis. More information about Control and Compliance Policies can be found in the &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/policies_and_profiles_guide/&#34;&gt;Policies and Profiles Guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;create-a-compliance-policy-for-selinux&#34;&gt;Create a Compliance Policy for SELinux&lt;/h1&gt;
+
+&lt;p&gt;To check if SELinux is in enforcing mode, a compliance policy like this can be used:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Condition: analyse the content of /etc/sysconfig/selinux and verify &amp;ldquo;SELinux=enforcing&amp;rdquo; is found in the file&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Action: mark the VM as compliant or non-compliant&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;An example of such a policy can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/control-policies&#34;&gt;Github&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;enable-the-policy&#34;&gt;Enable the Policy&lt;/h1&gt;
+
+&lt;p&gt;To enable the Compliance Policy, it has to be part of a Policy Profile. The example found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/control-policies&#34;&gt;Github&lt;/a&gt; is pre-configured accordingly.&lt;/p&gt;
+
+&lt;p&gt;As one last step the Policy has to be enabled. This can be done on individual VMs or instances or any where in the hierarchy, up to the provider level. Policies are inherited to their child objects, for example if the Policy is enabled on a specific provider, it automatically applies to all objects found on this provider.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Navigate to the provider, e.g. &lt;strong&gt;&lt;em&gt;Compute&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Infrastructure&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Providers&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Select the provider and click on &lt;strong&gt;&lt;em&gt;Policy&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Manage Policies&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/manage-policies.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/manage-policies-300x82.png&#34; alt=&#34;Manage Policies&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Check the box next to the Policy&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/enable-policy-profile.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/enable-policy-profile-300x274.png&#34; alt=&#34;Enable Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Click &lt;strong&gt;&lt;em&gt;Save&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The icon shows a yellow shield to illustrate the a Policy is enabled&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/provider-policy-enabled.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/provider-policy-enabled-300x77.png&#34; alt=&#34;Provider with enabled Policy&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;verify&#34;&gt;Verify&lt;/h1&gt;
+
+&lt;p&gt;To verify the configuration, navigate to a VM or instances on the selected provider. Click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Perform SmartState Analysis&lt;/em&gt;&lt;/strong&gt;. Depending on the performance of the environment, this usually takes up to two minutes. In some environments it can also take much longer (in particular on OpenStack providers).&lt;/p&gt;
+
+&lt;p&gt;Configuration of Smart State is out of scope for this document. There is a knowledge base article &lt;a href=&#34;https://access.redhat.com/articles/435283&#34;&gt;Virtual Machine SmartState Analysis Checklist&lt;/a&gt; with some useful links.&lt;/p&gt;
+
+&lt;p&gt;System is not compliant:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/system-non-compliant.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/system-non-compliant-300x58.png&#34; alt=&#34;System is not compliant&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;System is compliant:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/system-compliant.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/system-compliant-300x61.png&#34; alt=&#34;System is not compliant&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>SmartProxy Affinity</title>
@@ -572,51 +901,6 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
       <description>&lt;p&gt;Just found this very good video demonstration on &lt;a href=&#34;http://www.videoqe.com/videogallery/cloudforms-4-0-provision-azure-vm/&#34;&gt;how to provision workloads&lt;/a&gt; on Microsoft Azure with CloudForms.&lt;/p&gt;
 
 &lt;p&gt;Check out the site for other good video demonstrations too.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Memory errors when provisioning VM from template in RHEV</title>
-      <link>http://www.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</link>
-      <pubDate>Wed, 10 Feb 2016 08:29:09 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2016/02/memory-errors-when-provisioning-vm-from-template-in-rhev/</guid>
-      <description>&lt;p&gt;If you&amp;rsquo;re provisioning from a template which is stored in RHEV, you might ran into the following error (found in evm.log):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MIQ(MiqProvisionRedhat#&amp;lt;wbr&amp;gt;&amp;lt;/wbr&amp;gt;provision_error) [[Ovirt::Error]: [Cannot edit VM. Physical Memory Guaranteed cannot exceed Memory Size.]] encountered during phase [customize_destination]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This happens if the template is using more memory than your provisioned VM. For example, the template is using 4 GB of memory, but you&amp;rsquo;re trying to deploy a VM which is only using 2 GB.&lt;/p&gt;
-
-&lt;p&gt;When CloudForms sets the memory to 2 GB, it doesn&amp;rsquo;t adjust the amount of reserved memory while doing it. A template with 4 GB memory usually has about 2.7 GB of reserved memory - which is more than the amount of memory you try to allocate and hence the error.&lt;/p&gt;
-
-&lt;p&gt;The fix is quite simple: Modify the VM template and set the memory size in the template to 1 GB. This will make sure whatever value CloudForms tries to set during provisioning, will not be below the reserved memory size.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Create Snapshots for a Service in OpenStack</title>
-      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</link>
-      <pubDate>Thu, 17 Dec 2015 16:30:23 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-for-a-service-in-openstack/</guid>
-      <description>&lt;p&gt;Based on the script to &lt;a href=&#34;http://www.jung-christian.de/2015/12/create-snapshots-in-openstack/&#34;&gt;create snapshots for OpenStack instances&lt;/a&gt;, this version provides similar functionality for service items.&lt;/p&gt;
-
-&lt;p&gt;It iterates through the list of instances belonging to a specific service and creates a snapshot for each instance. The complete method can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_service_snapshot.rb&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;This can be called from a custom button associated to service items.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Create Snapshots in OpenStack</title>
-      <link>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</link>
-      <pubDate>Thu, 17 Dec 2015 16:16:01 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2015/12/create-snapshots-in-openstack/</guid>
-      <description>&lt;p&gt;One of my first experiments using the Ruby fog library. ManageIQ or CloudForms can currently not create snapshots for OpenStack instances.&lt;/p&gt;
-
-&lt;p&gt;With a custom button and a method available on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/blob/master/OpenStack/create_snapshot.rb&#34;&gt;Github&lt;/a&gt;, you can easily add this functionality. The snapshot name and snapshot ID will be stored in custom attributes of the instance, so they show up in the Web UI (after a reload).&lt;/p&gt;
 </description>
     </item>
     
