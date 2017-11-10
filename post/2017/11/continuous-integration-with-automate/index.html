@@ -217,22 +217,24 @@
 <p>This example is using GitLab:</p>
 
 <ul>
-<li><p>create a new file called &ldquo;.gitlab-ci.yml&rdquo; in the root directory of the git repository</p></li>
+<li><p>Create a new file called &ldquo;.gitlab-ci.yml&rdquo; in the root directory of the git repository</p></li>
 
-<li><p>add the following lines:</p>
+<li><p>Add the following lines:</p>
 
 <pre><code>job1:
   script:
     - curl -k -X POST -d'{&quot;action&quot;:&quot;refresh_from_source&quot;}' https://&lt;username&gt;:&lt;password&gt;@&lt;FQDN or IP of CloudForms Appliance&gt;/api/automate_domains/&lt;name of Automate domain&gt;
 </code></pre></li>
+
+<li><p>Save the file and commit it to the repository</p></li>
 </ul>
 
 <h2 id="travis-ci">Travis CI</h2>
 
 <ul>
-<li><p>create a new file called &ldquo;.travis.yml&rdquo; in the root directory of the git repository</p></li>
+<li><p>Create a new file called &ldquo;.travis.yml&rdquo; in the root directory of the git repository</p></li>
 
-<li><p>add the following lines:</p>
+<li><p>Add the following lines:</p>
 
 <pre><code>language: ruby
 
@@ -240,7 +242,7 @@ script:
 - curl -k -X POST -d'{&quot;action&quot;:&quot;refresh_from_source&quot;}' https://&lt;username&gt;:&lt;password&gt;@&lt;FQDN or IP of CloudForms Appliance&gt;/api/automate_domains/&lt;name of Automate domain&gt;
 </code></pre></li>
 
-<li><p>save the file and commit it to the repository</p></li>
+<li><p>Save the file and commit it to the repository</p></li>
 </ul>
 
 <h1 id="testing">Testing</h1>

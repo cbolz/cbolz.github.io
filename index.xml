@@ -130,22 +130,24 @@
 &lt;p&gt;This example is using GitLab:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;create a new file called &amp;ldquo;.gitlab-ci.yml&amp;rdquo; in the root directory of the git repository&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Create a new file called &amp;ldquo;.gitlab-ci.yml&amp;rdquo; in the root directory of the git repository&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;add the following lines:&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Add the following lines:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;job1:
   script:
     - curl -k -X POST -d&#39;{&amp;quot;action&amp;quot;:&amp;quot;refresh_from_source&amp;quot;}&#39; https://&amp;lt;username&amp;gt;:&amp;lt;password&amp;gt;@&amp;lt;FQDN or IP of CloudForms Appliance&amp;gt;/api/automate_domains/&amp;lt;name of Automate domain&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Save the file and commit it to the repository&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;travis-ci&#34;&gt;Travis CI&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;create a new file called &amp;ldquo;.travis.yml&amp;rdquo; in the root directory of the git repository&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Create a new file called &amp;ldquo;.travis.yml&amp;rdquo; in the root directory of the git repository&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;add the following lines:&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Add the following lines:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;language: ruby
 
@@ -153,7 +155,7 @@ script:
 - curl -k -X POST -d&#39;{&amp;quot;action&amp;quot;:&amp;quot;refresh_from_source&amp;quot;}&#39; https://&amp;lt;username&amp;gt;:&amp;lt;password&amp;gt;@&amp;lt;FQDN or IP of CloudForms Appliance&amp;gt;/api/automate_domains/&amp;lt;name of Automate domain&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;save the file and commit it to the repository&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Save the file and commit it to the repository&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&#34;testing&#34;&gt;Testing&lt;/h1&gt;
