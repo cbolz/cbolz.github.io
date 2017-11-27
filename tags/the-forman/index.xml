@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/tags/the-forman/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/tags/the-forman/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Retrieve MAC Address from SCVMM</title>
+      <link>http://www.jung-christian.de/post/2017/11/scvmm-get-mac/</link>
+      <pubDate>Mon, 20 Nov 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/11/scvmm-get-mac/</guid>
+      <description>
+
+&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
+
+&lt;p&gt;To provision Virtual Machines from &lt;a href=&#34;http://www.redhat.com/cloudforms/&#34;&gt;CloudForms&lt;/a&gt; or &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; by utilizing &lt;a href=&#34;http://www.theformen.org&#34;&gt;the Foreman&lt;/a&gt;, the MAC Address of the new system has to be specified. Due to this &lt;a href=&#34;https://bugzilla.redhat.com/1514461&#34;&gt;Bugzilla&lt;/a&gt;, the MAC address is unfortunately not in the VMDB right now.&lt;/p&gt;
+
+&lt;p&gt;I wrote a small script which uses WinRM and PowerShell to retrieve the MAC address and store it in the State Machine. How to store and retrieve variables has been documented before in the article &lt;a href=&#34;http://www.jung-christian.de/post/2015/03/preserve-data-in-manageiq-state-machines/index.html&#34;&gt;Preserve data in ManageIQ state machines&lt;/a&gt; A modified version of the register_foreman script fetches the MAC address from the variable, instead of the actual Virtual Machine.&lt;/p&gt;
+
+&lt;p&gt;An Automate Domain containing both changes can be found on &lt;a href=&#34;https://gitlab.com/cjung/automate.git&#34;&gt;GitLab&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;how-it-works&#34;&gt;How it works&lt;/h1&gt;
+
+&lt;p&gt;The provided method is supposed to be part of the VM provisioning state machine for SCVMM. It will retrieve the MAC address from the SCVMM provider by using PowerShell. The returned MAC address is stored in a state variable so it can be retrieved later.&lt;/p&gt;
+
+&lt;p&gt;The VM Provisioning state machine has the following modifications:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Disable VM auto start (microsoft_CustomizeRequest)&lt;/li&gt;
+&lt;li&gt;Retrieve MAC Address from SCVMM (get_mac)&lt;/li&gt;
+&lt;li&gt;Register VM in Foreman/Satellite 6 (register_foreman)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As said before, after the Bugzilla is fixed, the get_mac method should not be necessary anymore.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

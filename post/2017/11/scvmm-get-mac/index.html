@@ -9,11 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Categories -- Christian&#39;s Blog</title>
+    <title>Retrieve MAC Address from SCVMM -- Christian&#39;s Blog</title>
 
-    
-    <link href="http://www.jung-christian.de/categories/index.xml" rel="alternate" type="application/rss+xml" title="Christian&#39;s Blog" />
-    <link href="http://www.jung-christian.de/categories/index.xml" rel="feed" type="application/rss+xml" title="Christian&#39;s Blog" />
     
 
     
@@ -79,57 +76,66 @@
 
 
     
-    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/home-bg.jpg')">
-     <div class="container">
-       <div class="row">
-         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-           <div class="site-heading">
-             <h1>Categories</h1>
-             <hr class="small">
-             <span class="subheading">Categories</span>
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Retrieve MAC Address from SCVMM</h1>
+               <h2 class="subheading">Retrieve MAC address from SCVMM for Satellite/Forman integration</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Christian Jung</a> on Mon, Nov 20, 2017
+<br />
+In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/automate">Automate</a>
+
+<br />
+Tags <a href="http://www.jung-christian.de/tags/automate">automate</a>, <a href="http://www.jung-christian.de/tags/scvmm">scvmm</a>, <a href="http://www.jung-christian.de/tags/the-forman">the forman</a>
+
+               </span>
+             </div>
            </div>
-         </div>
-       </div>
-     </div>
+        </div>
+      </div>
     </header>
 
     
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-          <ul>
-            
-            
-            <li><a href="http://www.jung-christian.de/categories/manageiq">Manageiq</a> 33</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/cloudforms">Cloudforms</a> 31</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/it">It</a> 28</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/rhev">Rhev</a> 6</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/automate">Automate</a> 4</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/funny">Funny</a> 4</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/the-foreman">The-Foreman</a> 4</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/compliance">Compliance</a> 3</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/control">Control</a> 2</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/openstack">Openstack</a> 2</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/smartstate">Smartstate</a> 2</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/cobbler">Cobbler</a> 1</li>
-            
-            <li><a href="http://www.jung-christian.de/categories/openshift">Openshift</a> 1</li>
-            
-          </ul>
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="purpose-of-this-document">Purpose of this document</h1>
+
+<p>To provision Virtual Machines from <a href="http://www.redhat.com/cloudforms/">CloudForms</a> or <a href="http://www.manageiq.org">ManageIQ</a> by utilizing <a href="http://www.theformen.org">the Foreman</a>, the MAC Address of the new system has to be specified. Due to this <a href="https://bugzilla.redhat.com/1514461">Bugzilla</a>, the MAC address is unfortunately not in the VMDB right now.</p>
+
+<p>I wrote a small script which uses WinRM and PowerShell to retrieve the MAC address and store it in the State Machine. How to store and retrieve variables has been documented before in the article <a href="http://www.jung-christian.de/post/2015/03/preserve-data-in-manageiq-state-machines/index.html">Preserve data in ManageIQ state machines</a> A modified version of the register_foreman script fetches the MAC address from the variable, instead of the actual Virtual Machine.</p>
+
+<p>An Automate Domain containing both changes can be found on <a href="https://gitlab.com/cjung/automate.git">GitLab</a>.</p>
+
+<h1 id="how-it-works">How it works</h1>
+
+<p>The provided method is supposed to be part of the VM provisioning state machine for SCVMM. It will retrieve the MAC address from the SCVMM provider by using PowerShell. The returned MAC address is stored in a state variable so it can be retrieved later.</p>
+
+<p>The VM Provisioning state machine has the following modifications:</p>
+
+<ul>
+<li>Disable VM auto start (microsoft_CustomizeRequest)</li>
+<li>Retrieve MAC Address from SCVMM (get_mac)</li>
+<li>Register VM in Foreman/Satellite 6 (register_foreman)</li>
+</ul>
+
+<p>As said before, after the Bugzilla is fixed, the get_mac method should not be necessary anymore.</p>
+
+                  
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+    </article>
 
     <hr>
     
