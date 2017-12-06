@@ -10,7 +10,6 @@
     <atom:link href="http://www.jung-christian.de/categories/cloudforms/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-<<<<<<< HEAD
       <title>CRUD for Custom Attributes in CloudForms or ManageIQ</title>
       <link>http://www.jung-christian.de/post/2017/12/custom-attributes/</link>
       <pubDate>Wed, 06 Dec 2017 12:19:49 +0100</pubDate>
@@ -119,8 +118,6 @@
     </item>
     
     <item>
-=======
->>>>>>> 422caae67ab9cf563ef47ae641b80802a115e788
       <title>Retrieve MAC Address from SCVMM</title>
       <link>http://www.jung-christian.de/post/2017/11/scvmm-get-mac/</link>
       <pubDate>Mon, 20 Nov 2017 12:19:49 +0100</pubDate>
@@ -1123,77 +1120,5 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 </description>
     </item>
     
-<<<<<<< HEAD
-=======
-    <item>
-      <title>Add an additional disk on RHEV virtual machines</title>
-      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</link>
-      <pubDate>Fri, 05 Aug 2016 15:25:41 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-disk-on-rhev-virtual-machines/</guid>
-      <description>
-
-&lt;p&gt;I was working on a script to add additional disks to existing virtual machines running on Red Hat Enterprise Virtualization (RHEV). I did find some code original written by Eduardo Minguez which I just polished a little bit. Thanks to him I published the full code on Github under the terms of the GPL.&lt;/p&gt;
-
-&lt;p&gt;There are actually multiple steps to build a user friendly way for adding the virtual disk:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;create an additional button for the VM object&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;provide a dialog to select disk size, data store and allocation policy (thin vs preallocated)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;select from a list of available datastores created by a dynamic dropdown list&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;the actual code which adds the virtual disk to the VM&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The code was tested on CloudForms 4.0/4.1 and RHEV 3.4 - but it should work with other versions and the respective OpenSource Projects too.&lt;/p&gt;
-
-&lt;h1 id=&#34;automate-code&#34;&gt;Automate Code&lt;/h1&gt;
-
-&lt;p&gt;There are two methods to implement this functionality. The first method &amp;ldquo;dialog_add_disk&amp;rdquo; will provide a dynamic drop down list from which the user will be able to select one of the existing RHEV data stores. The new virtual disk will be created on the selected storage.&lt;/p&gt;
-
-&lt;p&gt;The second method &amp;ldquo;hot_add_disk&amp;rdquo; will parse this information plus the other settings provided by the user (allocation policy and size) and create the virtual disk.&lt;/p&gt;
-
-&lt;p&gt;Both methods can be found on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h1 id=&#34;service-dialog&#34;&gt;Service Dialog&lt;/h1&gt;
-
-&lt;p&gt;The second step is to create a service dialog which asks the user for required information. If you create the dialog manually, make sure the field are using the proper names, or the &amp;ldquo;hot_add_disk&amp;rdquo; method will not be able to find the values.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&amp;ldquo;size&amp;rdquo;: and integer value of the new disk size in GB&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&amp;ldquo;datastore&amp;rdquo;: the name of the data store, ideally coming from a dynamic dialog&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&amp;ldquo;allocpolicy&amp;rdquo;: allocation policy, possible values are &amp;ldquo;thick&amp;rdquo; or &amp;ldquo;thin&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;For your convenience I exported my service dialog and put it on &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-disk.yml&#34;&gt;Github&lt;/a&gt; too.&lt;/p&gt;
-
-&lt;h1 id=&#34;button&#34;&gt;Button&lt;/h1&gt;
-
-&lt;p&gt;To put everything together, a button has to be created and associated to virtual machine objects. For the button it is important to specify the correct value for &amp;ldquo;System/Process&amp;rdquo; which should be set to &amp;ldquo;Request&amp;rdquo;, and the request name which has to match the name of the instance. In the provided Automate export the name of the instance is &amp;ldquo;hot_add_disk&amp;rdquo; which has to be put into the &amp;ldquo;Request&amp;rdquo; field.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-hot-add-disk.png&#34; title=&#34;Button for hot add disk&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-hot-add-disk-300x308.png&#34; alt=&#34;button-hot-add-disk&#34; title=&#34;Button for hot add disk&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;a-few-words-about-the-code&#34;&gt;A few words about the code&lt;/h1&gt;
-
-&lt;p&gt;The &amp;ldquo;dialog_add_disk&amp;rdquo; method has probably two blocks worth describing. The function &amp;ldquo;getstorages&amp;rdquo; will use the provided host name and credentials to retrieve a list of all available storage domains. This list is filtered by type &amp;ldquo;data&amp;rdquo; to exclude ISO and Export domains. The resulting list of storage domain is stored in an array which later stored in the $evm.object to populate the dynamic dialog fields.&lt;/p&gt;
-
-&lt;p&gt;The second noteworthy code block is the following section:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;  vm=$evm.root[&#39;vm&#39;]
-  ext_mgt_system = vm.ext_management_system
-  rhevmhost = &amp;quot;https://#{ext_mgt_system.hostname}&amp;quot;
-  rhevmuser = ext_mgt_system.authentication_userid
-  rhevmpass = ext_mgt_system.authentication_password
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This piece of code does first retrieve the VM object (from which the button was clicked) and will then retrieve the details for the management system. This object does contain the host name and credentials to communicate to the provider. This is a nice way of retrieving those credentials from the internal database instead of hard coding them or providing them in the instance attributes.&lt;/p&gt;
-</description>
-    </item>
-    
->>>>>>> 422caae67ab9cf563ef47ae641b80802a115e788
   </channel>
 </rss>
