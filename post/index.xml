@@ -24,7 +24,7 @@
 
 &lt;p&gt;If an object has custom attributes associated and stored in the database, the attribute and the value are automatically shown in the UI. Unfortunately there is no capability to create, update or delete custom attributes from the Web UI. Since we can extend the out of the box functionality easily, we can add the missing capabilities by ourselves.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom-attribute-buttons.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom-attribute-buttons-300x48.png&#34; alt=&#34;Additional buttons to manage custom attributes&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom-attribute-buttons.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom-attribute-buttons-300x38.png&#34; alt=&#34;Additional buttons to manage custom attributes&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;automate-code&#34;&gt;Automate Code&lt;/h2&gt;
 
