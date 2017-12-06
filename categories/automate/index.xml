@@ -10,6 +10,7 @@
     <atom:link href="http://www.jung-christian.de/categories/automate/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+<<<<<<< HEAD
       <title>CRUD for Custom Attributes in CloudForms or ManageIQ</title>
       <link>http://www.jung-christian.de/post/2017/12/custom-attributes/</link>
       <pubDate>Wed, 06 Dec 2017 12:19:49 +0100</pubDate>
@@ -118,6 +119,8 @@
     </item>
     
     <item>
+=======
+>>>>>>> 422caae67ab9cf563ef47ae641b80802a115e788
       <title>Retrieve MAC Address from SCVMM</title>
       <link>http://www.jung-christian.de/post/2017/11/scvmm-get-mac/</link>
       <pubDate>Mon, 20 Nov 2017 12:19:49 +0100</pubDate>

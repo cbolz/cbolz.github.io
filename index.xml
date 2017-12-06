@@ -7,6 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
+<<<<<<< HEAD
     <lastBuildDate>Wed, 06 Dec 2017 12:19:49 +0100</lastBuildDate>
     <atom:link href="http://www.jung-christian.de/index.xml" rel="self" type="application/rss+xml" />
     
@@ -119,6 +120,12 @@
     </item>
     
     <item>
+=======
+    <lastBuildDate>Mon, 20 Nov 2017 12:19:49 +0100</lastBuildDate>
+    <atom:link href="http://www.jung-christian.de/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+>>>>>>> 422caae67ab9cf563ef47ae641b80802a115e788
       <title>Retrieve MAC Address from SCVMM</title>
       <link>http://www.jung-christian.de/post/2017/11/scvmm-get-mac/</link>
       <pubDate>Mon, 20 Nov 2017 12:19:49 +0100</pubDate>
@@ -1111,5 +1118,32 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 </description>
     </item>
     
+<<<<<<< HEAD
+=======
+    <item>
+      <title>Add an additional network interface on RHEV virtual machines</title>
+      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
+      <pubDate>Fri, 05 Aug 2016 15:30:05 +0000</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
+      <description>&lt;p&gt;Similar to the previous post on how to &lt;a href=&#34;http://www.jung-christian.de/2016/08/add-an-additional-disk-on-rhev-virtual-machines/&#34;&gt;add additional disks for existing virtual machines&lt;/a&gt; running on RHEV, this article describes how to add additional network interfaces to virtual machines running in RHEV.&lt;/p&gt;
+
+&lt;p&gt;The implementation follows the same concept:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;use a dynamic drop down list to make the selection of available networks available to the user&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;specify the name of the new interface&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create a button to call the action&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;and the actual code which adds the network interfaces to the specified virtual machine&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since the setup is very similar to what was described in the previous post, here are the links to the &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-nic.yml&#34;&gt;Service Dialog&lt;/a&gt; and the &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Automate Code&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+>>>>>>> 422caae67ab9cf563ef47ae641b80802a115e788
   </channel>
 </rss>
