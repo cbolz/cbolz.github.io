@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/tags/custom-attributes/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/tags/custom-attributes/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CRUD for Custom Attributes in CloudForms or ManageIQ</title>
+      <link>http://www.jung-christian.de/post/2017/12/custom-attributes/</link>
+      <pubDate>Wed, 06 Dec 2017 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2017/12/custom-attributes/</guid>
+      <description>
+
+&lt;h1 id=&#34;custom-attributes-in-cloudforms-and-manageiq&#34;&gt;Custom attributes in CloudForms and ManageIQ&lt;/h1&gt;
+
+&lt;p&gt;One of the nice features CloudForms and ManageIQ provide, is the automated discovery of the existing infrastructure. The collected information is stored in the database (often called the VMDB) and regularly updated. Sometimes we want to store additional information for specific objects as well. Although the database is not intended to be or to replace a CMDB, it is still a valid option for storing additional data.&lt;/p&gt;
+
+&lt;p&gt;If an object has custom attributes associated and stored in the database, the attribute and the value are automatically shown in the UI. Unfortunately there is no capability to create, update or delete custom attributes from the Web UI. Since we can extend the out of the box functionality easily, we can add the missing capabilities by ourselves.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/custom-attribute-buttons.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/custom-attribute-buttons-300x48.png&#34; alt=&#34;Additional buttons to manage custom attributes&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;automate-code&#34;&gt;Automate Code&lt;/h2&gt;
+
+&lt;p&gt;To implement the core functionality, Automate already provides the necessary methods:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;custom_get(key): returns the value of the custom attribute with name &amp;ldquo;key&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;custom_keys: returns an array of all custom attributes for the given object&lt;/li&gt;
+&lt;li&gt;custom_set(key,value): stores the specified value in the custom attribute key&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The Automate code to implement these features can be found in my &lt;a href=&#34;https://gitlab.com/cjung/automate.git&#34;&gt;Gitlab&lt;/a&gt; repository. On top of the necessary methods to create and delete custom attributes, you&amp;rsquo;ll find some methods to create dynamic dialogs with the list of available custom attributes.&lt;/p&gt;
+
+&lt;p&gt;There is no method for &amp;ldquo;update&amp;rdquo;, since the custom_set method works for new and existing custom attributes. There is also no method for &amp;ldquo;delete&amp;rdquo;. To delete a custom attribute, just overwrite the current value with an empty string.&lt;/p&gt;
+
+&lt;h2 id=&#34;service-dialogs&#34;&gt;Service Dialogs&lt;/h2&gt;
+
+&lt;p&gt;To make it easy for the end user to consume these features, Service Dialogs can be created. The Gitlab repository also contains examples for this.&lt;/p&gt;
+
+&lt;p&gt;Create custom attributes:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/create-custom-attribute.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/create-custom-attribute-300x113.png&#34; alt=&#34;Create custom attribute&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Update custom attributes:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/update-custom-attribute.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/update-custom-attribute-300x117.png&#34; alt=&#34;Update customa ttribute&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Delete custom attribute:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-custom-attribute.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-custom-attribute-300x82.png&#34; alt=&#34;Dalete Custom Attribute&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Service Dialogs can be imported by navigting to &lt;strong&gt;&lt;em&gt;Automation&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Automate&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Customization&lt;/em&gt;&lt;/strong&gt;. From there click &lt;strong&gt;&lt;em&gt;Import/Export&lt;/em&gt;&lt;/strong&gt; on the accordion on the left and import the files one by one.&lt;/p&gt;
+
+&lt;h2 id=&#34;buttons&#34;&gt;Buttons&lt;/h2&gt;
+
+&lt;p&gt;Finally we need to create custom buttons which call the Service Dialogs and the backend logic. In the current release, buttons can not be imported or exported, so we have to create them manually.&lt;/p&gt;
+
+&lt;p&gt;First navigate to &lt;strong&gt;&lt;em&gt;Automation&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Automate&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Customization&lt;/em&gt;&lt;/strong&gt;. Click on &lt;strong&gt;&lt;em&gt;Buttons&lt;/em&gt;&lt;/strong&gt; in the accordion on the left. To make the provisded example work, you have to create the buttons on the &lt;strong&gt;&lt;em&gt;VM and Instance&lt;/em&gt;&lt;/strong&gt; tree. Click on it and then &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Add a new Button Group&lt;/em&gt;&lt;/strong&gt;. Give it a good name and description and select an Button Group Image.&lt;/p&gt;
+
+&lt;p&gt;Create the button for new custom attributes:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Button Text: &amp;ldquo;Create new Attribute&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Button Hover Text: &amp;ldquo;Create new custom attribute&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Button Image: Choose and icon&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Dialog: &amp;ldquo;Create Custom Attribute&amp;rdquo; (only works if you successfully import the provided dialogs in the previous step)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Request: create_custom&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-create-new-attribute.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-create-new-attribute-300x226.png&#34; alt=&#34;Create new attribute&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Create the button for updating custom attributes:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Button Text: &amp;ldquo;Update Custom Attribute&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Button Hover Text: &amp;ldquo;edit an existing custom attribute&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Button Image: Choose and icon&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Dialog: &amp;ldquo;Update Custom Attribute&amp;rdquo; (only works if you successfully import the provided dialogs in the previous step)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Request: update_custom&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-update-attribute.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-update-attribute-300x220.png&#34; alt=&#34;Update attribute&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Create the button for deleting custom attributes:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Button Text: &amp;ldquo;Delete Custom Attribute&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Button Hover Text: &amp;ldquo;Delete a custom attribute and the stored value&amp;rdquo;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Button Image: Choose and icon&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Dialog: &amp;ldquo;Delete Custom Attribute&amp;rdquo; (only works if you successfully import the provided dialogs in the previous step)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Request: delete_custom&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/button-delete-custom-attribute.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/button-delete-custom-attribute-300x227.png&#34; alt=&#34;Delete custom attribute&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;role-based-access-control&#34;&gt;Role based access control&lt;/h3&gt;
+
+&lt;p&gt;There is a very powerful and flexible Role Based Access Control (RBAC) feature available which can also be used for custom buttons. If you scroll down to the very button of the &amp;ldquo;Add new Button&amp;rdquo; screen, you&amp;rsquo;ll see a drop down list where you can change the &lt;strong&gt;&lt;em&gt;Visibility&lt;/em&gt;&lt;/strong&gt;. If set to &lt;strong&gt;&lt;em&gt;by Role&lt;/em&gt;&lt;/strong&gt;, we can grant access to each individual button for specific roles.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

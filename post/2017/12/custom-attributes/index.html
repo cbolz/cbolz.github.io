@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CRUD for Custom Attributes in CloudForms or ManageIQ -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>CRUD for Custom Attributes in CloudForms or ManageIQ</h1>
+               <h2 class="subheading">Create buttons to provide GUI integration for managing custom attributes</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Christian Jung</a> on Wed, Dec 6, 2017
+<br />
+In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/automate">Automate</a>
+
+<br />
+Tags <a href="http://www.jung-christian.de/tags/automate">automate</a>, <a href="http://www.jung-christian.de/tags/custom-attributes">custom attributes</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="custom-attributes-in-cloudforms-and-manageiq">Custom attributes in CloudForms and ManageIQ</h1>
+
+<p>One of the nice features CloudForms and ManageIQ provide, is the automated discovery of the existing infrastructure. The collected information is stored in the database (often called the VMDB) and regularly updated. Sometimes we want to store additional information for specific objects as well. Although the database is not intended to be or to replace a CMDB, it is still a valid option for storing additional data.</p>
+
+<p>If an object has custom attributes associated and stored in the database, the attribute and the value are automatically shown in the UI. Unfortunately there is no capability to create, update or delete custom attributes from the Web UI. Since we can extend the out of the box functionality easily, we can add the missing capabilities by ourselves.</p>
+
+<p><a href="http://www.jung-christian.de/images/custom-attribute-buttons.png"><img src="http://www.jung-christian.de/images/custom-attribute-buttons-300x48.png" alt="Additional buttons to manage custom attributes" /></a></p>
+
+<h2 id="automate-code">Automate Code</h2>
+
+<p>To implement the core functionality, Automate already provides the necessary methods:</p>
+
+<ul>
+<li>custom_get(key): returns the value of the custom attribute with name &ldquo;key&rdquo;</li>
+<li>custom_keys: returns an array of all custom attributes for the given object</li>
+<li>custom_set(key,value): stores the specified value in the custom attribute key</li>
+</ul>
+
+<p>The Automate code to implement these features can be found in my <a href="https://gitlab.com/cjung/automate.git">Gitlab</a> repository. On top of the necessary methods to create and delete custom attributes, you&rsquo;ll find some methods to create dynamic dialogs with the list of available custom attributes.</p>
+
+<p>There is no method for &ldquo;update&rdquo;, since the custom_set method works for new and existing custom attributes. There is also no method for &ldquo;delete&rdquo;. To delete a custom attribute, just overwrite the current value with an empty string.</p>
+
+<h2 id="service-dialogs">Service Dialogs</h2>
+
+<p>To make it easy for the end user to consume these features, Service Dialogs can be created. The Gitlab repository also contains examples for this.</p>
+
+<p>Create custom attributes:</p>
+
+<p><a href="http://www.jung-christian.de/images/create-custom-attribute.png"><img src="http://www.jung-christian.de/images/create-custom-attribute-300x113.png" alt="Create custom attribute" /></a></p>
+
+<p>Update custom attributes:</p>
+
+<p><a href="http://www.jung-christian.de/images/update-custom-attribute.png"><img src="http://www.jung-christian.de/images/update-custom-attribute-300x117.png" alt="Update customa ttribute" /></a></p>
+
+<p>Delete custom attribute:</p>
+
+<p><a href="http://www.jung-christian.de/images/delete-custom-attribute.png"><img src="http://www.jung-christian.de/images/delete-custom-attribute-300x82.png" alt="Dalete Custom Attribute" /></a></p>
+
+<p>Service Dialogs can be imported by navigting to <strong><em>Automation</em></strong>, <strong><em>Automate</em></strong>, <strong><em>Customization</em></strong>. From there click <strong><em>Import/Export</em></strong> on the accordion on the left and import the files one by one.</p>
+
+<h2 id="buttons">Buttons</h2>
+
+<p>Finally we need to create custom buttons which call the Service Dialogs and the backend logic. In the current release, buttons can not be imported or exported, so we have to create them manually.</p>
+
+<p>First navigate to <strong><em>Automation</em></strong>, <strong><em>Automate</em></strong>, <strong><em>Customization</em></strong>. Click on <strong><em>Buttons</em></strong> in the accordion on the left. To make the provisded example work, you have to create the buttons on the <strong><em>VM and Instance</em></strong> tree. Click on it and then <strong><em>Configuration</em></strong>, <strong><em>Add a new Button Group</em></strong>. Give it a good name and description and select an Button Group Image.</p>
+
+<p>Create the button for new custom attributes:</p>
+
+<ol>
+<li><p>Button Text: &ldquo;Create new Attribute&rdquo;</p></li>
+
+<li><p>Button Hover Text: &ldquo;Create new custom attribute&rdquo;</p></li>
+
+<li><p>Button Image: Choose and icon</p></li>
+
+<li><p>Dialog: &ldquo;Create Custom Attribute&rdquo; (only works if you successfully import the provided dialogs in the previous step)</p></li>
+
+<li><p>Request: create_custom</p></li>
+</ol>
+
+<p><a href="http://www.jung-christian.de/images/button-create-new-attribute.png"><img src="http://www.jung-christian.de/images/button-create-new-attribute-300x226.png" alt="Create new attribute" /></a></p>
+
+<p>Create the button for updating custom attributes:</p>
+
+<ol>
+<li><p>Button Text: &ldquo;Update Custom Attribute&rdquo;</p></li>
+
+<li><p>Button Hover Text: &ldquo;edit an existing custom attribute&rdquo;</p></li>
+
+<li><p>Button Image: Choose and icon</p></li>
+
+<li><p>Dialog: &ldquo;Update Custom Attribute&rdquo; (only works if you successfully import the provided dialogs in the previous step)</p></li>
+
+<li><p>Request: update_custom</p></li>
+</ol>
+
+<p><a href="http://www.jung-christian.de/images/button-update-attribute.png"><img src="http://www.jung-christian.de/images/button-update-attribute-300x220.png" alt="Update attribute" /></a></p>
+
+<p>Create the button for deleting custom attributes:</p>
+
+<ol>
+<li><p>Button Text: &ldquo;Delete Custom Attribute&rdquo;</p></li>
+
+<li><p>Button Hover Text: &ldquo;Delete a custom attribute and the stored value&rdquo;</p></li>
+
+<li><p>Button Image: Choose and icon</p></li>
+
+<li><p>Dialog: &ldquo;Delete Custom Attribute&rdquo; (only works if you successfully import the provided dialogs in the previous step)</p></li>
+
+<li><p>Request: delete_custom</p></li>
+</ol>
+
+<p><a href="http://www.jung-christian.de/images/button-delete-custom-attribute.png"><img src="http://www.jung-christian.de/images/button-delete-custom-attribute-300x227.png" alt="Delete custom attribute" /></a></p>
+
+<h3 id="role-based-access-control">Role based access control</h3>
+
+<p>There is a very powerful and flexible Role Based Access Control (RBAC) feature available which can also be used for custom buttons. If you scroll down to the very button of the &ldquo;Add new Button&rdquo; screen, you&rsquo;ll see a drop down list where you can change the <strong><em>Visibility</em></strong>. If set to <strong><em>by Role</em></strong>, we can grant access to each individual button for specific roles.</p>
+
+                  
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:blog@jung-christian.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://twitter.com/CJungCloud">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://gitlab.com/cjung">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-gitlab fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+
+</body>
+
+</html>
+
