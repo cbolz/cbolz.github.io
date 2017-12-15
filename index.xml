@@ -20,13 +20,13 @@
 
 &lt;h1 id=&#34;enforce-compliance&#34;&gt;Enforce Compliance&lt;/h1&gt;
 
-&lt;p&gt;In a recent article about how to write a &lt;a href=&#34;http://www.jung-christian.de/post/2017/10/control-policy-selinux/&#34;&gt;SELinux Compliance Policy&lt;/a&gt; you learned how to use CloudForms&amp;rsquo; and ManageIQ&amp;rsquo;s capability to perform compliance checks. This article goes one step further: Instead of just reporting compliance or non-compliance of a given virtual machine, we use the power of Ansible to enforce compliance.&lt;/p&gt;
+&lt;p&gt;In a recent article about how to write a &lt;a href=&#34;http://www.jung-christian.de/post/2017/10/control-policy-selinux/&#34;&gt;SELinux Compliance Policy&lt;/a&gt; you learned how to use &lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt;&amp;rsquo; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt;&amp;rsquo;s capability to perform compliance checks. This article goes one step further: Instead of just reporting compliance or non-compliance of a given virtual machine, we use the power of Ansible to enforce compliance.&lt;/p&gt;
 
-&lt;p&gt;This example builds on the Compliance and Control policy described in the previous article.&lt;/p&gt;
+&lt;p&gt;This example builds on the Compliance and Control policy described in the mentioned article and it is recommended to read it first.&lt;/p&gt;
 
 &lt;h1 id=&#34;compliance-policies&#34;&gt;Compliance Policies&lt;/h1&gt;
 
-&lt;p&gt;Enterprises often have rules and regulations about system compliance. This could include a specific baseline configuration, for example hardening rules. It could also include other requirements, like Backup and Monitoring has to be configured, a proper License has to be available (particularly with proprietary software) and more. Compliance checks in CloudForms and ManageIQ can bundle these requirements into policy profiles.&lt;/p&gt;
+&lt;p&gt;Enterprises often have rules and regulations about system compliance. This could include a specific baseline configuration, for example hardening rules. It could also include other requirements, like backup and monitoring has to be configured, a proper license has to be available (particularly with proprietary software) and more. Compliance checks in CloudForms and ManageIQ can bundle these requirements into policy profiles.&lt;/p&gt;
 
 &lt;p&gt;If one or more of the requirements is not met, actions can be triggered. The most obvious and most simple to implement is to mark the system as being &amp;ldquo;non compliant&amp;rdquo;.&lt;/p&gt;
 
@@ -45,13 +45,13 @@
 
 &lt;h2 id=&#34;running-ansible-playbook-from-tower&#34;&gt;Running Ansible Playbook from Tower&lt;/h2&gt;
 
-&lt;p&gt;A GitLab repository with &lt;a href=&#34;https://gitlab.com/cjung/cloudforms-playbooks.git&#34;&gt;CloudForms Ansible Playbooks&lt;/a&gt; optimized for the usage with CloudForms and ManageIQ has to be added to Tower first. This repository contains a Playbooks called &amp;ldquo;selinux-enforcing&amp;rdquo; which makes sure the SELinux modus is set to &amp;ldquo;Enforcing&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;A GitLab repository with &lt;a href=&#34;https://gitlab.com/cjung/cloudforms-playbooks.git&#34;&gt;CloudForms Ansible Playbooks&lt;/a&gt; optimized for the usage with CloudForms and ManageIQ has to be added to Tower first. This repository contains a Playbooks called &amp;ldquo;&lt;a href=&#34;https://gitlab.com/cjung/cloudforms-playbooks/raw/master/Playbooks/selinux-enforcing.yaml&#34;&gt;selinux-enforcing&lt;/a&gt;&amp;rdquo; which makes sure the SELinux modus is set to &amp;ldquo;Enforcing&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;After adding the repository and running an initial sync, a Job Template has to be created, which runs the previously imported Playbook. Make sure the following requirements are met:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Job Template Name: make sure you use the name &amp;ldquo;Fix SELinux&amp;rdquo;. If you want to use another name, the Compliance Policy imported later, has to be adjusted accordingly&lt;/li&gt;
-&lt;li&gt;Check &amp;ldquo;Prompt on Launch&amp;rdquo; for the Limit parameter: During Playbook execution CloudForms or ManageIQ will set the limit parameter dynamically to the correct value to ensure, the Playbook is only executed on the non compliant system and not the entire inventory. If this box is not checked (enabled), the limit parameter set by CloudForms or ManageIQ will be ignored by Ansible Tower - and the Playbook will be executed on the entire inventory&lt;/li&gt;
+&lt;li&gt;Check &amp;ldquo;Prompt on Launch&amp;rdquo; for the Limit parameter: During Playbook execution CloudForms or ManageIQ will set the limit parameter dynamically to the correct value to ensure the Playbook is only executed on the non compliant system and not the entire inventory. If this box is not checked (enabled), the limit parameter set by CloudForms or ManageIQ will be ignored by Ansible Tower - and the Playbook will be executed on the entire inventory&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Next we force an update of the Ansible Tower inventory. Navigate to &lt;strong&gt;&lt;em&gt;Automation&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Ansible Tower&lt;/em&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;em&gt;Explorer&lt;/em&gt;&lt;/strong&gt;. Select your Tower Provider and click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Refresh Relationships and Power State&lt;/em&gt;&lt;/strong&gt;. Such a refresh is executed in the background and can take a minute or two. Eventually the new Job Template should show up in the accordion on the left.&lt;/p&gt;
@@ -80,7 +80,7 @@
 
 &lt;h2 id=&#34;running-ansible-playbook-natively&#34;&gt;Running Ansible Playbook natively&lt;/h2&gt;
 
-&lt;p&gt;First it&amp;rsquo;s important to make sure the Embedded Ansible Role is enabled. Without this Role properly running, Ansible Playbooks can not be executed and it is not even possible to add an Ansible Playbook Repository. A good article summarizing the how to &lt;a href=&#34;https://cloudformsblog.redhat.com/2017/12/07/debugging-ansible-automation-inside-red-hat-cloudforms/&#34;&gt;Debug Ansible Automation inside Red Hat CloudForms&lt;/a&gt; has just been published by Victor.&lt;/p&gt;
+&lt;p&gt;If you want to use the native support to run Ansible Playbooks, it&amp;rsquo;s important to make sure the Embedded Ansible Role is enabled. Without this Role properly running, Ansible Playbooks can not be executed and it is not even possible to add an Ansible Playbook Repository. A good article summarizing the how to &lt;a href=&#34;https://cloudformsblog.redhat.com/2017/12/07/debugging-ansible-automation-inside-red-hat-cloudforms/&#34;&gt;Debug Ansible Automation inside Red Hat CloudForms&lt;/a&gt; has just been published by my buddy &lt;a href=&#34;https://twitter.com/victorestival&#34;&gt;Victor&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;After ensuring the Role is properly configured, add the &lt;a href=&#34;https://gitlab.com/cjung/cloudforms-playbooks.git&#34;&gt;CloudForms Ansible Playbooks&lt;/a&gt; repository found on GitLab.&lt;/p&gt;
 
@@ -93,6 +93,18 @@
 &lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/list-of-actions-selinux-policy.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/list-of-actions-selinux-policy-300x78.png&#34; alt=&#34;Updated actions on fail&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;I uploaded an example &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/control-policies/VM-Security-Profile-with-Ansible-Action.yaml&#34;&gt;VM-Security-Profile-with-Ansible-Action&lt;/a&gt; on &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/control-policies&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;testing-and-conclusion&#34;&gt;Testing and Conclusion&lt;/h1&gt;
+
+&lt;p&gt;You should now have a combination of the following poclies:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A Control Policy &amp;ldquo;Run SmartState&amp;rdquo; which will schedule a Smart State Analysis scan in the background if a VM is powered on or reset&lt;/li&gt;
+&lt;li&gt;A Control Policy &amp;ldquo;Check Compliance&amp;rdquo; which will trigger a Compliance Check every time a VM completed Smart State Analysis&lt;/li&gt;
+&lt;li&gt;A Compliance Policy &amp;ldquo;Check SELinux Policy&amp;rdquo; which verifies SELinux is configured in Enforcing mode, and if not, marks the VM as non compliant and runs an Ansible Playbook to fix the configuration error&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;To do a test run, you can either power on a VM, or &amp;ldquo;Perform Smart State Analysis&amp;rdquo; from the VM &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt; menu.&lt;/p&gt;
 </description>
     </item>
     
