@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Enforce SELinux Compliance Policy with Ansible -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Enforce SELinux Compliance Policy with Ansible</h1>
+               <h2 class="subheading">Enforce Compliance with Ansible</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Christian Jung</a> on Thu, Dec 14, 2017
+<br />
+In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>, <a href="http://www.jung-christian.de/categories/compliance">Compliance</a>, <a href="http://www.jung-christian.de/categories/ansible">Ansible</a>
+
+<br />
+Tags <a href="http://www.jung-christian.de/tags/ansible">ansible</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="enforce-compliance">Enforce Compliance</h1>
+
+<p>In a recent article about how to write a <a href="http://www.jung-christian.de/post/2017/10/control-policy-selinux/">SELinux Compliance Policy</a> you learned how to use CloudForms&rsquo; and ManageIQ&rsquo;s capability to perform compliance checks. This article goes one step further: Instead of just reporting compliance or non-compliance of a given virtual machine, we use the power of Ansible to enforce compliance.</p>
+
+<p>This example builds on the Compliance and Control policy described in the previous article.</p>
+
+<h1 id="compliance-policies">Compliance Policies</h1>
+
+<p>Enterprises often have rules and regulations about system compliance. This could include a specific baseline configuration, for example hardening rules. It could also include other requirements, like Backup and Monitoring has to be configured, a proper License has to be available (particularly with proprietary software) and more. Compliance checks in CloudForms and ManageIQ can bundle these requirements into policy profiles.</p>
+
+<p>If one or more of the requirements is not met, actions can be triggered. The most obvious and most simple to implement is to mark the system as being &ldquo;non compliant&rdquo;.</p>
+
+<p><a href="http://www.jung-christian.de/images/system-non-compliant.png"><img src="http://www.jung-christian.de/images/system-non-compliant-300x58.png" alt="System is not compliant" /></a></p>
+
+<p>Compliance policies can also trigger other actions, including running an Ansible Playbook or perform a custom method, which allows us to run our own (Ruby) Method as an action.</p>
+
+<h1 id="ansible-playbook-as-an-action">Ansible Playbook as an Action</h1>
+
+<p>Coming back to the problem at hand, an error in the SELinux configuration, Ansible would be the logical tool choice to fix the system configuration. There are two options available to run Ansible Playbooks from CloudForms or ManageIQ:</p>
+
+<ul>
+<li>Embedded Ansible: Since <a href="http://www.redhat.com">CloudForms 4.5</a> and <a href="http://www.manageiq.org">ManageIQ Fine</a> there a built in native capability to run Ansible Playbooks</li>
+<li>Ansible Tower: Since <a href="http://www.redhat.com">CloudForms 4.1</a> and <a href="http://www.manageiq.org">ManageIQ Darga</a> we can run Ansible Playbook from <a href="https://www.ansible.com/tower">Ansible Tower</a></li>
+</ul>
+
+<h2 id="running-ansible-playbook-from-tower">Running Ansible Playbook from Tower</h2>
+
+<p>A GitLab repository with <a href="https://gitlab.com/cjung/cloudforms-playbooks.git">CloudForms Ansible Playbooks</a> optimized for the usage with CloudForms and ManageIQ has to be added to Tower first. This repository contains a Playbooks called &ldquo;selinux-enforcing&rdquo; which makes sure the SELinux modus is set to &ldquo;Enforcing&rdquo;.</p>
+
+<p>After adding the repository and running an initial sync, a Job Template has to be created, which runs the previously imported Playbook. Make sure the following requirements are met:</p>
+
+<ul>
+<li>Job Template Name: make sure you use the name &ldquo;Fix SELinux&rdquo;. If you want to use another name, the Compliance Policy imported later, has to be adjusted accordingly</li>
+<li>Check &ldquo;Prompt on Launch&rdquo; for the Limit parameter: During Playbook execution CloudForms or ManageIQ will set the limit parameter dynamically to the correct value to ensure, the Playbook is only executed on the non compliant system and not the entire inventory. If this box is not checked (enabled), the limit parameter set by CloudForms or ManageIQ will be ignored by Ansible Tower - and the Playbook will be executed on the entire inventory</li>
+</ul>
+
+<p>Next we force an update of the Ansible Tower inventory. Navigate to <strong><em>Automation</em></strong>, <strong><em>Ansible Tower</em></strong> and <strong><em>Explorer</em></strong>. Select your Tower Provider and click on <strong><em>Configuration</em></strong>, <strong><em>Refresh Relationships and Power State</em></strong>. Such a refresh is executed in the background and can take a minute or two. Eventually the new Job Template should show up in the accordion on the left.</p>
+
+<h3 id="create-a-new-action">Create a new Action</h3>
+
+<p>To trigger an execution of an Ansible Playbook from a Control or Compliance Policy, we first have to create a new Action. Navigate to <strong><em>Control</em></strong>, <strong><em>Explorer</em></strong>. In the accordion on the left, click on <strong><em>Actions</em></strong> and from there <strong><em>Configuration</em></strong>, <strong><em>Add a new Action</em></strong>.</p>
+
+<ul>
+<li><p>Description: Fix SELinux</p></li>
+
+<li><p>Action Type: Invoke a Custom Automation</p></li>
+
+<li><p>Message: create</p></li>
+
+<li><p>Request: ansible_tower_job</p></li>
+
+<li><p>Attribute 1: job_template_name</p></li>
+
+<li><p>Value 1: Fix SElinux</p></li>
+</ul>
+
+<p><strong><em>Note:</em></strong> The Name &ldquo;Fix SELinux&rdquo; has to match the name of the Job Template definition in Ansible Tower, or the Action will fail.</p>
+
+<p><a href="http://www.jung-christian.de/images/create-action-fix-selinux.png"><img src="http://www.jung-christian.de/images/create-action-fix-selinux-300x114.png" alt="Create Fix SELinux Action" /></a></p>
+
+<h2 id="running-ansible-playbook-natively">Running Ansible Playbook natively</h2>
+
+<p>First it&rsquo;s important to make sure the Embedded Ansible Role is enabled. Without this Role properly running, Ansible Playbooks can not be executed and it is not even possible to add an Ansible Playbook Repository. A good article summarizing the how to <a href="https://cloudformsblog.redhat.com/2017/12/07/debugging-ansible-automation-inside-red-hat-cloudforms/">Debug Ansible Automation inside Red Hat CloudForms</a> has just been published by Victor.</p>
+
+<p>After ensuring the Role is properly configured, add the <a href="https://gitlab.com/cjung/cloudforms-playbooks.git">CloudForms Ansible Playbooks</a> repository found on GitLab.</p>
+
+<p>This blog post is not going into details on how to do this. I already created a lab called <a href="https://github.com/cbolz/rhte-fy18/blob/master/getting-well-with-cloudforms/index.md">Getting well with CloudForms</a> which covers the embedded Ansible capbilities.</p>
+
+<h1 id="updating-the-compliance-policy">Updating the Compliance Policy</h1>
+
+<p>To use the previously created Action in the Compliance Policy, navigate to <strong><em>Control</em></strong>, <strong><em>Explorer</em></strong> first. Then navigate to the Compliance Policy and the respective event. Add the Action you created in the previous step to the &ldquo;Order of Actions if ANY Conditions are False&rdquo; list.</p>
+
+<p><a href="http://www.jung-christian.de/images/list-of-actions-selinux-policy.png"><img src="http://www.jung-christian.de/images/list-of-actions-selinux-policy-300x78.png" alt="Updated actions on fail" /></a></p>
+
+<p>I uploaded an example <a href="https://raw.githubusercontent.com/cbolz/ManageIQ/master/control-policies/VM-Security-Profile-with-Ansible-Action.yaml">VM-Security-Profile-with-Ansible-Action</a> on <a href="https://github.com/cbolz/ManageIQ/tree/master/control-policies">Github</a>.</p>
+
+                  
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:blog@jung-christian.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://twitter.com/CJungCloud">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://gitlab.com/cjung">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-gitlab fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+
+</body>
+
+</html>
+
