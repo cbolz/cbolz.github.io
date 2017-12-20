@@ -150,30 +150,6 @@
     </item>
     
     <item>
-      <title>Consolidated Automate Domain to integrate CloudForms or ManageIQ with The Foreman</title>
-      <link>http://www.jung-christian.de/post/2017/11/foreman-domain/</link>
-      <pubDate>Fri, 10 Nov 2017 12:19:49 +0100</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2017/11/foreman-domain/</guid>
-      <description>
-
-&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
-
-&lt;p&gt;Over time I&amp;rsquo;ve been experimenting different ways on how to provide Automate code in a convenient and easy to use way. Some of the best practices and lessons learned are documented in the previous blog post on &lt;a href=&#34;http://www.jung-christian.de/post/2017/10/automate-best-practice/index.html&#34;&gt;Best Practice recommendations for Automate&lt;/a&gt; and &lt;a href=&#34;http://www.jung-christian.de/post/2017/11/continuous-integration-with-automate/index.html&#34;&gt;Continuous Integration with CloudForms or ManageIQ&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;There are some specific needs though for providing Automate examples in blog posts like this.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;pluggable: allow users to choose and import only the Automate pieces they need&lt;/li&gt;
-&lt;li&gt;isolation: make sure there are no dependencies between Automate Domains&lt;/li&gt;
-&lt;li&gt;conflict: while ensuring that no two Automate Domains conflict or override each other&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I&amp;rsquo;m still trying to find the best solution. My current approach is to split my Automate Code into logical modules.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Continuous Integration with CloudForms or ManageIQ</title>
       <link>http://www.jung-christian.de/post/2017/11/continuous-integration-with-automate/</link>
       <pubDate>Fri, 10 Nov 2017 12:19:49 +0100</pubDate>
