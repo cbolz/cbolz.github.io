@@ -110,9 +110,15 @@ Tags <a href="http://www.jung-christian.de/tags/appliance">appliance</a>
 
 <h1 id="purpose-of-this-document">Purpose of this document</h1>
 
-<p>The architecture of <a href="http://www.redhat.com/cloudforms/">CloudForms</a> or <a href="http://www.manageiq.org">ManageIQ</a> allows you to easily scale out by adding additional appliances when needed. This could be used to accommodate growth of the managed infrastructure, better security isolation or increased availability requirements. This can easily be done by joining an appliance to an existing region as documented in the <a href="http://manageiq.org/docs/reference/">ManageIQ</a> or <a href="https://docs.redhat.com">Red Hat</a> Documentation. There is an example if you deploy CloudForms on <a href="https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.6-beta/html/installing_red_hat_cloudforms_on_red_hat_virtualization/configuring-cloudforms#configuring-a-worker-appliance">Red Hat Virtualization</a>. The process is the same for all providers.</p>
+<p>The architecture of <a href="http://www.redhat.com/cloudforms/">CloudForms</a> or <a href="http://www.manageiq.org">ManageIQ</a> allows you to easily scale out by adding additional appliances when needed. This could be used to accommodate growth of the managed infrastructure, better security isolation or increased availability requirements. This can easily be done by joining an appliance to an existing region as documented in the <a href="http://manageiq.org/docs/reference/">ManageIQ</a> or <a href="https://docs.redhat.com">Red Hat</a> Documentation. There is an example if you <a href="https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.6-beta/html/installing_red_hat_cloudforms_on_red_hat_virtualization/configuring-cloudforms#configuring-a-worker-appliance">deploy CloudForms on Red Hat Virtualization</a>. The process is the same for all providers.</p>
 
 <p>Occasionally you also have to scale down and delete no longer needed appliances as well. This is very simple as well.</p>
+
+<h2 id="considerations">Considerations</h2>
+
+<p>The process described here works for simple &ldquo;worker&rdquo; appliances. If you&rsquo;re not familiar with the architecture, there is a very good <a href="https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.5/html/deployment_planning_guide/">Deployment Planning Guide</a> which describes the architecture in detail.</p>
+
+<p>Deleting database appliances might require additional preparation, which is not covered in this article. There might also be additional steps necessary in your particular environment, like adjust backup procedures, monitoring, or configuration files outside CloudForms or ManageIQ.</p>
 
 <h2 id="delete-an-appliance">Delete an appliance</h2>
 
@@ -129,12 +135,14 @@ Tags <a href="http://www.jung-christian.de/tags/appliance">appliance</a>
 
 <p><a href="http://www.jung-christian.de/images/delete-appliance-select-appliance.png"><img src="http://www.jung-christian.de/images/delete-appliance-select-appliance-300x332.png" alt="Select Appliance" /></a></p></li>
 
-<li><p>Click on <strong><em>Configuration</em></strong>, <strong><em>Delete Server <NAME></em></strong>, <NAME> being the name of the appliance which should be deleted</p>
+<li><p>Click on <strong><em>Configuration</em></strong>, <strong><em>Delete Server NAME</em></strong>, NAME being the name of the appliance which should be deleted. IN this example &ldquo;Appliance-2&rdquo; will be deleted.</p>
 
 <p><a href="http://www.jung-christian.de/images/delete-appliance-configuration-delete.png"><img src="http://www.jung-christian.de/images/delete-appliance-configuration-delete-300x125.png" alt="Delete Appliance" /></a></p></li>
 </ol>
 
-<p>In the background the action will be performed and the Appliance will be deleted from the configuration.</p>
+<p>In the background the action will be performed and the Appliance will be removed from the configuration.</p>
+
+<p>Finally you can just delete the actual virtual machine as usual.</p>
 
                   
 
