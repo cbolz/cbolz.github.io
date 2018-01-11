@@ -10,6 +10,44 @@
     <atom:link href="http://www.jung-christian.de/categories/manageiq/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>How to delete an obsolete Appliance</title>
+      <link>http://www.jung-christian.de/post/2018/01/delete-appliance/</link>
+      <pubDate>Thu, 11 Jan 2018 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2018/01/delete-appliance/</guid>
+      <description>
+
+&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
+
+&lt;p&gt;The architecture of &lt;a href=&#34;http://www.redhat.com/cloudforms/&#34;&gt;CloudForms&lt;/a&gt; or &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; allows you to easily scale out by adding additional appliances when needed. This could be used to accommodate growth of the managed infrastructure, better security isolation or increased availability requirements. This can easily be done by joining an appliance to an existing region as documented in the &lt;a href=&#34;http://manageiq.org/docs/reference/&#34;&gt;ManageIQ&lt;/a&gt; or &lt;a href=&#34;https://docs.redhat.com&#34;&gt;Red Hat&lt;/a&gt; Documentation. There is an example if you deploy CloudForms on &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.6-beta/html/installing_red_hat_cloudforms_on_red_hat_virtualization/configuring-cloudforms#configuring-a-worker-appliance&#34;&gt;Red Hat Virtualization&lt;/a&gt;. The process is the same for all providers.&lt;/p&gt;
+
+&lt;p&gt;Occasionally you also have to scale down and delete no longer needed appliances as well. This is very simple as well.&lt;/p&gt;
+
+&lt;h2 id=&#34;delete-an-appliance&#34;&gt;Delete an appliance&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;If you have the necessary privileges, click on your user name on the top right of the screen and &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Click on &lt;strong&gt;&lt;em&gt;Diagnostics&lt;/em&gt;&lt;/strong&gt; in the accordion on the left&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Click on the Zone the appliance belongs to, in the example below you can see two appliances&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-appliance-select-zone.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-appliance-select-zone-300x162.png&#34; alt=&#34;Select Zone&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;In the view &amp;ldquo;Roles by Server&amp;rdquo; select the appliance which will be deleted&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-appliance-select-appliance.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-appliance-select-appliance-300x332.png&#34; alt=&#34;Select Appliance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Delete Server &lt;NAME&gt;&lt;/em&gt;&lt;/strong&gt;, &lt;NAME&gt; being the name of the appliance which should be deleted&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-appliance-configuration-delete.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-appliance-configuration-delete-300x125.png&#34; alt=&#34;Delete Appliance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In the background the action will be performed and the Appliance will be deleted from the configuration.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Enforce SELinux Compliance Policy with Ansible</title>
       <link>http://www.jung-christian.de/post/2017/12/enforce-selinux-with-ansible/</link>
       <pubDate>Thu, 14 Dec 2017 12:00:00 +0100</pubDate>
@@ -1167,30 +1205,6 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 &lt;p&gt;Please make sure you only use CreateCobblerRecord or RegisterForeman if the attributes for the instances have been declared. For Foreman this was &lt;a href=&#34;http://www.jung-christian.de/2015/04/how-to-provision-vms-with-foreman-and-manageiq/&#34;&gt;documented in a previous post&lt;/a&gt;, for Cobbler, it could look like this:&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/cobbler-instance.png&#34; title=&#34;Cobbler Instance&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/cobbler-instance-300x114.png&#34; alt=&#34;cobbler-instance&#34; title=&#34;Cobbler Instance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Add an additional network interface on RHEV virtual machines</title>
-      <link>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</link>
-      <pubDate>Fri, 05 Aug 2016 15:30:05 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2016/08/add-an-additional-network-interface-on-rhev-virtual-machines/</guid>
-      <description>&lt;p&gt;Similar to the previous post on how to &lt;a href=&#34;http://www.jung-christian.de/2016/08/add-an-additional-disk-on-rhev-virtual-machines/&#34;&gt;add additional disks for existing virtual machines&lt;/a&gt; running on RHEV, this article describes how to add additional network interfaces to virtual machines running in RHEV.&lt;/p&gt;
-
-&lt;p&gt;The implementation follows the same concept:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;use a dynamic drop down list to make the selection of available networks available to the user&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;specify the name of the new interface&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;create a button to call the action&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;and the actual code which adds the network interfaces to the specified virtual machine&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Since the setup is very similar to what was described in the previous post, here are the links to the &lt;a href=&#34;https://raw.githubusercontent.com/cbolz/ManageIQ/master/service-dialogs/dialog-hot-add-nic.yml&#34;&gt;Service Dialog&lt;/a&gt; and the &lt;a href=&#34;https://github.com/cbolz/ManageIQ/tree/master/Automate&#34;&gt;Automate Code&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

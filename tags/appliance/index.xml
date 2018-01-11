@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/tags/appliance/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/tags/appliance/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How to delete an obsolete Appliance</title>
+      <link>http://www.jung-christian.de/post/2018/01/delete-appliance/</link>
+      <pubDate>Thu, 11 Jan 2018 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2018/01/delete-appliance/</guid>
+      <description>
+
+&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
+
+&lt;p&gt;The architecture of &lt;a href=&#34;http://www.redhat.com/cloudforms/&#34;&gt;CloudForms&lt;/a&gt; or &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; allows you to easily scale out by adding additional appliances when needed. This could be used to accommodate growth of the managed infrastructure, better security isolation or increased availability requirements. This can easily be done by joining an appliance to an existing region as documented in the &lt;a href=&#34;http://manageiq.org/docs/reference/&#34;&gt;ManageIQ&lt;/a&gt; or &lt;a href=&#34;https://docs.redhat.com&#34;&gt;Red Hat&lt;/a&gt; Documentation. There is an example if you deploy CloudForms on &lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_cloudforms/4.6-beta/html/installing_red_hat_cloudforms_on_red_hat_virtualization/configuring-cloudforms#configuring-a-worker-appliance&#34;&gt;Red Hat Virtualization&lt;/a&gt;. The process is the same for all providers.&lt;/p&gt;
+
+&lt;p&gt;Occasionally you also have to scale down and delete no longer needed appliances as well. This is very simple as well.&lt;/p&gt;
+
+&lt;h2 id=&#34;delete-an-appliance&#34;&gt;Delete an appliance&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;If you have the necessary privileges, click on your user name on the top right of the screen and &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Click on &lt;strong&gt;&lt;em&gt;Diagnostics&lt;/em&gt;&lt;/strong&gt; in the accordion on the left&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Click on the Zone the appliance belongs to, in the example below you can see two appliances&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-appliance-select-zone.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-appliance-select-zone-300x162.png&#34; alt=&#34;Select Zone&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;In the view &amp;ldquo;Roles by Server&amp;rdquo; select the appliance which will be deleted&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-appliance-select-appliance.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-appliance-select-appliance-300x332.png&#34; alt=&#34;Select Appliance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Click on &lt;strong&gt;&lt;em&gt;Configuration&lt;/em&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;em&gt;Delete Server &lt;NAME&gt;&lt;/em&gt;&lt;/strong&gt;, &lt;NAME&gt; being the name of the appliance which should be deleted&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/delete-appliance-configuration-delete.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/delete-appliance-configuration-delete-300x125.png&#34; alt=&#34;Delete Appliance&#34; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In the background the action will be performed and the Appliance will be deleted from the configuration.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
