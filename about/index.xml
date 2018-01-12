@@ -24,7 +24,8 @@
 
 &lt;p&gt;You can find me on LinkedIn:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://de.linkedin.com/pub/christian-jung/23/41a/90&#34; title=&#34;LinkedIn Profile&#34;&gt;&lt;img src=&#34;https://static.licdn.com/scds/common/u/img/webpromo/btn_myprofile_160x33.png&#34; alt=&#34;LinkedIn PRofile&#34; title=&#34;LinkedIn Profile&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;script type=&#34;text/javascript&#34; src=&#34;https://platform.linkedin.com/badges/js/profile.js&#34; async defer&gt;&lt;/script&gt;
+&lt;div class=&#34;LI-profile-badge&#34;  data-version=&#34;v1&#34; data-size=&#34;medium&#34; data-locale=&#34;en_US&#34; data-type=&#34;horizontal&#34; data-theme=&#34;light&#34; data-vanity=&#34;cjungcloud&#34;&gt;&lt;a class=&#34;LI-simple-link&#34; href=&#39;https://de.linkedin.com/in/cjungcloud/en?trk=profile-badge&#39;&gt;Christian Jung&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
 </description>
     </item>
     
