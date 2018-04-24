@@ -7,8 +7,36 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <lastBuildDate>Thu, 11 Jan 2018 12:19:49 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 04 Apr 2018 12:19:49 +0100</lastBuildDate>
     <atom:link href="http://www.jung-christian.de/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CloudForms labs at Red Hat Summit</title>
+      <link>http://www.jung-christian.de/post/2018/04/summit/</link>
+      <pubDate>Wed, 04 Apr 2018 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2018/04/summit/</guid>
+      <description>
+
+&lt;p&gt;I will run two labs during Red Hat Summit 2018 in San Francisco with some of my colleagues. Feel free to check the agenda and register, or just drop by and say hello.&lt;/p&gt;
+
+&lt;h1 id=&#34;red-hat-cloudforms-with-red-hat-ansible-automation-better-together&#34;&gt;Red Hat CloudForms with Red Hat Ansible Automation—Better together&lt;/h1&gt;
+
+&lt;p&gt;Have you heard about the embedded Ansible theme of Red Hat CloudForms? Keen to learn more? Join us in this lab session for hands-on exercises utilizing Red Hat Ansible Automation in CloudForms.&lt;/p&gt;
+
+&lt;p&gt;In this lab, we&amp;rsquo;ll start with a brief overview presentation. Then, you will configure your CloudForms instance for embedded Ansible Automation and add a playbook repository. Next, you will learn how to use Ansible Playbooks to create service catalog items for the CloudForms self-service portal. Finally, you will use Ansible Playbooks as actions in CloudForms Policies and finally learn how playbooks can be run from custom buttons.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://agenda.summit.redhat.com/SessionDetail.aspx?id=154447&#34;&gt;More Details&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;building-a-self-service-portal-with-red-hat-cloudforms&#34;&gt;Building a self-service portal with Red Hat CloudForms&lt;/h1&gt;
+
+&lt;p&gt;User self-service is seen as one of the defining capabilities of cloud computing. Red Hat CloudForms provides a self-service portal and catalog to deploy IT services over a variety of virtualization and cloud providers.&lt;/p&gt;
+
+&lt;p&gt;In this lab, you will get an introduction to CloudForms self-service, followed by hands-on examples. You will start by creating a service catalog item to deploy a virtual machine and then move on to more advanced topics, like orchestration templates (OpenStack HEAT) as services. To be ready to use these features in real-world scenarios, you will learn how to limit catalog visibility and access with CloudForms&amp;rsquo; role-based access control feature.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://agenda.summit.redhat.com/SessionDetail.aspx?id=154446&#34;&gt;More Details&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>How to delete an obsolete Appliance</title>
@@ -1084,130 +1112,6 @@ host miq-euwe miq-euwe 192.168.1.1/32 md5
 &lt;p&gt;I&amp;rsquo;m using this setup since CloudForms 5.6, aka ManageIQ Darga on a daily basis. I also tested this with previous versions of CloudForms back to 5.3 and the basic steps have always been the same.&lt;/p&gt;
 
 &lt;p&gt;To make ManageIQ and CloudForms work without superuser privileges during setup, a &lt;a href=&#34;https://bugzilla.redhat.com/show_bug.cgi?id=1364270&#34;&gt;Bugzilla Ticket&lt;/a&gt; has been created.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Using Tags for access control</title>
-      <link>http://www.jung-christian.de/post/2016/08/using-tags-for-access-control/</link>
-      <pubDate>Thu, 25 Aug 2016 18:35:15 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2016/08/using-tags-for-access-control/</guid>
-      <description>
-
-&lt;p&gt;UPDATE 2016-10-14: A more polished version of this article can now be found on the &lt;a href=&#34;http://cloudformsblog.redhat.com/2016/10/13/using-tags-for-access-control/&#34;&gt;Official Red Hat CloudForms Blog&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Most systems are using Access Control LIsts (ACL) to manage user access to objects. Common examples are ACL&amp;rsquo;s for file systems, LDAP, Web Servers and many more. Who ever had to create ACL rules and maintain them knows how complicated this can be. To make access control easy again, CloudForms and ManageIQ are using tags. If the group a user belongs to has the same tag associated as the accessed object, access is granted, if not, access is denied.&lt;/p&gt;
-
-&lt;p&gt;Sounds simple and straight forward. There are a couple of things to know about tags, which make it very powerful, but using them also a bit tricky. Let&amp;rsquo;s start with some basics.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;User: users can be created in the internal database or are retrieved from external authentication (LDAP, Active Directory, IPA/RH Identitiy Manager which is part of Red Hat Enterprise Linux). Meta data including the full name, the email address, the password (in case of database authentication) and a relationship to one or more groups&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Groups: every user is a member of one or more groups (if the internal database is used for authentication, users can only be a member of one group)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Roles: every group is associated to exactly one role which describes the granted privileges&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Tenants: multiple tenants can be used to separate slices of the infrastructure. Tenants could be external customers, internal departments or project teams.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Groups are used to define the scope or visibility of a user. For example, a member of the Engineering Department can be granted access to all VMs owned by the Engineering Department. Or an operator could be a member of the group Operations and be granted access to all VMs running in the production environment.&lt;/p&gt;
-
-&lt;p&gt;Roles are used to define which actions a user is allowed to perform. For example, an operator role could define all actions needed for an operator. This could include permissions to start or stop virtual machines, reconfigure them etc. A role &amp;ldquo;self service user&amp;rdquo; could allow a user to order new VMs and manage them.&lt;/p&gt;
-
-&lt;p&gt;The combination of groups and role defines which actions are allowed for which object. An operator in the Engineering Department would have the same privileges as an operator in the Finance Department (because they share the same role), but they would still see different objects (because they are not in the same group).&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s discuss a couple of examples to get familiar with the model.&lt;/p&gt;
-
-&lt;h1 id=&#34;setting-the-stage&#34;&gt;Setting the stage&lt;/h1&gt;
-
-&lt;p&gt;For the following exercises the internal database authentication has been used. That limits the examples to the restriction of one user is always in exactly one group. If a more flexible model is needed, where a user can be a member of multiple groups, an external authentication source like LDAP, Active Directory or FreeIPA (Red Hat Identity Manager) has to be used. But let&amp;rsquo;s keep it simple.&lt;/p&gt;
-
-&lt;p&gt;The way the user interface is designed, it makes sense to start with the role, then create the group and finally the user. Let&amp;rsquo;s keep tenants for later.&lt;/p&gt;
-
-&lt;h2 id=&#34;example-role-self-service&#34;&gt;Example Role &amp;ldquo;Self Service&amp;rdquo;&lt;/h2&gt;
-
-&lt;p&gt;Navigate to &amp;ldquo;Settings&amp;rdquo;, &amp;ldquo;Configuration&amp;rdquo; and click on &amp;ldquo;Access Control&amp;rdquo; in the pane on the left. and then click on &amp;ldquo;Roles&amp;rdquo;. Add a new role by clicking on &amp;ldquo;Configuration&amp;rdquo;, &amp;ldquo;Add a new Role&amp;rdquo; name it &amp;ldquo;Self Service&amp;rdquo;. Granting privileges to the role is very nicely implemented. The tree on the right represents all the menus and actions a user can perform in the UI. Enabling (checking) a feature grants the privilege to the role. By drilling down into sub folders, very fine grained permissions can be granted (e.g. power on, but not power off).&lt;/p&gt;
-
-&lt;p&gt;For the purpose of this demo, a role with full access to &amp;ldquo;Cloud Intel&amp;rdquo;, &amp;ldquo;Services&amp;rdquo;, &amp;ldquo;Compute&amp;rdquo;, &amp;ldquo;Settings&amp;rdquo; and &amp;ldquo;Access Rules for all Virtual Machines&amp;rdquo; - but no other privileges - is created.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-role-300x122.png&#34; alt=&#34;add role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;example-group-engineering&#34;&gt;Example Group &amp;ldquo;Engineering&amp;rdquo;&lt;/h2&gt;
-
-&lt;p&gt;In the next step a group called &amp;ldquo;Engineering&amp;rdquo; is created. All members of this group will have the role &amp;ldquo;Self Service&amp;rdquo; assigned, which was created in the previous step. For now, we skip tags and filters and keep them all unchecked.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/create-group.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/create-group-300x203.png&#34; alt=&#34;create group&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;example-user-joe-doe&#34;&gt;Example user Joe Doe&lt;/h2&gt;
-
-&lt;p&gt;In the last step a user &amp;ldquo;Joe Doe&amp;rdquo; is created. This will be a local user (stored in the database) and is a member of the Engineering group.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/add-user.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/add-user-300x184.png&#34; alt=&#34;add user&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
-
-&lt;p&gt;If Joe Doe logs into the web interface and navigates to Providers, Hosts, Virtual Machines or Service Catalogs he will see all existing objects. When the user was created, he was assigned to a group which doesn&amp;rsquo;t have any restrictions on visibility, so this should not be a surprise.&lt;/p&gt;
-
-&lt;h1 id=&#34;granting-access-to-individual-objects&#34;&gt;Granting access to individual objects&lt;/h1&gt;
-
-&lt;p&gt;Joe Doe can now see all objects in the Web UI. Since Joe Doe is a member of the Engineering Department, we want to restrict his visibility to VMs associated to Engineering. To accomplish this, CloudForms/ManageIQ needs to know which VMs are part of the Engineering Department. This can be done by tagging those objects. But first, let&amp;rsquo;s restrict Joe Doe to only see objects tagged as Department/Engineering.&lt;/p&gt;
-
-&lt;p&gt;Navigate to the group, edit it and select the Department/Engineering Tag.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/edit-and-tag-engineering.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/edit-and-tag-engineering-300x458.png&#34; alt=&#34;edit and tag engineering&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;When changing groups, roles or tenants, the user doesn&amp;rsquo;t need to logout and login again. Changes are reflected on the next reload of the UI. If Joe reloads the UI, he will see no Virtual Machines or other objects anymore! The scope for the group and hence the user, was just limited to objects which are tagged as Department/Engineering - and no objects have been tagged so far.&lt;/p&gt;
-
-&lt;p&gt;An object, like a Virtual Machine, a Host, Data Store etc. can be tagged by using the &amp;ldquo;Policy&amp;rdquo;, &amp;ldquo;Edit Tags&amp;rdquo; menu. After tagging a Virtual Machine and reloading the Web UI as Joe Doe, the VM will show up in the user interface.&lt;/p&gt;
-
-&lt;p&gt;This works the same way for all other objects. If Joe Doe should be able to order a specific item from the service catalog, the item (or bundle) has to be tagged with the Department/Engineering tag to make it visible.&lt;/p&gt;
-
-&lt;h2 id=&#34;first-gotcha&#34;&gt;First Gotcha!&lt;/h2&gt;
-
-&lt;p&gt;You might have noticed, after setting the Department/Engineering Tag for the Group, no objects are showing up in the UI. This means, all relevant objects which should be visible for the user, must be tagged. As soon as you start using tags, you have to use them consistently.&lt;/p&gt;
-
-&lt;h1 id=&#34;working-with-multiple-tags&#34;&gt;Working with multiple tags&lt;/h1&gt;
-
-&lt;p&gt;If a Virtual Machine or any other object has to be visible to multiple Departments, it&amp;rsquo;s solved by just adding all the necessary Department tags. Adding the Department/Finance tag to a service catalog item, makes the item available for order to members of the Finance team.&lt;/p&gt;
-
-&lt;p&gt;Tags in the same tag category are logical OR relationships. If at least one tag of the list of group tags in this category matches with at least one tag of the category of the target object, access is granted. In this example, if a user is in Department/Finance OR Department/Engineering, he or she will see the object. Users which are not in Engineering or Finance, will not see the object. This also applies, if the object isn&amp;rsquo;t tagged with any Department tag - which means, nobody will see it.&lt;/p&gt;
-
-&lt;h2 id=&#34;second-gotcha&#34;&gt;Second Gotcha!&lt;/h2&gt;
-
-&lt;p&gt;This also includes Super Administrators! If you restrict visibility of Super Administrators by assigning them tags, they will no longer see those objects which they don&amp;rsquo;t have matching tags for! Since Super Administrators can always fix tag assignments (or remove the tag filter for their group), they can restore full visibility. But better make sure you never limit Super Administrators by accident&amp;hellip;&lt;/p&gt;
-
-&lt;h1 id=&#34;working-with-multiple-tag-categories&#34;&gt;Working with multiple tag categories&lt;/h1&gt;
-
-&lt;p&gt;When working in more complex environments, multiple tag categories have to be used. For example, tags can be used to separate Virtual Machines from different stages (Development, QA, Production), or different tag categories could be used to be more granular by granting access to service catalog items.&lt;/p&gt;
-
-&lt;p&gt;As soon as multiple tag categories are introduced, things get a bit more complicated.&lt;/p&gt;
-
-&lt;h2 id=&#34;third-gotcha&#34;&gt;Third Gotcha!&lt;/h2&gt;
-
-&lt;p&gt;When using multiple tag categories, there is a logical AND between tag categories. This is probably best explained with an example. There is already an example tag category called &amp;ldquo;Environment&amp;rdquo; with tags associated like &amp;ldquo;Development&amp;rdquo;, &amp;ldquo;Production&amp;rdquo; and others.&lt;/p&gt;
-
-&lt;p&gt;If the group &amp;ldquo;Engineering&amp;rdquo; of which Joe Doe is a member, gets the additional tag Environment/Development assigned, Joe can only see objects which have the Department/Engineering AND the Environment/Development tag assigned.  A Virtual Machine tagged as Department/Engineering and Environment/Production will be hidden from Joe.&lt;/p&gt;
-
-&lt;p&gt;This is very important and is often causing confusion. As soon as you start tagging objects of your infrastructure with tags of different tag categories, the logical AND comes into play!&lt;/p&gt;
-
-&lt;h1 id=&#34;tags-in-the-context-of-tenants&#34;&gt;Tags in the context of tenants&lt;/h1&gt;
-
-&lt;p&gt;Tenants can be used to go even one step further when it comes to isolation and separation of the virtual and cloud infrastructure. Tenants can be nested and can also have projects as child elements. When working with tenants, it is important to remember that they limit also the visibility of objects.&lt;/p&gt;
-
-&lt;p&gt;If Joe Doe moves into a new tenant, he will only see objects like Virtual Machines, which are owned by this tenant or one of its sub tenants. Tags are filtered with logical AND. This means, Joe will only see objects which are part of the tenant or any of the sub tenants AND are tagged appropriately. Objects which are owned by a parent or sibling tenant will never be visible to Joe, even if they are tagged with the proper tag (in this example Department/Engineering).&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion-think-before-you-tag&#34;&gt;Conclusion: Think before you tag&lt;/h1&gt;
-
-&lt;p&gt;Tags are a very simple and yet powerful way to manage access control lists. Sometimes people tend to over complicate things though and this makes it unnecessarily complicated. There are a few rules we try to follow when we plan tagging:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;don&amp;rsquo;t use tags for information which is already available as an attribute: For example tagging all Windows VMs as Operating System Windows and tagging all Linux VMs similarly, is in most cases not a good idea, since this information is already stored in an VM attribute (you can create a filter to find all Windows VMs, you don&amp;rsquo;t need a tag to do that)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;try to reduce the number of tags and tag categories: having a large number of categories and tags make things complicated. Think before you add a new tag. Also keep in mind that you might have to tag (again) everything you already have (remember, logical AND between tag categories)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;try to use auto tagging: instead of manually tagging the infrastructure, try to write some Automate Code which does it for you. For example during provisioning time.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     

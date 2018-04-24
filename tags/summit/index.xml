@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian&#39;s Blog</title>
+    <link>http://www.jung-christian.de/tags/summit/index.xml</link>
+    <description>Recent content on Christian&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2017 by Christian Jung</copyright>
+    <atom:link href="http://www.jung-christian.de/tags/summit/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CloudForms labs at Red Hat Summit</title>
+      <link>http://www.jung-christian.de/post/2018/04/summit/</link>
+      <pubDate>Wed, 04 Apr 2018 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2018/04/summit/</guid>
+      <description>
+
+&lt;p&gt;I will run two labs during Red Hat Summit 2018 in San Francisco with some of my colleagues. Feel free to check the agenda and register, or just drop by and say hello.&lt;/p&gt;
+
+&lt;h1 id=&#34;red-hat-cloudforms-with-red-hat-ansible-automation-better-together&#34;&gt;Red Hat CloudForms with Red Hat Ansible Automation—Better together&lt;/h1&gt;
+
+&lt;p&gt;Have you heard about the embedded Ansible theme of Red Hat CloudForms? Keen to learn more? Join us in this lab session for hands-on exercises utilizing Red Hat Ansible Automation in CloudForms.&lt;/p&gt;
+
+&lt;p&gt;In this lab, we&amp;rsquo;ll start with a brief overview presentation. Then, you will configure your CloudForms instance for embedded Ansible Automation and add a playbook repository. Next, you will learn how to use Ansible Playbooks to create service catalog items for the CloudForms self-service portal. Finally, you will use Ansible Playbooks as actions in CloudForms Policies and finally learn how playbooks can be run from custom buttons.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://agenda.summit.redhat.com/SessionDetail.aspx?id=154447&#34;&gt;More Details&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;building-a-self-service-portal-with-red-hat-cloudforms&#34;&gt;Building a self-service portal with Red Hat CloudForms&lt;/h1&gt;
+
+&lt;p&gt;User self-service is seen as one of the defining capabilities of cloud computing. Red Hat CloudForms provides a self-service portal and catalog to deploy IT services over a variety of virtualization and cloud providers.&lt;/p&gt;
+
+&lt;p&gt;In this lab, you will get an introduction to CloudForms self-service, followed by hands-on examples. You will start by creating a service catalog item to deploy a virtual machine and then move on to more advanced topics, like orchestration templates (OpenStack HEAT) as services. To be ready to use these features in real-world scenarios, you will learn how to limit catalog visibility and access with CloudForms&amp;rsquo; role-based access control feature.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://agenda.summit.redhat.com/SessionDetail.aspx?id=154446&#34;&gt;More Details&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
