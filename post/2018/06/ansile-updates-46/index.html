@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Mini Series on Ansible Buttons in CloudForms 4.6 -- Christian&#39;s Blog</title>
+
+    
+
+    
+    <link href="http://www.jung-christian.de//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="http://www.jung-christian.de//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.jung-christian.de/">Christian&#39;s Blog</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/">home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/post/">Archives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/categories/">Categories</a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.jung-christian.de/about/">About me</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('http://www.jung-christian.de//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>Mini Series on Ansible Buttons in CloudForms 4.6</h1>
+               <h2 class="subheading">CloudForms 4.6 makes it easier to use Ansible Playbooks with Buttons</h2>
+               <span class="meta">
+                 
+Posted by <a href="#">Christian Jung</a> on Thu, May 31, 2018
+<br />
+In <a href="http://www.jung-christian.de/categories/cloudforms">CloudForms</a>, <a href="http://www.jung-christian.de/categories/manageiq">ManageIQ</a>
+
+<br />
+Tags <a href="http://www.jung-christian.de/tags/appliance">appliance</a>, <a href="http://www.jung-christian.de/tags/ansible">ansible</a>
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<h1 id="purpose-of-this-document">Purpose of this document</h1>
+
+<p><a href="http://www.redhat.com/cloudforms">CloudForms</a> 4.6 and <a href="http://www.manageiq.org">ManageIQ Gaprindashvili</a> give us some improvements in handling the embedded Ansible capabilities.</p>
+
+<p>I published a mini series of articles on the <a href="http://cloudformsblog.redhat.com">official Red Hat CloudForms blog</a> demonstrating those new features.</p>
+
+<p><a href="https://cloudformsblog.redhat.com/2018/05/29/ansible-custom-buttons-in-cloudforms-part-1-configuring-the-environment/">Ansible Custom Buttons in CloudForms (Part 1 configuring the environment)</a></p>
+
+<p><a href="https://cloudformsblog.redhat.com/2018/05/31/ansible-custom-buttons-in-cloudforms-part-2-creating-the-button/">Ansible Custom Buttons in CloudForms (Part 2 creating the button)</a></p>
+
+                  
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    
+                      <li>
+                        <a href="mailto:blog@jung-christian.de">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                      </li>
+                    
+                    
+                    <li>
+                      <a href="https://github.com/cbolz">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://twitter.com/CJungCloud">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://gitlab.com/cjung">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-gitlab fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">Copyright 2017 by Christian Jung</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="http://www.jung-christian.de//js/jquery.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/bootstrap.min.js"></script>
+
+    
+    <script src="http://www.jung-christian.de//js/clean-blog.js"></script>
+
+    
+
+</body>
+
+</html>
+
