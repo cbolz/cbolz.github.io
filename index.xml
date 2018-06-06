@@ -7,8 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2017 by Christian Jung</copyright>
-    <lastBuildDate>Wed, 04 Apr 2018 12:19:49 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 31 May 2018 12:19:49 +0100</lastBuildDate>
     <atom:link href="http://www.jung-christian.de/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Mini Series on Ansible Buttons in CloudForms 4.6</title>
+      <link>http://www.jung-christian.de/post/2018/06/ansile-updates-46/</link>
+      <pubDate>Thu, 31 May 2018 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2018/06/ansile-updates-46/</guid>
+      <description>
+
+&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; 4.6 and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ Gaprindashvili&lt;/a&gt; give us some improvements in handling the embedded Ansible capabilities.&lt;/p&gt;
+
+&lt;p&gt;I published a mini series of articles on the &lt;a href=&#34;http://cloudformsblog.redhat.com&#34;&gt;official Red Hat CloudForms blog&lt;/a&gt; demonstrating those new features.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloudformsblog.redhat.com/2018/05/29/ansible-custom-buttons-in-cloudforms-part-1-configuring-the-environment/&#34;&gt;Ansible Custom Buttons in CloudForms (Part 1 configuring the environment)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloudformsblog.redhat.com/2018/05/31/ansible-custom-buttons-in-cloudforms-part-2-creating-the-button/&#34;&gt;Ansible Custom Buttons in CloudForms (Part 2 creating the button)&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>CloudForms labs at Red Hat Summit</title>
@@ -990,128 +1010,6 @@ script:
 &lt;p&gt;At the same time I fixed some internal stuff and selected a fresh and modern design. This should also render quite nicely on mobile devices.&lt;/p&gt;
 
 &lt;p&gt;The new pages do not allow visitors to leave comments any more. The vast majority of comments I got were SPAM and it got quite annoying. If you want to reach out to me, check the about page for contact details.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>How to setup a PostgreSQL database for ManageIQ and CloudForms</title>
-      <link>http://www.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</link>
-      <pubDate>Wed, 23 Nov 2016 14:44:44 +0000</pubDate>
-      
-      <guid>http://www.jung-christian.de/post/2016/11/setup-postgresql-database-manageiq-cloudforms/</guid>
-      <description>
-
-&lt;p&gt;When playing with several &lt;a href=&#34;http://www.redhat.com/en/technologies/management/cloudforms&#34;&gt;CloudForms&lt;/a&gt; and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ&lt;/a&gt; appliances in my lab environment, I face the problem that I quickly run out of RAM on my virtual infrastructure. I&amp;rsquo;m using a number of &lt;a href=&#34;http://www.intel.com/content/www/us/en/nuc/overview.html&#34;&gt;Intel NUC&amp;rsquo;s&lt;/a&gt; and although the newest models can go up to 32 GB of RAM, memory has always been my bottleneck. So I thought instead of running a PostgreSQL server in each virtual CloudForms or ManageIQ appliance, it might be more efficient to have a dedicated PostgreSQL Server for all of them. There are other use cases where one might want to use a external database:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;High Availability: built a PostgreSQL cluster to increase fault tolerance&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Scalability: a dedicated database server can make it easier to scale up&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Maintenance: if the database is clustered upgrades and other maintenance tasks can be performed on one node, while all other nodes continue to work&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;These are just some examples and there are many more use cases and examples.&lt;/p&gt;
-
-&lt;h1 id=&#34;prepare-the-postgresql-server&#34;&gt;Prepare the PostgreSQL Server&lt;/h1&gt;
-
-&lt;p&gt;Obviously the first step is to setup the PostgreSQL Server on a physical or virtual machine (or multiple, if one wants to setup a clustered databse). This post will not go into any details on how to do that. It&amp;rsquo;s covered in many other posts and documents. When tuning the database server, it is recommended to have a look at the example configuration which can be found on an CloudForms or ManageIQ virtual appliance.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# example configuration on CloudForms Appliances
-/opt/rh/cfme-appliance/TEMPLATE/var/opt/rh/rh-postgresql94/lib/pgsql/data/
-# example configuration on ManageIQ Appliances
-/opt/manageiq/manageiq-appliance/TEMPLATE/var/opt/rh/rh-postgresql95/lib/pgsql/data
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Make sure the applicable settings are transferred to your PostgreSQL Server to get best possible performance. Since the external database will be used a lot, its performance is crucial for the entire environment.&lt;/p&gt;
-
-&lt;p&gt;Tools like &lt;a href=&#34;https://www.postgresql.org/docs/current/static/pgbench.html&#34;&gt;pg_bench&lt;/a&gt; can help to verify database performance.&lt;/p&gt;
-
-&lt;h1 id=&#34;create-the-user-database-and-privileges&#34;&gt;Create the user, database and privileges&lt;/h1&gt;
-
-&lt;p&gt;After the database server has been installed, tuned and tested, it&amp;rsquo;s time to create the user and database. I&amp;rsquo;m using one database server for many CloudForms and ManageIQ appliances. To be able to isolate database access, I create a user for every appliance and restrict this user to its dedicated database.&lt;/p&gt;
-
-&lt;p&gt;For the following example, let&amp;rsquo;s assume there is a new &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ Appliance&lt;/a&gt; running the &lt;a href=&#34;http://manageiq.org/blog/2016/06/announce_e_name/&#34;&gt;Euwe&lt;/a&gt; release.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# create a new user and grant super user privilegescreateuser -s -P miq-euwe# create a dedicate database and set ownercreatedb -O miq-euwe miq-euwe
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We just created a user call &lt;strong&gt;miq-euwe&lt;/strong&gt; and gave him ownership to the new database with the same name. Why this user was created as a super user, will be covered in the next paragraph. Before we move on, we need to grant this user remote login privileges. Modfy pg_hba.conf on the PostgreSQL server and add a line similar to this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;host all miq-euwe 192.168.1.1/32 md5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This will allow the user &lt;strong&gt;miq-euwe&lt;/strong&gt; to login into all databases from the system with the IP &lt;strong&gt;192.168.1.1&lt;/strong&gt; after authenticating with the correct password. Test the connection from the appliance with the &lt;strong&gt;psql&lt;/strong&gt; command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;psql -h &amp;lt;hostname&amp;gt; -U miq-euwe -W miq-euwe
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;configure-database-with-appliance-console&#34;&gt;Configure database with appliance console&lt;/h1&gt;
-
-&lt;p&gt;To configure the appliance to use the external database, the appliance_console can be used (on current version, you can just use the alias &amp;ldquo;ap&amp;rdquo;).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ appliance_console
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Chose Option 8 &amp;ldquo;Configure Database&amp;rdquo; and go through the guided procedure.&lt;/p&gt;
-
-&lt;h2 id=&#34;what-happens&#34;&gt;What happens&lt;/h2&gt;
-
-&lt;p&gt;The appliance performs a number of steps while configuring the database:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;connect to the database and try to login&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;verify no process is currently using the database&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;if no other process is using the database, delete it&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;create a new database with the specified name and credentials&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;populate the database with the initial tables and data&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;On the first start of the evmserverd service, additional data is written into the database. During that phase the database can grow to around 30 to 40 MB.&lt;/p&gt;
-
-&lt;p&gt;Now it might be clearer, why we needed a user with superuser privilege and why the pg_hba.conf has to allow access to all databases. But not all is lost, this can be fixed after the initial setup is done.&lt;/p&gt;
-
-&lt;h1 id=&#34;fix-database-configuration&#34;&gt;Fix database configuration&lt;/h1&gt;
-
-&lt;p&gt;After setting up the appliance and populating the initial data, I restrict database access to what is absolutely necessary. This is done by performing two simple steps.&lt;/p&gt;
-
-&lt;p&gt;Fix pg_hba.conf:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# only grant access to miq-euwe database
-host miq-euwe miq-euwe 192.168.1.1/32 md5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To make this change active, send a Hangup signal to the master PostgreSQL process:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;kill -HUP &amp;lt;PID&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Remove superuser privilege from user:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;pgsql=# alter role miq-euwe nosuperuser;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Verify the appliance still works correctly after applying those changes.&lt;/p&gt;
-
-&lt;h1 id=&#34;clean-up-the-appliance&#34;&gt;Clean up the appliance&lt;/h1&gt;
-
-&lt;p&gt;When logging into the appliance, the active database configuration can be found in the Configuration, Database menu.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/external-database.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/external-database-300x69.png&#34; alt=&#34;Verify external database configuration&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;If everything works fine, the internal database role can be disabled, which will also free up some memory in the virtual machine.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.jung-christian.de/images/disable-db-role.png&#34;&gt;&lt;img src=&#34;http://www.jung-christian.de/images/disable-db-role-300x157.png&#34; alt=&#34;How to disable database role&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;wrap-up&#34;&gt;Wrap up&lt;/h1&gt;
-
-&lt;p&gt;I&amp;rsquo;m using this setup since CloudForms 5.6, aka ManageIQ Darga on a daily basis. I also tested this with previous versions of CloudForms back to 5.3 and the basic steps have always been the same.&lt;/p&gt;
-
-&lt;p&gt;To make ManageIQ and CloudForms work without superuser privileges during setup, a &lt;a href=&#34;https://bugzilla.redhat.com/show_bug.cgi?id=1364270&#34;&gt;Bugzilla Ticket&lt;/a&gt; has been created.&lt;/p&gt;
 </description>
     </item>
     

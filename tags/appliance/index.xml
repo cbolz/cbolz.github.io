@@ -10,6 +10,26 @@
     <atom:link href="http://www.jung-christian.de/tags/appliance/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Mini Series on Ansible Buttons in CloudForms 4.6</title>
+      <link>http://www.jung-christian.de/post/2018/06/ansile-updates-46/</link>
+      <pubDate>Thu, 31 May 2018 12:19:49 +0100</pubDate>
+      
+      <guid>http://www.jung-christian.de/post/2018/06/ansile-updates-46/</guid>
+      <description>
+
+&lt;h1 id=&#34;purpose-of-this-document&#34;&gt;Purpose of this document&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.redhat.com/cloudforms&#34;&gt;CloudForms&lt;/a&gt; 4.6 and &lt;a href=&#34;http://www.manageiq.org&#34;&gt;ManageIQ Gaprindashvili&lt;/a&gt; give us some improvements in handling the embedded Ansible capabilities.&lt;/p&gt;
+
+&lt;p&gt;I published a mini series of articles on the &lt;a href=&#34;http://cloudformsblog.redhat.com&#34;&gt;official Red Hat CloudForms blog&lt;/a&gt; demonstrating those new features.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloudformsblog.redhat.com/2018/05/29/ansible-custom-buttons-in-cloudforms-part-1-configuring-the-environment/&#34;&gt;Ansible Custom Buttons in CloudForms (Part 1 configuring the environment)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://cloudformsblog.redhat.com/2018/05/31/ansible-custom-buttons-in-cloudforms-part-2-creating-the-button/&#34;&gt;Ansible Custom Buttons in CloudForms (Part 2 creating the button)&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>How to delete an obsolete Appliance</title>
       <link>http://www.jung-christian.de/post/2018/01/delete-appliance/</link>
       <pubDate>Thu, 11 Jan 2018 12:19:49 +0100</pubDate>
