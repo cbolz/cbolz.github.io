@@ -110,19 +110,23 @@ Tags
 
 <p>To use such an image on RHEV, you have to first import it. Sadly the rhevm-image-uploader does not support qcow images yet, so you have to import the image manually. This is the way I did - there might be better ways to do it.</p>
 
-<p>create a new VM in RHEV
-    * choose RHEL 6 or 7 depending on which template you want to import
-    * give it a reasonable name
-    * adjust other settings as you see fit</p>
+<p>create a new VM in RHEV</p>
+
+<ul>
+<li>choose RHEL 6 or 7 depending on which template you want to import</li>
+<li>give it a reasonable name</li>
+<li>adjust other settings as you see fit</li>
+</ul>
 
 <p>add a disk to the new VM. The minimum size can be retrieved from the qcow image itself:</p>
 
-<p>$ qemu-img info rhel-guest-image-6.6-20141222.0.x86_64.qcow2
-  image: rhel-guest-image-6.6-20141222.0.x86_64.qcow2
-  file format: qcow2
-  virtual size: 16G (17179869184 bytes)
-  disk size: 340M
-  cluster_size: 65536</p>
+<pre><code>$ qemu-img info rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+image: rhel-guest-image-6.6-20141222.0.x86_64.qcow2
+file format: qcow2
+virtual size: 16G (17179869184 bytes)
+disk size: 340M
+cluster_size: 65536
+</code></pre>
 
 <p>This image needs a minimum disk size of 16 GB. The image automatically grows on first boot, if you create a larger disk.</p>
 
